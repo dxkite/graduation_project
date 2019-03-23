@@ -1,0 +1,22 @@
+{
+    "name": "dxkite/apartment",
+    "authors": [
+        {
+            "name": "dxkite",
+            "email": "dxkite@qq.com"
+        }
+    ],
+    "import": {
+        "share": {
+            "dxkite\\apartment": "share"
+        },
+        "src": {
+            "dxkite\\apartment\\response": "src"
+        }
+    },
+    "discription": "公寓选择系统代码",
+    "require": {
+        "support/open-method": ""
+    },
+    "version": "1.0.0"
+}

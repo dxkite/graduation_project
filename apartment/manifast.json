@@ -1,14 +1,11 @@
 {
     "name": "suda-demo-app",
     "version": "1.0-dev",
-    "modules": [
-        "suda",
-        "welcome"
-    ],
-    "reachable": [
-        "welcome"
-    ],
     "language": "zh-CN",
+    "module-paths":[
+        "modules",
+        "support"
+    ],
     "url": {
         "mode": 0,
         "beautify": true,
