@@ -2,6 +2,6 @@
 
 ## 目录说明
 
-- www 主项目
-- user 用户中心
+- apartment 主项目
+- passport 用户中心
 - nebula 项目框架
