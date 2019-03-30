@@ -1,0 +1,16 @@
+{
+    "name": "support/setting",
+    "version": "0.0.1",
+    "import": {
+        "share": {
+            "support\\setting": "share"
+        },
+        "src": {
+            "support\\setting\\response": "src"
+        }
+    },
+    "route-prefix": {
+        "default": "/setting"
+    },
+    "discription": "设置模块"
+}

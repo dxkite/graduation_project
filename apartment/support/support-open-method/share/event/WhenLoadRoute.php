@@ -28,7 +28,7 @@ class WhenLoadRoute
     public function registerRoute(Route $route, Application $application)
     {
         $application->debug()->info('register open-method routes ...');
-        foreach ($application->getModule()->all() as $fullName => $module) {
+        foreach ($application->getModules() as $fullName => $module) {
             if ($path = $module->getResource()->getConfigResourcePath('config/open-method')) {
                 $routeConfig = Config::loadConfig($path, [
                     'module' => $fullName,

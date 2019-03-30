@@ -197,7 +197,7 @@ class Permission implements \JsonSerializable
     public static function readPermissions(Application $app)
     {
         $permissions = [];
-        foreach ($app->getModule()->all() as $fullName => $module) {
+        foreach ($app->getModules() as $fullName => $module) {
             if ($path = $module->getResource()->getConfigResourcePath('config/permissions')) {
                 $tmp = Config::loadConfig($path, [
                     'module' => $fullName,
