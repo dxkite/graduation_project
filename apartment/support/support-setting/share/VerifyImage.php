@@ -32,7 +32,7 @@ class VerifyImage
 
     public function __construct(Context $context, string $name)
     {
-        $path = $context->getApplication()->getModule()->get('support/setting')->getResource()->getResourcePath('ttf');
+        $path = $context->getApplication()->getModules()->getModuleFromPath(__FILE__)->getResource()->getResourcePath('ttf');
         $fointit = FileSystem::readFiles($path);
         $foints = iterator_to_array($fointit);
         $this->foint = $foints[mt_rand(0, count($foints) - 1)];
