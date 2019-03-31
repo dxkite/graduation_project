@@ -13,8 +13,8 @@ class UserProvider extends UserSessionAwareProvider
      *
      * @param string $account 账号
      * @param string $password 密码
-     * @param boolean $remeber
-     * @return \support\setting\UserSession
+     * @param boolean $remeber 记住登陆状态7天
+     * @return \support\setting\UserSession 登陆会话
      */
     public function signin(string $account, string $password, bool $remeber = false): UserSession
     {
