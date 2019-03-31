@@ -25,10 +25,13 @@ class SigninResponse extends Response
                 $vp->loadFromContext($this->context);
                 $visitor = $vp->getVisitor($session);
                 $this->context->getSession()->set('visitor', $visitor);
+                $last = $this->history->last($this->context->getSession()->id(), 0 , $this->getUrl('index'));
+                $this->redirect($last);
+                return;
             } catch (UserException $e) {
                 if ($e->getCode() === UserException::ERR_CODE) {
                     $view->set('invaildCode', true);
-                }else{
+                } else {
                     $view->set('invaildInput', true);
                 }
             }
@@ -38,6 +41,6 @@ class SigninResponse extends Response
     
     public function onAccessVisit(Request $request)
     {
-        $this->goRoute('support/setting:index');
+        $this->goRoute('index');
     }
 }

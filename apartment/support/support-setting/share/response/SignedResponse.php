@@ -8,7 +8,8 @@ abstract class SignedResponse extends Response
 {
     public function onGuestVisit(Request $request)
     {
-        $this->goRoute('support/setting:signin');
+        $this->history->log($this->context->getSession()->id(), $request, $this->context->getVisitor()->getId());
+        $this->goRoute('signin');
     }
     
     abstract public function onAccessVisit(Request $request);
