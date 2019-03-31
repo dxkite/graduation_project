@@ -1,5 +1,5 @@
 <?php
-namespace suda\welcome\table;
+namespace dxkite\apartment\table;
 
 use suda\orm\DataSource;
 use suda\orm\TableStruct;

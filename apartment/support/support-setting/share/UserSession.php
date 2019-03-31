@@ -54,48 +54,50 @@ class UserSession implements MethodParameterInterface, ResultProcessor
     protected static $beat = 60;
 
     /**
-     * 创建会话
+     * 保存会话
      *
      * @param string $userId 用户ID
+     * @param string $ip  用户IP
      * @param integer $expireIn 过期时间
-     * @param string $ip
      * @param string $group 会话组
      * @return UserSession
      */
-    public static function create(string $userId, int $expireIn, string $ip, string $group = 'system'): UserSession
+    public static function save(string $userId, string $ip, int $expireIn = 0, string $group = 'system'): UserSession
     {
         $table = new SessionTable;
         $session = new static;
         $session->group = $group;
+        $session->token = str_replace('=', '', base64_encode(\md5(\microtime(true).$userId.$group.$expireIn, true)));
         // 用户会话有效
-        if ($data = $table->run($table->read('id', 'expire', 'token', 'grantee')->where([
+        if ($data = $table->read('id', 'expire', 'token', 'grantee')->where([
             'ip' => $ip,
             'group' => $group,
             'grantee' => $userId,
             'expire' => ['>', time()],
-        ])->one())) {
+        ])->one()) {
             $session->id = $data['id'];
-            $session->token = $data['token'];
-            $session->expireTime = $data['expire'];
             $session->userId = $data['grantee'];
             // 小于10倍心跳时长则更新
             $limit = time() + static::$beat * 10;
-            if ($data['expire'] < $limit) {
+            $write = $table->write('token', $session->token);
+            if ($data['expire'] < $limit && $expireIn === 0) {
                 $session->expireTime = $session->expireTime + $beat;
-                $table->run($table->write('expire', $session->expireTime)->where(['id' => $data['id']]));
+                $write->write('expire', $session->expireTime);
+            }else{
+                $session->expireTime = time() + $expireIn;
+                $write->write('expire', $session->expireTime);
             }
+            $write->where(['id' => $data['id']])->ok();
         } else {
-            // 创建新的会话
             $session->expireTime = time() + $expireIn;
             $session->userId = $userId;
-            $session->token = str_replace('=', '', base64_encode(\md5(\microtime(true).$userId.$group.$expireIn, true)));
-            $session->id = $table->run($table->write([
+            $session->id = $table->write([
                 'group' => $group,
                 'grantee' => $userId,
                 'expire' => $session->expireTime,
                 'token' => $session->token,
                 'ip' => $ip,
-            ])->id());
+            ])->id();
         }
         return $session;
     }
@@ -120,12 +122,12 @@ class UserSession implements MethodParameterInterface, ResultProcessor
         if (strlen($token) < 10 || strlen($token) > 32) {
             return $session;
         }
-        if ($data = $table->run($table->read('id', 'expire', 'token', 'grantee')->where([
+        if ($data = $table->read('id', 'expire', 'token', 'grantee')->where([
             'ip' => $ip,
             'group' => $group,
             'token' => $token,
             'expire' => ['>', time()],
-        ])->one())) {
+        ])->one()) {
             $session->id = $data['id'];
             $session->token = $data['token'];
             $session->expireTime = $data['expire'];
@@ -134,7 +136,7 @@ class UserSession implements MethodParameterInterface, ResultProcessor
             $limit = time() + static::$beat * 10;
             if ($data['expire'] < $limit) {
                 $session->expireTime = $session->expireTime + $beat;
-                $table->run($table->write('expire', $session->expireTime)->where(['id' => $data['id']]));
+                $table->write('expire', $session->expireTime)->where(['id' => $data['id']])->rows();
             }
         }
         return $session;

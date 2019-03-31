@@ -62,7 +62,7 @@ class UserController
         $this->assertName($name);
         $this->assertEmail($email);
         $this->assertMobile($mobile);
-        return $this->table->run($this->table->write([
+        return $this->table->write([
             'name' => $name,
             'password' => \password_hash($password, PASSWORD_DEFAULT),
             'mobile' => $mobile,
@@ -71,7 +71,7 @@ class UserController
             'create_by' => $by,
             'create_time' => time(),
             'status' => $status,
-        ])->isOk());
+        ])->isOk();
     }
 
     /**
@@ -82,7 +82,7 @@ class UserController
      */
     public function getByName(string $name):?TableStruct
     {
-        return $this->table->run($this->table->read('*')->where('LOWER(name)=LOWER(:name)', ['name' => $name])->one());
+        return $this->table->read('*')->where('LOWER(name)=LOWER(:name)', ['name' => $name])->one();
     }
 
     /**
@@ -93,7 +93,7 @@ class UserController
      */
     public function getByEmail(string $email):?TableStruct
     {
-        return $this->table->run($this->table->read('*')->where('LOWER(email)=LOWER(:email)', ['email' => $email])->one());
+        return $this->table->read('*')->where('LOWER(email)=LOWER(:email)', ['email' => $email])->one();
     }
 
     /**
@@ -104,7 +104,7 @@ class UserController
      */
     public function getByMobile(string $mobile):?TableStruct
     {
-        return $this->table->run($this->table->read('*')->where(['mobile' => $email])->one());
+        return $this->table->read('*')->where(['mobile' => $email])->one();
     }
 
     public function getByAccount(string $account):TableStruct

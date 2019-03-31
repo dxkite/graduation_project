@@ -8,7 +8,7 @@
         "url": "\/helloworld"
     },
     "simple": {
-        "class": "suda.welcome.response.SimpleResponse",
+        "class": "dxkite.apartment.response.SimpleResponse",
         "url": "\/simple"
     }
 }

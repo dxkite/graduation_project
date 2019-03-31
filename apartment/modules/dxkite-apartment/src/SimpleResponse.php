@@ -1,6 +1,6 @@
 <?php
 
-namespace suda\welcome\response;
+namespace dxkite\apartment\response;
 
 use suda\framework\Request;
 use suda\framework\Response;
@@ -11,7 +11,7 @@ class SimpleResponse implements RequestProcessor
 {
     public function onRequest(Application $application, Request $request, Response $response)
     {
-        $template = $application->getTemplate('simple', $request);
+        $template = $application->getTemplate('support/setting:signin', $request);
         $template->set('ip', $request->getRemoteAddr());
         return $template;
     }

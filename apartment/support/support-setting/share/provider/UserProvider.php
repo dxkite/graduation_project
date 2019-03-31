@@ -20,7 +20,7 @@ class UserProvider extends UserSessionAwareProvider
     {
         $controller = new UserController;
         if ($user = $controller->signin($account, $password)) {
-            $this->session = UserSession::create($user['id'], $remeber ? 3600 : 25200, $this->request->getRemoteAddr());
+            $this->session = UserSession::save($user['id'], $this->request->getRemoteAddr(), $remeber ? 3600 : 25200);
         } else {
             throw new UserException('password or account error', UserException::ERR_PASSWORD_OR_ACCOUNT);
         }
