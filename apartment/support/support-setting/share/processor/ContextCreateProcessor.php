@@ -14,8 +14,8 @@ class ContextCreateProcessor implements RequestProcessor
     {
         $context = new Context($application, $request, $response);
         $session = $context->getSession();
-        if ($session->has('visitor_user')) {
-            $context->setVisitor($session->get('visitor_user'));
+        if ($session->has('visitor')) {
+            $context->setVisitor($session->get('visitor'));
         }else{
             $context->setVisitor(new Visitor);
         }

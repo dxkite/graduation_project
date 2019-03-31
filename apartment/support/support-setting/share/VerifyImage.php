@@ -55,7 +55,11 @@ class VerifyImage
 
     public function checkCode(string $code):bool
     {
-        $result = strtoupper($verify = $this->context->getSession()->get($this->name)) === strtoupper($code);
+        $verify = $this->context->getSession()->get($this->name);
+        if (strlen($verify) === 0 || strlen($code) === 0) {
+            return false;
+        }
+        $result = strtoupper($verify) === strtoupper($code);
         $this->refresh();
         return $result;
     }

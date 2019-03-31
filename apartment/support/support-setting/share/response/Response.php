@@ -42,7 +42,7 @@ abstract class Response implements RequestProcessor
 
     public function onUserVisit(Request $request)
     {
-        if ($this->context->getVisitor()->canAccess([$this, 'onVisit'])) {
+        if ($this->context->getVisitor()->canAccess([$this, 'onAccessVisit'])) {
             return $this->onAccessVisit($request);
         } else {
             return $this->onDeny($request);
