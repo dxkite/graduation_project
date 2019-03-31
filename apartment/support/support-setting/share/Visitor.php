@@ -137,4 +137,18 @@ class Visitor
     {
         return strlen($this->id) === 0;
     }
+
+    /**
+     * Set 权限
+     *
+     * @param  Permission  $permission  权限
+     *
+     * @return  self
+     */ 
+    public function setPermission(Permission $permission)
+    {
+        $this->permission = $permission;
+
+        return $this;
+    }
 }

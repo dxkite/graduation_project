@@ -2,6 +2,7 @@
 namespace support\setting\controller;
 
 use suda\orm\TableStruct;
+use suda\orm\exception\SQLException;
 use support\setting\table\UserTable;
 use support\setting\exception\UserException;
 use support\setting\controller\UserController;
@@ -57,21 +58,35 @@ class UserController
      * @param integer $status
      * @return boolean
      */
-    public function add(string $name, string $password, string $ip, ?string $mobile = null, ?string $email = null, ?string $by = null, int $status = UserTable::NORMAL): bool
+    public function add(string $name, string $password, string $ip = '', ?string $mobile = null, ?string $email = null, ?string $by = null, int $status = UserTable::NORMAL): bool
     {
         $this->assertName($name);
         $this->assertEmail($email);
         $this->assertMobile($mobile);
-        return $this->table->write([
-            'name' => $name,
-            'password' => \password_hash($password, PASSWORD_DEFAULT),
-            'mobile' => $mobile,
-            'email' => $email,
-            'create_ip' => $ip,
-            'create_by' => $by,
-            'create_time' => time(),
-            'status' => $status,
-        ])->isOk();
+        try {
+            $id = $this->table->write([
+                'name' => $name,
+                'password' => \password_hash($password, PASSWORD_DEFAULT),
+                'mobile' => $mobile,
+                'email' => $email,
+                'create_ip' => $ip,
+                'create_by' => $by,
+                'create_time' => time(),
+                'status' => $status,
+            ])->id();
+        } catch (SQLException $e) {
+            $message = $e->getMessage();
+            if (strpos($message, 'name')) {
+                throw new UserException('name exist error', UserException::ERR_NAME_EXISTS);
+            }
+            if (strpos($message, 'email')) {
+                throw new UserException('email exist error', UserException::ERR_EMAIL_EXISTS);
+            }
+            if (strpos($message, 'mobile')) {
+                throw new UserException('mobile exist error', UserException::ERR_MOBILE_EXISTS);
+            }
+            throw new UserException('account exist error', UserException::ERR_ACCOUNT_EXISTS);
+        }
     }
 
     /**
@@ -83,6 +98,39 @@ class UserController
     public function getByName(string $name):?TableStruct
     {
         return $this->table->read('*')->where('LOWER(name)=LOWER(:name)', ['name' => $name])->one();
+    }
+
+    /**
+     * 通过用户ID获取用户
+     *
+     * @param string $name
+     * @return array|null
+     */
+    public function getById(string $id):?TableStruct
+    {
+        return $this->table->read('*')->where('id = ?', $id)->one();
+    }
+
+    /**
+     * 通过用户ID获取用户名和头像
+     *
+     * @param string $name
+     * @return array|null
+     */
+    public function getBaseInfoById(string $id):?TableStruct
+    {
+        return $this->table->read('name', 'headimg', 'create_time')->where('id = ?', $id)->one();
+    }
+
+    /**
+     * 通过用户ID获取用户信息
+     *
+     * @param string $name
+     * @return array|null
+     */
+    public function getInfoById(string $id):?TableStruct
+    {
+        return $this->table->read('name', 'headimg', 'email', 'mobile', 'create_time')->where('id = ?', $id)->one();
     }
 
     /**

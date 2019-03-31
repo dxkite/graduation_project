@@ -67,7 +67,7 @@ class UserSession implements MethodParameterInterface, ResultProcessor
         $table = new SessionTable;
         $session = new static;
         $session->group = $group;
-        $session->token = str_replace('=', '', base64_encode(\md5(\microtime(true).$userId.$group.$expireIn, true)));
+        $session->token = str_replace(['=','+','/'], 'o', base64_encode(\md5(\microtime(true).$userId.$group.$expireIn, true)));
         // 用户会话有效
         if ($data = $table->read('id', 'expire', 'token', 'grantee')->where([
             'ip' => $ip,
@@ -83,7 +83,7 @@ class UserSession implements MethodParameterInterface, ResultProcessor
             if ($data['expire'] < $limit && $expireIn === 0) {
                 $session->expireTime = $session->expireTime + $beat;
                 $write->write('expire', $session->expireTime);
-            }else{
+            } else {
                 $session->expireTime = time() + $expireIn;
                 $write->write('expire', $session->expireTime);
             }

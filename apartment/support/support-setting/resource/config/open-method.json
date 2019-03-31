@@ -1,6 +1,9 @@
 {
     "user-provider": {
         "url": "/user-provider[/{_method:string}]",
-        "class": "support.setting.provider.UserProvider"
+        "class": [
+            "support.setting.provider.UserProvider",
+            "support.setting.provider.VisitorProvider"
+        ]
     }
 }

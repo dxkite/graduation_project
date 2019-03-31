@@ -16,4 +16,5 @@ class UserException extends RuntimeException
     const ERR_MOBILE_FORMAT = 9;
     const ERR_MOBILE_EXISTS = 10;
     const ERR_PASSWORD_OR_ACCOUNT = 11;
+    const ERR_ACCOUNT_EXISTS = 12;
 }
