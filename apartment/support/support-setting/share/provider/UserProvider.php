@@ -1,20 +1,29 @@
 <?php
 namespace support\setting\provider;
 
+use support\setting\UserSession;
 use support\setting\exception\UserException;
+use support\setting\controller\UserController;
 
-class UserProvider
+class UserProvider extends UserSessionAwareProvider
 {
- 
+
     /**
-     * 登陆 
+     * 登陆
      *
      * @param string $account 账号
      * @param string $password 密码
-     * @return null|array 能登陆则非空
+     * @param boolean $remeber
+     * @return \support\setting\UserSession
      */
-    public function signin(string $account, string $password): ?array
+    public function signin(string $account, string $password, bool $remeber = false): UserSession
     {
-        
+        $controller = new UserController;
+        if ($user = $controller->signin($account, $password)) {
+            $this->session = UserSession::create($user['id'], $remeber ? 3600 : 25200, $this->request->getRemoteAddr());
+        } else {
+            throw new UserException('password or account error', UserException::ERR_PASSWORD_OR_ACCOUNT);
+        }
+        return $this->session;
     }
 }

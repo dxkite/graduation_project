@@ -15,8 +15,8 @@ abstract class AutoCreate extends Table
         $cache = Table::$application->cache();
         // 避免多次重复创建表
         if ($cache->has($cacheKey) === false && SUDA_DEBUG) {
-            (new MySQLTableCreator($this->getSource()->write(), $this->getStruct()->getFields()))->create();
-            $cache->set($name, true, 0);
+            (new MySQLTableCreator($this->access->getSource()->write(), $this->access->getStruct()->getFields()))->create();
+            $cache->set($cacheKey, true, 0);
         }
     }
 }

@@ -64,14 +64,14 @@ class MethodParameterBag
         // 压入调用参数
         foreach ($method->getParameters() as $param) {
             $name = $param->getName();
-            $pos = $param->getPosition();
-            $value = $this->buildTypeValue($pos, $name, $param);
+            $position = $param->getPosition();
+            $value = $this->buildTypeValue($position, $name, $param);
             if ($param->hasType()) {
                 if (ContentWrapper::isTypeOf($value, $param->getType()) === false) {
-                    throw new InvalidArgumentException('paramter '.$name.' at '.$position.' could not be '. $param->getType(), -32602);
+                    throw new InvalidArgumentException('paramter '.$name.' at '.$position.' must be '. $param->getType(), -32602);
                 }
             }
-            $parameter[$pos] = $value;
+            $parameter[$position] = $value;
         }
         return $parameter;
     }
@@ -81,7 +81,7 @@ class MethodParameterBag
         if (preg_match('/@param-source\s+([\w,]+)\s*$/ims', $docs, $match)) {
             return explode(',', strtoupper(trim($match[1], ',')));
         }
-        return $this->json !== null ? ['JSON'] : ['GET'];
+        return $this->json !== null ? ['JSON'] : [ 'POST','GET'];
     }
 
     public function isPHPInnerType(string $typeName):bool
@@ -95,8 +95,8 @@ class MethodParameterBag
         foreach ($this->sourceFrom as  $from) {
             if ($parameter->getType() !== null) {
                 if ($this->isPHPInnerType($parameter->getType())) {
-                    $data = $this->buildPHPInnerTypeValueFrom($position, $name, $from);
-                    if (settype($data, $parameter->getType())) {
+                    $data = $this->buildValueFrom($position, $name, $from);
+                    if (settype($data, $parameter->getType()) === false) {
                         continue;
                     }
                 } else {

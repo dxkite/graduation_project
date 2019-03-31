@@ -9,7 +9,7 @@ use support\openmethod\processor\MethodInterfaceProcessor;
 
 class WhenLoadRoute
 {
-    public function prepareRoute(Application $application, string $moduleFullName, Module $module, array $routeConfig)
+    public function prepareRoute(Application $application, string $moduleFullName, string $prefix, Module $module, array $routeConfig)
     {
         foreach ($routeConfig as $name => $config) {
             $exname = $moduleFullName.':'.$name;
@@ -21,7 +21,9 @@ class WhenLoadRoute
             $attriute['config'] = $config;
             $attriute['route'] = $exname;
             $attriute['application'] = $application;
-            $application->request($method, $exname, $config['url'] ?? '/', $attriute);
+            $uri = $config['url'];
+            $uri = '/'.trim($prefix . $uri, '/');
+            $application->request($method, $exname, $uri, $attriute);
         }
     }
 
@@ -35,7 +37,8 @@ class WhenLoadRoute
                     'config' => $module->getConfig(),
                 ]);
                 if ($routeConfig !== null) {
-                    $this->prepareRoute($application, $fullName, $module, $routeConfig);
+                    $prefix = $module->getConfig('route-prefix.open-method', '');
+                    $this->prepareRoute($application, $fullName, $prefix, $module, $routeConfig);
                 }
             }
         }

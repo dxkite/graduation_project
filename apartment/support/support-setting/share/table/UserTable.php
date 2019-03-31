@@ -27,6 +27,7 @@ class UserTable extends AutoCreate
             $struct->field('mobile', 'varchar', 255)->unique()->default(null)->comment('手机号'),
             $struct->field('password', 'varchar', 255)->comment('密码'),
             $struct->field('headimg', 'varchar', 512)->comment('头像'),
+            $struct->field('create_ip', 'varchar', 32)->comment('创建IP'),
             $struct->field('create_by', 'bigint', 20)->default(0)->comment('创建的用户'),
             $struct->field('create_time', 'int', 11)->key()->comment('创建时间'),
             $struct->field('status', 'tinyint', 1)->key()->default(UserTable::NORMAL)->comment('用户状态'),

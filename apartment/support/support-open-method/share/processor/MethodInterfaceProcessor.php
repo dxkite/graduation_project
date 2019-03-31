@@ -7,17 +7,18 @@ use RuntimeException;
 use suda\framework\Route;
 use BadMethodCallException;
 use suda\framework\Request;
-use support\openmethod\Permission;
 use suda\application\Module;
 use suda\framework\Response;
 use InvalidArgumentException;
+use suda\application\Application;
+use support\openmethod\Permission;
 use support\openmethod\ExportMethod;
 use support\openmethod\ExportMessage;
-use suda\application\Application;
 use support\openmethod\MethodParameterBag;
 use support\openmethod\AuthorizationInterface;
-use support\openmethod\processor\ResultProcessor;
 use suda\application\processor\RequestProcessor;
+use support\openmethod\processor\ResultProcessor;
+use support\openmethod\FrameworkContextAwareInterface;
 
 class MethodInterfaceProcessor
 {
@@ -47,9 +48,9 @@ class MethodInterfaceProcessor
             $application->debug()->time('build parameter');
             list($id, $parameterBag) = $this->buildMethodParameterBag($methods, $id, $method, $application, $request);
             $application->debug()->timeEnd('build parameter');
-            $result = $this->invokeMethod($parameterBag);
+            $result = $this->invokeMethod($parameterBag, $application, $request, $response);
             if ($result instanceof ResultProcessor) {
-                $result->processor($application, $request, $response);
+                return $result->processor($application, $request, $response);
             } else {
                 return [
                     'id' => $id,
@@ -71,7 +72,7 @@ class MethodInterfaceProcessor
         }
     }
 
-    protected function invokeMethod(MethodParameterBag $parameterBag)
+    protected function invokeMethod(MethodParameterBag $parameterBag, Application $application, Request $request, Response $response)
     {
         $method = $parameterBag->getMethod();
         $parameter = $parameterBag->getParameter();
@@ -82,10 +83,25 @@ class MethodInterfaceProcessor
         }
         if ($methodIsStatic) {
             $this->assertCanAccessMethod(null, $method);
+            $this->contextAware(null, $method, $application, $request, $response);
             return $method->getReflectionMethod()->invokeArgs(null, $parameter);
         } else {
             $this->assertCanAccessMethod($object, $method);
+            $this->contextAware($object, $method, $application, $request, $response);
             return $method->getReflectionMethod()->invokeArgs($object, $parameter);
+        }
+    }
+
+    protected function contextAware($object, ExportMethod $export, Application $application, Request $request, Response $response)
+    {
+        $hasMethod = $export->getReflectionClass()->implementsInterface(FrameworkContextAwareInterface::class) || $export->getReflectionClass()->hasMethod('setContext');
+        if ($hasMethod) {
+            $setContext = $export->getReflectionClass()->getMethod('setContext');
+            if ($setContext->isStatic()) {
+                $setContext->invokeArgs($object, [ $application,  $request,  $response]);
+            } else {
+                $setContext->invokeArgs($object, [ $application,  $request,  $response]);
+            }
         }
     }
 
@@ -97,7 +113,7 @@ class MethodInterfaceProcessor
             if ($hasMethod) {
                 $getPermission = $export->getReflectionClass()->getMethod('getPermission');
                 if ($getPermission->isStatic()) {
-                    $currentPermission = $getPermission->invoke(null);
+                    $currentPermission = $getPermission->invoke($object);
                 } else {
                     $currentPermission = $getPermission->invoke($object);
                 }
