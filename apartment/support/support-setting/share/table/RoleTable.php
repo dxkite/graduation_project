@@ -2,6 +2,7 @@
 namespace support\setting\table;
 
 use suda\orm\TableStruct;
+use support\openmethod\Permission;
 use support\setting\table\AutoCreate;
 
 /**

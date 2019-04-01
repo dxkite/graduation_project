@@ -1,7 +1,9 @@
 <?php
 namespace support\setting\controller;
 
+use ArrayObject;
 use suda\orm\TableStruct;
+use support\setting\PageData;
 use support\openmethod\Permission;
 use support\setting\table\RoleTable;
 use support\setting\table\GrantTable;
@@ -136,5 +138,39 @@ class VisitorController
     public function revokeAll(int $grantee):bool
     {
         return $this->grant->delete(['grantee' => $grantee])->ok();
+    }
+
+
+    /**
+     * 列出角色列表
+     *
+     * @param integer|null $page
+     * @param integer $row
+     * @return PageData
+     */
+    public function listRole(?int $page = null, int $row = 10): PageData
+    {
+        return PageData::create($this->role->read('id', 'name', 'permission'), $page, $row);
+    }
+
+    /**
+     * 列出角色列表
+     *
+     * @param string $user
+     * @param integer|null $page
+     * @param integer $row
+     * @return \support\setting\PageData
+     */
+    public function listUserRole(string $user, ?int $page = null, int $row = 10): PageData
+    {
+        $grants = $this->grant->read('grant')->where(['grantee' => $userId])->all();
+        if (count($grants) > 0) {
+            $grantIds = [];
+            foreach ($grants as $item) {
+                $grantIds[] = $item['grant'];
+            }
+            return PageData::create($this->role->read('id', 'name', 'permission')->where(['id' => new ArrayObject($grantIds)]), $page, $row);
+        }
+        return PageData::empty($page,$row);
     }
 }

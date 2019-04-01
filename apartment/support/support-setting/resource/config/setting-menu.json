@@ -7,5 +7,16 @@
                 "name": "网站状态"
             }
         }
+    },
+    "${module}@${group}:role_list": {
+        "name": "角色管理",
+        "child": {
+            "${module}@${group}:role_list": {
+                "name": "角色列表"
+            },
+            "${module}@${group}:role_add": {
+                "name": "添加角色"
+            }
+        }
     }
 }

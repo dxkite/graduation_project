@@ -113,6 +113,30 @@ abstract class Response implements RequestProcessor
      */
     public function redirect(string $url)
     {
-        return $this->context->getResponse()->redirect($url);
+        $this->context->getResponse()->redirect($url);
+    }
+
+    /**
+     * 语言翻译
+     *
+     * @param string $message
+     * @param mixed ...$_
+     * @return string
+     */
+    public function _(string $message, ...$_)
+    {
+        return $this->context->getApplication()->_($message, ...$_);
+    }
+
+    /**
+     * 跳转到某页面
+     *
+     * @param string $url
+     * @return void
+     */
+    public function goBack(string $default)
+    {
+        $url = $this->history->last($this->context->getSession()->id(), 0, $default);
+        $this->context->getResponse()->redirect($url);
     }
 }

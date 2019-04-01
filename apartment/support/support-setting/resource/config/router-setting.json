@@ -10,5 +10,13 @@
     "verify": {
         "class": "support.setting.response.user.VerifyImageResponse",
         "url": "\/verify-image"
+    },
+    "role_list": {
+        "class": "support.setting.response.role.ListResponse",
+        "url": "\/role[\/{page:int}]"
+    },
+    "role_add": {
+        "class": "support.setting.response.role.AddResponse",
+        "url": "\/role\/add"
     }
 }
