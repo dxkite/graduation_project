@@ -2,11 +2,12 @@
 namespace support\setting\response;
 
 use suda\framework\Request;
-use support\setting\response\SignedResponse;
+use support\setting\response\SettingResponse;
 
-class IndexResponse extends SignedResponse
+
+class IndexResponse extends SettingResponse
 {
-    public function onAccessVisit(Request $request)
+    public function onSettingVisit(Request $request)
     {
         if (function_exists('gd_info')) {
             $gd = gd_info();

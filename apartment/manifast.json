@@ -2,6 +2,10 @@
     "name": "suda-demo-app",
     "version": "1.0-dev",
     "language": "zh-CN",
+    "route-group":[
+        "default",
+        "setting"
+    ],
     "module-paths":[
         "modules",
         "support"

@@ -1,0 +1,11 @@
+{
+    "${module}@${group}:index": {
+        "name": "网站设置",
+        "sort": -999,
+        "child": {
+            "${module}@${group}:index": {
+                "name": "网站状态"
+            }
+        }
+    }
+}

@@ -10,7 +10,7 @@
         }
     },
     "route-prefix": {
-        "default": "/setting",
+        "setting": "/setting",
         "open-method": "/setting-provider"
     },
     "discription": "设置模块"

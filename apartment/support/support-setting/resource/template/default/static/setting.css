@@ -28,10 +28,13 @@
 .sidebar .nav-link {
   font-weight: 500;
   color: #333;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .sidebar .nav-link.active {
   color: #007bff;
+  padding-left: 1rem;
 }
 
 .sidebar .nav-link:hover .feather,
@@ -40,8 +43,18 @@
 }
 
 .sidebar-heading {
-  font-size: .75rem;
   text-transform: uppercase;
+  display: block;
+  border-left: #e5e5e5 solid .25rem;
+  margin-left: 1rem;
+  padding: .5em;
+  cursor: pointer;
+  transition: .5s;
+}
+.sidebar-heading:hover  {
+  border-left: rgba(0, 0, 0, .25) solid .25rem;
+  background-color: #e5e5e5;
+  text-decoration: none;
 }
 
 /*
