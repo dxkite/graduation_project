@@ -2,11 +2,11 @@
     <div class="sidebar-sticky">
         <!-- 侧边栏 -->
         @foreach($:menuTree([]) as $item)
-        <a class="sidebar-heading text-muted" href="#{{$item['name']}}" data-toggle="collapse"
+        <a class="sidebar-heading" href="#{{$item['name']}}" data-toggle="collapse"
             aria-expanded="{{$item['select']?'true':'false'}}">{{$item['name']}}</a>
         @if(isset($item['child']))
-        <div class="collapse {{$item['select']?'show':''}}" id="{{$item['name']}}">
-            <ul class="nav flex-column mb-2">
+        <div class="sidebar-body collapse {{$item['select']?'show':''}}" id="{{$item['name']}}">
+            <ul class="nav flex-column">
                 @foreach($item['child'] as $subitem)
                 <li class="nav-item">
                     <a class="nav-link @if($subitem['select']) active @endif" href="{{$subitem['link']}}">

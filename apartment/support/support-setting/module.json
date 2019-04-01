@@ -3,7 +3,8 @@
     "version": "0.0.1",
     "import": {
         "share": {
-            "support\\setting": "share"
+            "support\\setting": "share",
+            "global": "share/functions.php"
         },
         "src": {
             "support\\setting\\response": "src"
