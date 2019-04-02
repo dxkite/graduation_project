@@ -51,7 +51,9 @@ class MethodInterfaceProcessor
             $result = $this->invokeMethod($parameterBag, $application, $request, $response);
             if ($result instanceof ResultProcessor) {
                 return $result->processor($application, $request, $response);
-            } else {
+            } else if ($result instanceof RawTemplate) {
+                return (new TemplateResultProcessor($result))->processor($application, $request, $response);
+            }else{
                 return [
                     'id' => $id,
                     'result' => $result,

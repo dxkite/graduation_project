@@ -34,10 +34,42 @@ abstract class Response implements RequestProcessor
      */
     protected $history;
 
+    /**
+     * 响应
+     *
+     * @var FrameworkResponse
+     */
+    protected $response;
+
+    /**
+     * 请求
+     *
+     * @var Request
+     */
+    protected $request;
+
+    /**
+     * 应用引用
+     *
+     * @var Application
+     */
+    protected $application;
+    
+    /**
+     * 访问者
+     *
+     * @var Visitor
+     */
+    protected $visitor;
+
     public function onRequest(Application $application, Request $request, FrameworkResponse $response)
     {
         $this->context = (new ContextCreateProcessor)->onRequest($application, $request, $response);
         $this->history = new HistoryController;
+        $this->visitor = $this->context->getVisitor();
+        $this->application = $application;
+        $this->response = $response;
+        $this->request = $request;
         $response->setHeader('cache-control', 'no-store');
         if ($this->context->getVisitor()->isGuest()) {
             return $this->onGuestVisit($request);
