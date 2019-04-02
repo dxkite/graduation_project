@@ -74,8 +74,8 @@ class Permission implements \JsonSerializable
         if (empty($this->permissions) && empty($anthor->permissions)) {
             return true;
         }
-        list($this_parent, $this_childs) = $this->splitIt($this->permissions);
-        list($anthor_parent, $anthor_childs) = $this->splitIt($anthor->permissions);
+        list($this_parent, $this_childs) = $this->explode($this->permissions);
+        list($anthor_parent, $anthor_childs) = $this->explode($anthor->permissions);
         // a有的t没有，且t有的a全有
         if (count(array_diff($anthor_parent, $this_parent)) > 0) {
             return false;
@@ -97,7 +97,7 @@ class Permission implements \JsonSerializable
      */
     public function has(string $name)
     {
-        list($this_parent, $this_childs) = $this->splitIt($this->permissions);
+        list($this_parent, $this_childs) = $this->explode($this->permissions);
         if (static::isParent($name)) {
             return is_array($name, $this_parent);
         } elseif (in_array($name, $this_childs)) {
@@ -131,26 +131,28 @@ class Permission implements \JsonSerializable
         return false;
     }
 
-    private function splitIt(array $permission)
+    private function explode(array $permission)
     {
-        $parent = [];
-        $childs = [];
-        // 去除父级元素
-        foreach ($permission as $index => $name) {
-            if ($this->isParent($name)) {
-                $parent[] = $name;
-            }else{
-                $childs[] = $name;
-            }
+        list($parent, $parentChilds) = $this->getParentChilds($permission);
+        // 去除父级子元素
+        foreach ($parent as $space) {
+            unset($parentChilds[$space]);
         }
-        foreach ($parent as $start) {
-            $childs = $this->removeChilds($start, $childs);
+        $childs = [];
+        foreach ($parentChilds as $space => $value) {
+            if ($this->canLevelUp($space, $value)) {
+                $parent[] = $space;
+                unset($parentChilds[$space]);
+            } else {
+                $childs = array_merge($childs, $parentChilds[$space]);
+            }
         }
         return [$parent,$childs];
     }
 
-    protected function removeChilds(string $parent, array $childs) {
-        return \array_filter($childs,function($child) use ($parent) {
+    protected function removeChilds(string $parent, array $childs)
+    {
+        return \array_filter($childs, function ($child) use ($parent) {
             if (strpos($child, $parent.'.') !== 0) {
                 return true;
             }
@@ -158,11 +160,34 @@ class Permission implements \JsonSerializable
         });
     }
 
+    protected function canLevelUp(string $parent, array $childs)
+    {
+        if (count(static::$permissionTable[$parent]) === count($childs)) {
+            return true;
+        }
+        return false;
+    }
+
+    protected function getParentChilds(array $permission)
+    {
+        $parent = [];
+        $childs = [];
+        foreach ($permission as $index => $name) {
+            if ($this->isParent($name)) {
+                $parent[] = $name;
+            } else {
+                list($space, $x) = \explode('.', $name, 2);
+                $childs[$space][] = $name;
+            }
+        }
+        return [$parent, $childs];
+    }
+
     private function filter(array $in)
     {
-        return array_filter($in, function ($name) {
+        return array_unique(array_filter($in, function ($name) {
             return in_array($name, Permission::$permissionFilter);
-        });
+        }));
     }
 
     public function getSystemPermissions()
@@ -181,7 +206,7 @@ class Permission implements \JsonSerializable
 
     public function minimum():array
     {
-        list($this_parent, $this_childs) = $this->splitIt($this->permissions);
+        list($this_parent, $this_childs) = $this->explode($this->permissions);
         return array_merge($this_parent, $this_childs);
     }
 
