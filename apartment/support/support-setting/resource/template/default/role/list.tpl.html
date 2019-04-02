@@ -21,8 +21,8 @@
                 <td class="text-nowrap">{{ $item['name'] }}</td>
                 <td>
                     <div class="tags">
-                        @foreach($item['permission']->jsonSerialize()??[] as $id)
-                        <span title="{{$id}}">{{ $item['permission']->alias($id) }}</span> @endforeach
+                        @foreach($item['permission']->jsonSerialize()??[] as $id => $name)
+                        <span title="{{$id}}" >{{ $name }}</span> @endforeach
                     </div>
                 </td>
                 <td>

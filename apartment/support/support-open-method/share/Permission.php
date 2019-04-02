@@ -28,6 +28,7 @@ class Permission implements \JsonSerializable
             // 字符串数组
             if (is_string(current($permissions))) {
                 $this->permissions = $this->filter($permissions);
+                $this->permissions = $this->minimum();
             } elseif (current($permissions) instanceof Permission) {
                 // 合并权限
                 $this->mergeArrays($permissions);
@@ -65,6 +66,7 @@ class Permission implements \JsonSerializable
                 $this->permissions = array_merge($this->permissions, $anthor->permissions);
             }
         }
+        $this->permissions = $this->minimum();
     }
 
     public function surpass(Permission $anthor)
@@ -72,35 +74,21 @@ class Permission implements \JsonSerializable
         if (empty($this->permissions) && empty($anthor->permissions)) {
             return true;
         }
-        
-        $permission = $anthor->permissions;
         list($this_parent, $this_childs) = $this->splitIt($this->permissions);
-        // 去除父级权限元素
-        $permission = array_diff($permission, $this_parent);
-        // 去除父级权限的子权限 g.n
-        foreach ($permission as $id => $name) {
-            if (strpos($name, '.')) {
-                list($p, $c) = preg_split('/\./', $name, 2);
-                if (in_array($p, $this_parent)) {
-                    unset($permission[$id]);
-                }
-            }
+        list($anthor_parent, $anthor_childs) = $this->splitIt($anthor->permissions);
+        // a有的t没有，且t有的a全有
+        if (count(array_diff($anthor_parent, $this_parent)) > 0) {
+            return false;
         }
-        // 去除父级权限的子权限 name
         foreach ($this_parent as $parent) {
-            if (isset(static::$permissionTable[$parent])) {
-                $permission = array_diff($permission, static::$permissionTable[$parent]);
-            }
-            if (empty($permission)) {
-                return true;
-            }
+            $anthor_childs = $this->removeChilds($parent, $anthor_childs);
         }
-        if (count(array_diff($permission, $this_childs))) {
+        if (count(array_diff($anthor_childs, $this_childs)) > 0) {
             return false;
         }
         return true;
     }
-
+ 
     /**
      * 检查是否包含单个权限name
      *
@@ -146,25 +134,28 @@ class Permission implements \JsonSerializable
     private function splitIt(array $permission)
     {
         $parent = [];
+        $childs = [];
         // 去除父级元素
-        foreach ($permission as $index => $perm) {
-            if ($this->isParent($perm)) {
-                $parent[] = $perm;
-                unset($permission[$index]);
+        foreach ($permission as $index => $name) {
+            if ($this->isParent($name)) {
+                $parent[] = $name;
+            }else{
+                $childs[] = $name;
             }
         }
+        foreach ($parent as $start) {
+            $childs = $this->removeChilds($start, $childs);
+        }
+        return [$parent,$childs];
+    }
 
-        // 去除父级权限的子权限
-        foreach ($parent as $index) {
-            if (isset(static::$permissionTable[$index])) {
-                $permission = array_diff($permission, static::$permissionTable[$index]);
+    protected function removeChilds(string $parent, array $childs) {
+        return \array_filter($childs,function($child) use ($parent) {
+            if (strpos($child, $parent.'.') !== 0) {
+                return true;
             }
-            if (empty($permission)) {
-                break;
-            }
-        }
-        // 父级，子集
-        return [$parent,$permission];
+            return false;
+        });
     }
 
     private function filter(array $in)
@@ -182,13 +173,13 @@ class Permission implements \JsonSerializable
     public function jsonSerialize()
     {
         $permissions = [];
-        foreach ($this->toArray() as $value) {
+        foreach ($this->minimum() as $value) {
             $permissions[$value] = static::alias($value);
         }
         return $permissions;
     }
 
-    public function toArray():array
+    public function minimum():array
     {
         list($this_parent, $this_childs) = $this->splitIt($this->permissions);
         return array_merge($this_parent, $this_childs);
@@ -287,6 +278,6 @@ class Permission implements \JsonSerializable
 
     public function __toString()
     {
-        return json_encode($this->toArray());
+        return json_encode($this->minimum());
     }
 }

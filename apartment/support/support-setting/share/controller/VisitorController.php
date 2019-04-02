@@ -99,6 +99,17 @@ class VisitorController
     }
 
     /**
+     * 获取
+     *
+     * @param integer $id
+     * @return TableStruct|null
+     */
+    public function getRole(int $id):?TableStruct
+    {
+        return $this->role->read('*')->where(['id' => $id])->one();
+    }
+
+    /**
      * 授权
      *
      * @param integer $id 角色ID
