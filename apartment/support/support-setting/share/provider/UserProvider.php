@@ -60,4 +60,17 @@ class UserProvider extends UserSessionAwareProvider
     {
         return $this->controller->list($page, $row);
     }
+
+    /**
+     * 搜索用户
+     *
+     * @param string $data
+     * @param integer|null $page
+     * @param integer $row
+     * @return \support\setting\PageData
+     */
+    public function search(string $data, ?int $page = null, int $row = 10): PageData
+    {
+        return $this->controller->search($data, $page, $row);
+    }
 }

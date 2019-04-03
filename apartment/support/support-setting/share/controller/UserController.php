@@ -205,4 +205,16 @@ class UserController
     {
         return PageData::create($this->table->read('id', 'headimg', 'name', 'email', 'mobile', 'create_time', 'status'), $page, $row);
     }
+
+    /**
+     * 搜索用户
+     *
+     * @param integer|null $page
+     * @param integer $row
+     * @return PageData
+     */
+    public function search(string $data, ?int $page = null, int $row = 10): PageData
+    {
+        return PageData::create($this->table->read('id', 'headimg', 'name', 'email', 'mobile', 'create_time', 'status')->where(' `name` LIKE CONCAT("%",:data,"%") OR `email` LIKE CONCAT("%",:data,"%") OR `mobile` LIKE CONCAT("%",:data,"%") ', ['data' => $data]), $page, $row);
+    }
 }
