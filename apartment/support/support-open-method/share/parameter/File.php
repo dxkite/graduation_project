@@ -1,12 +1,18 @@
 <?php
 namespace support\openmethod\parameter;
 
+use suda\framework\Request;
+use suda\framework\Response;
+use suda\application\Application;
 use suda\framework\http\UploadedFile;
+use support\openmethod\MethodParameterInterface;
+use support\openmethod\processor\ResultProcessor;
+use suda\application\processor\FileRangeProccessor;
 
 /**
  * 表单文件
  */
-class File extends UploadedFile
+class File extends UploadedFile implements ResultProcessor, MethodParameterInterface
 {
     /**
      * 是否是图片
@@ -48,7 +54,7 @@ class File extends UploadedFile
             }
             if ($imageType) {
                 $this->mimeType = image_type_to_mime_type($imageType);
-                $this->extension =  image_type_to_extension($imageType, false);
+                $this->extension = image_type_to_extension($imageType, false);
                 return true;
             }
         }
@@ -60,7 +66,8 @@ class File extends UploadedFile
      *
      * @return string
      */
-    public function getExtension():string {
+    public function getExtension():string
+    {
         return $this->extension ?? parent::getExtension();
     }
 
@@ -69,7 +76,37 @@ class File extends UploadedFile
      *
      * @return boolean
      */
-    public function isImage():bool {
+    public function isImage():bool
+    {
         return $this->image;
+    }
+
+    /**
+     * 输出到响应
+     *
+     * @param \suda\application\Application $application
+     * @param \suda\framework\Request $request
+     * @param \suda\framework\Response $response
+     * @return mixed
+     */
+    public function processor(Application $application, Request $request, Response $response)
+    {
+        $processor = new FileRangeProccessor($this);
+        return $processor->onRequest($application, $request, $response);
+    }
+
+    /**
+     * 从请求中创建文件
+     *
+     * @param integer $position
+     * @param string $name
+     * @param string $from
+     * @param \suda\application\Application $application
+     * @param \suda\framework\Request $request
+     * @return mixed
+     */
+    public static function createParameterFromRequest(int $position, string $name, string $from, Application $application, Request $request)
+    {
+        return new self($request->getFile($name));
     }
 }
