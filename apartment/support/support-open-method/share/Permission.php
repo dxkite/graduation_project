@@ -7,7 +7,7 @@ use suda\framework\Config;
 use suda\application\Application;
 
 /**
- * 二级权限验证，支持忽略父级元素
+ * 二级权限验证
  */
 class Permission implements \JsonSerializable
 {

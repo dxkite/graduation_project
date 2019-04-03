@@ -1,13 +1,26 @@
 <?php
 namespace support\setting\provider;
 
+use support\setting\PageData;
 use support\setting\UserSession;
 use support\setting\VerifyImage;
+use support\openmethod\parameter\File;
 use support\setting\exception\UserException;
 use support\setting\controller\UserController;
 
 class UserProvider extends UserSessionAwareProvider
 {
+    /**
+     * UserController
+     *
+     * @var UserController
+     */
+    protected $controller;
+
+    public function __construct()
+    {
+        $this->controller = new UserController;
+    }
 
     /**
      * 登陆
@@ -24,12 +37,27 @@ class UserProvider extends UserSessionAwareProvider
         if ($verify->checkCode($code) === false) {
             throw new UserException('code error', UserException::ERR_CODE);
         }
-        $controller = new UserController;
-        if ($user = $controller->signin($account, $password)) {
+        if ($user = $this->controller->signin($account, $password)) {
             $this->session = UserSession::save($user['id'], $this->request->getRemoteAddr(), $remeber ? 3600 : 25200);
         } else {
             throw new UserException('password or account error', UserException::ERR_PASSWORD_OR_ACCOUNT);
         }
         return $this->session;
+    }
+    
+    public function add(File $image, string $name, string $password, ?string $mobile, ?string $email)
+    {
+    }
+
+    /**
+     * 列出用户
+     *
+     * @param integer|null $page
+     * @param integer $row
+     * @return PageData
+     */
+    public function list(?int $page = null, int $row = 10): PageData
+    {
+        return $this->controller->list($page, $row);
     }
 }

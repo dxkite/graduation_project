@@ -1,9 +1,9 @@
 <?php
-namespace support\setting\response\role;
+namespace support\setting\response\user;
 
 use suda\framework\Request;
 use support\openmethod\Permission;
-use support\setting\provider\VisitorProvider;
+use support\setting\provider\UserProvider;
 use support\setting\response\SettingResponse;
 
 
@@ -18,19 +18,14 @@ class ListResponse extends  SettingResponse
      */
     public function onSettingVisit(Request $request)
     {
-        $controller = new VisitorProvider;
-        $canDelete = $this->context->getVisitor()->hasPermission('role.delete');
-        if ($request->hasGet('delete')) {
-            $controller->deleteRole($request->get('delete'));
-            $this->goBack($this->getUrl('role_list'));
-            return;
-        }
-        $view = $this->view('role/list');
+        $provider = new UserProvider;
+        $provider->loadFromContext($this->context);
+        $view = $this->view('user/list');
         $page = $request->get('page', 1);
-        $list = $controller->listRole($page, 10);
+        $list = $provider->list($page, 10);
         $pageBar = $list->getPage();
-        $pageBar['router'] = 'role_list';
-        $view->set('title', $this->_('角色列表 第$0页', $list->getPageCurrent()));
+        $pageBar['router'] = 'user_list';
+        $view->set('title', $this->_('用户列表 第$0页', $list->getPageCurrent()));
         $view->set('list', $list->getRows());
         $view->set('page', $pageBar);
         return $view;

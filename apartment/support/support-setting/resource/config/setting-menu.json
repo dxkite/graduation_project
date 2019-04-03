@@ -8,6 +8,17 @@
             }
         }
     },
+    "${module}@${group}:user_list": {
+        "name": "管理员管理",
+        "child": {
+            "${module}@${group}:user_list": {
+                "name": "管理列表"
+            },
+            "${module}@${group}:user_add": {
+                "name": "添加管理"
+            }
+        }
+    },
     "${module}@${group}:role_list": {
         "name": "角色管理",
         "child": {

@@ -203,6 +203,6 @@ class UserController
      */
     public function list(?int $page = null, int $row = 10): PageData
     {
-        return PageData::create($this->role->read('id', 'name', 'permission'), $page, $row);
+        return PageData::create($this->table->read('id', 'headimg', 'name', 'email', 'mobile', 'create_time', 'status'), $page, $row);
     }
 }
