@@ -5,7 +5,7 @@ use suda\framework\Request;
 use support\openmethod\Permission;
 use support\setting\provider\VisitorProvider;
 use support\setting\response\SettingResponse;
- 
+
 
  
 class ListResponse extends  SettingResponse

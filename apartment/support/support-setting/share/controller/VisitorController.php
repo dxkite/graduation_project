@@ -3,10 +3,13 @@ namespace support\setting\controller;
 
 use ArrayObject;
 use suda\orm\TableStruct;
+use support\setting\Visitor;
 use support\setting\PageData;
+use support\setting\UserSession;
 use support\openmethod\Permission;
 use support\setting\table\RoleTable;
 use support\setting\table\GrantTable;
+use support\setting\controller\UserController;
 
 class VisitorController
 {
@@ -74,15 +77,15 @@ class VisitorController
      *
      * @param integer $id
      * @param string $name
-     * @param \support\openmethod\Permission $permisson
+     * @param \support\openmethod\Permission $permission
      * @param integer $sort
      * @return boolean
      */
-    public function editRole(int $id, string $name, Permission $permisson, int $sort = 0): bool
+    public function editRole(int $id, string $name, Permission $permission, int $sort = 0): bool
     {
         return $this->role->write([
             'name' => $name,
-            'permission' => $permisson,
+            'permission' => $permission,
             'sort' => $sort,
         ])->where(['id' => $id]) -> ok();
     }
@@ -117,7 +120,7 @@ class VisitorController
      * @param string $investor 授权者
      * @return boolean
      */
-    public function grant(int $id, string $grantee, string $investor = null): bool
+    public function grant(int $id, string $grantee, ?string $investor = null): bool
     {
         if ($this->grant->read('id')->where(['grantee' => $grantee,'grant' => $id])->one()) {
             return true;
@@ -183,5 +186,22 @@ class VisitorController
             return PageData::create($this->role->read('id', 'name', 'permission')->where(['id' => new ArrayObject($grantIds)]), $page, $row);
         }
         return PageData::empty($page,$row);
+    }
+
+    /**
+     * 获取用户
+     *
+     * @param \support\setting\UserSession $session
+     * @return Visitor
+     */
+    public function getVisitor(UserSession $session):Visitor
+    {
+        $visitor = new Visitor($session->getUserId());
+        $ctr = new VisitorController;
+        $visitor->setPermission($ctr->loadPermission($session->getUserId()));
+        $uCtr = new UserController;
+        $data = $uCtr->getInfoById($session->getUserId());
+        $visitor->setAttributes($data?$data->toArray():[]);
+        return $visitor;
     }
 }

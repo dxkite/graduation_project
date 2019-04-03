@@ -2,6 +2,7 @@
 namespace support\setting\controller;
 
 use suda\orm\TableStruct;
+use support\setting\PageData;
 use suda\orm\exception\SQLException;
 use support\setting\table\UserTable;
 use support\setting\exception\UserException;
@@ -191,5 +192,17 @@ class UserController
             throw new UserException('invalid user email', UserException::ERR_EMAIL_FORMAT);
         }
         return $email;
+    }
+
+    /**
+     * 列出用户
+     *
+     * @param integer|null $page
+     * @param integer $row
+     * @return PageData
+     */
+    public function list(?int $page = null, int $row = 10): PageData
+    {
+        return PageData::create($this->role->read('id', 'name', 'permission'), $page, $row);
     }
 }

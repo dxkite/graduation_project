@@ -22,5 +22,9 @@
     "role_edit": {
         "class": "support.setting.response.role.EditResponse",
         "url": "\/role\/{id:int}\/edit"
+    },
+    "user_list": {
+        "class": "support.setting.response.user.ListResponse",
+        "url": "\/user[\/{page:int}]"
     }
 }

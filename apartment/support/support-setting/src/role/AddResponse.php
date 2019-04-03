@@ -3,8 +3,8 @@ namespace support\setting\response\role;
 
 use suda\framework\Request;
 use support\openmethod\Permission;
+use support\setting\provider\VisitorProvider;
 use support\setting\response\SettingResponse;
-use support\setting\controller\VisitorController;
 
 class AddResponse extends SettingResponse
 {
@@ -16,9 +16,9 @@ class AddResponse extends SettingResponse
      */
     public function onSettingVisit(Request $request)
     {
-        $controller = new VisitorController;
+        $controller = new VisitorProvider;
         if ($request->hasPost('name')) {
-            $id = $controller->createRole($request->post('name'), new Permission(array_keys($request->post('auths', []))));
+            $id = $controller->createRole($request->post('name'), array_keys($request->post('auths', [])));
             if ($id) {
                 $this->goRoute('role_list');
                 return;

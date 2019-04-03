@@ -3,8 +3,8 @@ namespace support\setting\response\role;
 
 use suda\framework\Request;
 use support\openmethod\Permission;
+use support\setting\provider\VisitorProvider;
 use support\setting\response\SettingResponse;
-use support\setting\controller\VisitorController;
 
 class EditResponse extends SettingResponse
 {
@@ -16,13 +16,13 @@ class EditResponse extends SettingResponse
      */
     public function onSettingVisit(Request $request)
     {
-        $controller = new VisitorController;
+        $controller = new VisitorProvider;
         $id = $request->get('id');
         $role = $controller->getRole($id);
         $view = $this->view('role/edit');
         if ($role !== null) {
             if ($request->hasPost('auths')) {
-                $controller->editRole($id, $request->post('name'), new Permission(array_keys($request->post('auths', []))));
+                $controller->editRole($id, $request->post('name'), array_keys($request->post('auths', [])));
                 $role = $controller->getRole($id);
             }
             $view->set('title', $this->_('编辑角色'));
