@@ -3,12 +3,12 @@ namespace support\setting\table;
 
 use suda\orm\TableStruct;
 use support\openmethod\Permission;
-use support\setting\table\AutoCreate;
+use support\setting\table\AutoCreateTable;
 
 /**
  * 管理员表
  */
-class RoleTable extends AutoCreate
+class RoleTable extends AutoCreateTable
 {
     const FREEZE = 0;   // 禁用登陆
     const NORMAL = 1;  //  正常状态

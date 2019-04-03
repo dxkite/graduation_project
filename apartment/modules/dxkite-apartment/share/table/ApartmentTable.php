@@ -3,18 +3,16 @@ namespace dxkite\apartment\table;
 
 use suda\orm\DataSource;
 use suda\orm\TableStruct;
-use suda\application\database\Table;
-use suda\orm\connection\creator\MySQLTableCreator;
+use support\setting\table\AutoCreateTable;
 
 /**
  * 公寓表
  */
-class ApartmentTable extends Table
+class ApartmentTable extends AutoCreateTable
 {
-    public function __construct(DataSource $datasource)
+    public function __construct()
     {
-        parent::__construct('apartment', $datasource);
-        (new MySQLTableCreator($this->getSource()->write(),$this->getStruct()->getFields()))->create();
+        parent::__construct('apartment');
     }
 
     public function onCreateStruct(TableStruct $struct):TableStruct

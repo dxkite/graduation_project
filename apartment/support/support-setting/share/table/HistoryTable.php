@@ -2,12 +2,12 @@
 namespace support\setting\table;
 
 use suda\orm\TableStruct;
-use support\setting\table\AutoCreate;
+use support\setting\table\AutoCreateTable;
 
 /**
  * 管理员表
  */
-class HistoryTable extends AutoCreate
+class HistoryTable extends AutoCreateTable
 {
     public function __construct()
     {

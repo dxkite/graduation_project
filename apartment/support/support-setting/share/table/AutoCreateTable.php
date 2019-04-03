@@ -6,7 +6,7 @@ use suda\orm\TableStruct;
 use suda\application\database\Table;
 use suda\orm\connection\creator\MySQLTableCreator;
 
-abstract class AutoCreate extends Table
+abstract class AutoCreateTable extends Table
 {
     public function __construct(string $name)
     {

@@ -2,12 +2,12 @@
 namespace support\setting\table;
 
 use suda\orm\TableStruct;
-use support\setting\table\AutoCreate;
+use support\setting\table\AutoCreateTable;
 
 /**
  * 登陆日志
  */
-class SessionTable extends AutoCreate
+class SessionTable extends AutoCreateTable
 {
     public function __construct()
     {
