@@ -21,11 +21,13 @@ class EditResponse extends SettingResponse
         $role = $controller->getRole($id);
         $view = $this->view('role/edit');
         if ($role !== null) {
+            $name = $request->post('name');
             if ($request->hasPost('auths')) {
                 $controller->editRole($id, $request->post('name'), array_keys($request->post('auths', [])));
                 $role = $controller->getRole($id);
             }
-            $view->set('title', $this->_('编辑角色'));
+            $view->set('title', $this->_('编辑角色 $0', $name));
+            $view->set('submenu', $this->_('编辑角色'));
             $auths = $this->visitor->getPermission()->readPermissions($this->application);
             $view->set('auths', $auths);
             $view->set('permission', $role['permission']);

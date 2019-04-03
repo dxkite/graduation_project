@@ -22,6 +22,11 @@ abstract class SettingResponse extends SignedResponse
                     if ($value['select']) {
                         $view->set('title', $value['name']);
                         $view->set('menuName', $value['name']);
+                        foreach ($value['child'] as $key => $submenu) {
+                            if ($submenu['select']) {
+                                $view->set('submenu', $submenu['name']);
+                            }
+                        }
                     }
                 }
             }

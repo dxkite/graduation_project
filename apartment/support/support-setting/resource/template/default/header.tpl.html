@@ -1,6 +1,11 @@
 <nav class="navbar navbar-dark sticky-top bg-dark navbar-expand-lg flex-md-nowrap p-0">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">{{ $:menuName('管理主页') }}</a>
     <ul class="navbar-nav mr-auto">
+        @if($?:submenu)
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="@u"> {{ $:submenu }}</a>
+        </li>
+        @endif
     </ul>
     <ul class="navbar-nav px-3">
         {:view.setting.header.navlist.prepend}
