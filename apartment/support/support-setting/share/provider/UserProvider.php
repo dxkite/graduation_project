@@ -1,6 +1,7 @@
 <?php
 namespace support\setting\provider;
 
+use suda\orm\TableStruct;
 use support\setting\PageData;
 use support\setting\UserSession;
 use support\setting\VerifyImage;
@@ -60,6 +61,35 @@ class UserProvider extends UserSessionAwareProvider
     public function add(string $name, string $password, string $ip = '', ?string $mobile = null, ?string $email = null, ?string $by = null, int $status = UserTable::NORMAL): string
     {
         return $this->controller->add($name, $password, $ip, $mobile, $email, $by, $status);
+    }
+
+    /**
+     * 编辑管理员
+     *
+     * @param string $id
+     * @param string $name
+     * @param string $password
+     * @param string $ip
+     * @param string|null $mobile
+     * @param string|null $email
+     * @param string|null $by
+     * @param integer $status
+     * @return boolean
+     */
+    public function edit(string $id, string $name, string $password, string $ip = '', ?string $mobile = null, ?string $email = null, ?string $by = null, int $status = UserTable::NORMAL): bool
+    {
+        return $this->controller->edit($id, $name, $password, $ip, $mobile, $email, $by, $status);
+    }
+    
+    /**
+     * 通过用户ID获取用户信息
+     *
+     * @param string $name
+     * @return TableStruct|null
+     */
+    public function getInfoById(string $id):?TableStruct
+    {
+        return $this->controller->getInfoById($id);
     }
 
     /**

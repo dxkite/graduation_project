@@ -91,6 +91,49 @@ class UserController
     }
 
     /**
+     * 编辑用户
+     *
+     * @param string $id
+     * @param string $name
+     * @param string $password
+     * @param string $ip
+     * @param string|null $mobile
+     * @param string|null $email
+     * @param string|null $by
+     * @param integer $status
+     * @return boolean
+     */
+    public function edit(string $id, string $name, string $password, string $ip = '', ?string $mobile = null, ?string $email = null, ?string $by = null, int $status = UserTable::NORMAL): bool
+    {
+        $this->assertName($name);
+        $this->assertEmail($email);
+        $this->assertMobile($mobile);
+        try {
+            return $this->table->write([
+                'name' => $name,
+                'password' => \password_hash($password, PASSWORD_DEFAULT),
+                'mobile' => $mobile,
+                'email' => $email,
+                'create_ip' => $ip,
+                'create_by' => $by,
+                'create_time' => time(),
+                'status' => $status,
+            ])->where(['id' => $id])->ok();
+        } catch (SQLException $e) {
+            $message = $e->getMessage();
+            if (strpos($message, 'name')) {
+                throw new UserException('name exist error', UserException::ERR_NAME_EXISTS);
+            }
+            if (strpos($message, 'email')) {
+                throw new UserException('email exist error', UserException::ERR_EMAIL_EXISTS);
+            }
+            if (strpos($message, 'mobile')) {
+                throw new UserException('mobile exist error', UserException::ERR_MOBILE_EXISTS);
+            }
+            throw new UserException('account exist error', UserException::ERR_ACCOUNT_EXISTS);
+        }
+    }
+    /**
      * 通过用户名获取用户
      *
      * @param string $name
@@ -116,7 +159,7 @@ class UserController
      * 通过用户ID获取用户名和头像
      *
      * @param string $name
-     * @return array|null
+     * @return TableStruct|null
      */
     public function getBaseInfoById(string $id):?TableStruct
     {
@@ -127,18 +170,18 @@ class UserController
      * 通过用户ID获取用户信息
      *
      * @param string $name
-     * @return array|null
+     * @return TableStruct|null
      */
     public function getInfoById(string $id):?TableStruct
     {
-        return $this->table->read('name', 'headimg', 'email', 'mobile', 'create_time')->where('id = ?', $id)->one();
+        return $this->table->read('id', 'headimg', 'name', 'email', 'mobile', 'create_time', 'create_by', 'create_ip', 'status')->where('id = ?', $id)->one();
     }
 
     /**
      * 通过用户邮箱获取用户
      *
      * @param string $email
-     * @return array|null
+     * @return TableStruct|null
      */
     public function getByEmail(string $email):?TableStruct
     {
@@ -149,13 +192,19 @@ class UserController
      * 通过手机号获取用户
      *
      * @param string $mobile
-     * @return array|null
+     * @return TableStruct|null
      */
     public function getByMobile(string $mobile):?TableStruct
     {
         return $this->table->read('*')->where(['mobile' => $email])->one();
     }
 
+    /**
+     * 获取账户
+     *
+     * @param string $account
+     * @return \suda\orm\TableStruct
+     */
     public function getByAccount(string $account):TableStruct
     {
         if (preg_match(UserController::EMAIL_PREG, $account)) {
@@ -203,7 +252,7 @@ class UserController
      */
     public function list(?int $page = null, int $row = 10): PageData
     {
-        return PageData::create($this->table->read('id', 'headimg', 'name', 'email', 'mobile', 'create_time', 'status'), $page, $row);
+        return PageData::create($this->table->read('id', 'headimg', 'name', 'email', 'mobile', 'create_time', 'create_by', 'create_ip', 'status'), $page, $row);
     }
 
     /**
@@ -215,6 +264,6 @@ class UserController
      */
     public function search(string $data, ?int $page = null, int $row = 10): PageData
     {
-        return PageData::create($this->table->read('id', 'headimg', 'name', 'email', 'mobile', 'create_time', 'status')->where(' `name` LIKE CONCAT("%",:data,"%") OR `email` LIKE CONCAT("%",:data,"%") OR `mobile` LIKE CONCAT("%",:data,"%") ', ['data' => $data]), $page, $row);
+        return PageData::create($this->table->read('id', 'headimg', 'name', 'email', 'mobile', 'create_time', 'create_by', 'create_ip', 'status')->where(' `name` LIKE CONCAT("%",:data,"%") OR `email` LIKE CONCAT("%",:data,"%") OR `mobile` LIKE CONCAT("%",:data,"%") ', ['data' => $data]), $page, $row);
     }
 }

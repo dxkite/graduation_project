@@ -35,14 +35,14 @@
             <td>{{ date('Y-m-d H:i:s',$item['create_time']) }} </td>
             <td>
                 <div class="btn-group btn-group-toggle">
-                    <a class="btn btn-outline-secondary btn-sm" href="@u('admin_edit',['id'=>$item['id']])">编辑</a>
+                    <a class="btn btn-outline-secondary btn-sm" href="@u('user_edit',['id'=>$item['id']])">编辑</a>
                     @if( $item['status'] == 1)
-                    <a class="btn btn-outline-success btn-sm" href="@u('admin_list',['freeze'=>$item['id']])">禁用登录</a>
+                    <a class="btn btn-outline-success btn-sm" href="@u(['freeze'=>$item['id']])">禁用登录</a>
                     @else
-                    <a class="btn btn-success btn-sm" href="@u('admin_list',['active'=>$item['id']])">允许登陆</a>
+                    <a class="btn btn-success btn-sm" href="@u(['active'=>$item['id']])">允许登陆</a>
                     @endif
-                    <a class="btn btn-outline-info btn-sm" href="@u('admin_role',['id'=>$item['id']])">权限</a>
-                    <a class="btn btn-danger btn-sm" href="@u('admin_list',['delete'=>$item['id']])">删除</a>
+                    <a class="btn btn-outline-info btn-sm" href="@u('user_role',['id'=>$item['id']])">权限</a>
+                    <a class="btn btn-danger btn-sm" href="@u(['delete'=>$item['id']])">删除</a>
                 </div>
             </td>
         </tr>
