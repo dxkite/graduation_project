@@ -10,17 +10,22 @@
     },
     "${module}@${group}:user_list": {
         "name": "管理员管理",
+        "acl": ["user.list"],
         "child": {
             "${module}@${group}:user_list": {
+                "acl": ["user.list"],
                 "name": "管理列表"
             },
             "${module}@${group}:user_add": {
+                "acl": ["user.add"],
                 "name": "添加管理"
             },
             "${module}@${group}:role_list": {
+                "acl": ["role.list"],
                 "name": "角色列表"
             },
             "${module}@${group}:role_add": {
+                "acl": ["role.add"],
                 "name": "添加角色"
             }
         }

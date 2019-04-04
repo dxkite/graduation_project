@@ -11,6 +11,7 @@ class ListResponse extends SettingResponse
     /**
      * 管理员列表
      *
+     * @acl user.list
      * @param Request $request
      * @return RawTemplate
      */

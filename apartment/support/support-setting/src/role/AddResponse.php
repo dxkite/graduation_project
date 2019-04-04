@@ -11,12 +11,14 @@ class AddResponse extends SettingResponse
     /**
      * 列出权限
      *
+     * @acl role.add
      * @param Request $request
      * @return RawTemplate
      */
     public function onSettingVisit(Request $request)
     {
         $controller = new VisitorProvider;
+        $controller->loadFromContext($this->context);
         if ($request->hasPost('name')) {
             $id = $controller->createRole($request->post('name'), array_keys($request->post('auths', [])));
             if ($id) {

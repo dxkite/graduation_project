@@ -12,7 +12,8 @@ class RoleResponse extends SettingResponse
 {
     /**
      * 添加管理
-     *
+     * 
+     * @acl user.role
      * @param Request $request
      * @return RawTemplate
      */

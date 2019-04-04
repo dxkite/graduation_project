@@ -38,6 +38,7 @@ class VisitorProvider extends UserSessionAwareProvider
     /**
      * 创建权限角色
      *
+     * @acl role.create
      * @param string $name 角色名
      * @param array $permission 权限
      * @param integer $sort 排序
@@ -45,12 +46,15 @@ class VisitorProvider extends UserSessionAwareProvider
      */
     public function createRole(string $name, array $permission, int $sort = 0):int
     {
+        $permission = new Permission($permission);
+        $this->visitor->getPermission()->assert($permission);
         return $this->controller->createRole($name, new Permission($permission), $sort);
     }
 
     /**
      * 编辑角色
      *
+     * @acl role.edit
      * @param integer $id
      * @param string $name
      * @param array $permission
@@ -59,12 +63,15 @@ class VisitorProvider extends UserSessionAwareProvider
      */
     public function editRole(int $id, string $name, array $permission, int $sort = 0): bool
     {
-        return $this->controller->editRole($id, $name, new Permission($permission), $sort);
+        $permission = new Permission($permission);
+        $this->visitor->getPermission()->assert($permission);
+        return $this->controller->editRole($id, $name, $permission, $sort);
     }
     
     /**
      * 删除角色
      *
+     * @acl role.delete
      * @param integer $id
      * @return boolean
      */
@@ -76,6 +83,7 @@ class VisitorProvider extends UserSessionAwareProvider
     /**
      * 获取
      *
+     * @role.edit
      * @param integer $id
      * @return TableStruct|null
      */
@@ -87,30 +95,35 @@ class VisitorProvider extends UserSessionAwareProvider
     /**
      * 授权
      *
+     * @acl role.grant
      * @param integer $id 角色ID
      * @param string $grantee 权限所有者
      * @return boolean
      */
     public function grant(int $id, string $grantee): bool
     {
+        $this->assert($id);
         return $this->controller->grant($id, $grantee, $this->context->getVisitor()->getId());
     }
 
     /**
      * 收回权限
      *
+     * @acl role.revoke
      * @param integer $id
      * @param integer $grantee
      * @return boolean
      */
     public function revoke(int $id, int $grantee): bool
     {
+        $this->assert($id);
         return $this->controller->revoke($id, $grantee);
     }
  
     /**
      * 收回某个用户的全部权限
      *
+     * @acl role.revoke
      * @param integer $grantee
      * @return boolean
      */
@@ -123,6 +136,7 @@ class VisitorProvider extends UserSessionAwareProvider
     /**
      * 列出角色列表
      *
+     * @acl role.list
      * @param integer|null $page
      * @param integer $row
      * @return PageData
@@ -135,6 +149,7 @@ class VisitorProvider extends UserSessionAwareProvider
     /**
      * 列出角色列表
      *
+     * @acl role.list
      * @param string $user
      * @param integer|null $page
      * @param integer $row
@@ -143,5 +158,17 @@ class VisitorProvider extends UserSessionAwareProvider
     public function listUserRole(string $user, ?int $page = null, int $row = 10): PageData
     {
         return $this->controller->listUserRole($user, $page, $row);
+    }
+
+    /**
+     * 断言权限
+     *
+     * @param string $role
+     * @return void
+     */
+    protected function assert(string $role)
+    {
+        $role = $this->getRole($role);
+        $this->visitor->getPermission()->assert($role['permission']);
     }
 }

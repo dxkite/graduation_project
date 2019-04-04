@@ -6,6 +6,7 @@ use suda\framework\Request;
 use support\setting\Context;
 use support\setting\Visitor;
 use suda\application\Application;
+use support\openmethod\Permission;
 
 class MenuTree
 {

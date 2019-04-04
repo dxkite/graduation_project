@@ -11,12 +11,15 @@ class EditResponse extends SettingResponse
     /**
      * 列出权限
      *
+     * @acl role.edit
      * @param Request $request
      * @return RawTemplate
      */
     public function onSettingVisit(Request $request)
     {
         $controller = new VisitorProvider;
+        $controller->loadFromContext($this->context);
+        
         $id = $request->get('id');
         $role = $controller->getRole($id);
         $view = $this->view('role/edit');

@@ -37,7 +37,7 @@ abstract class SettingResponse extends SignedResponse
             }
             return $view;
         } else {
-            $this->onDeny($request);
+            return $this->onDeny($request);
         }
     }
 

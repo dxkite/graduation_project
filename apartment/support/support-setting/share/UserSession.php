@@ -135,7 +135,7 @@ class UserSession implements MethodParameterInterface, ResultProcessor
             // 小于10倍心跳时长则更新
             $limit = time() + static::$beat * 10;
             if ($data['expire'] < $limit) {
-                $session->expireTime = $session->expireTime + $beat;
+                $session->expireTime = $session->expireTime + static::$beat;
                 $table->write('expire', $session->expireTime)->where(['id' => $data['id']])->rows();
             }
         }

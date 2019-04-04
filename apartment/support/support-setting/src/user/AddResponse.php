@@ -12,6 +12,7 @@ class AddResponse extends SettingResponse
     /**
      * 添加管理
      *
+     * @acl user.add
      * @param Request $request
      * @return RawTemplate
      */

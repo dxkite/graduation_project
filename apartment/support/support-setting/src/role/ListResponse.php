@@ -5,22 +5,21 @@ use suda\framework\Request;
 use support\openmethod\Permission;
 use support\setting\provider\VisitorProvider;
 use support\setting\response\SettingResponse;
- 
 
- 
 class ListResponse extends  SettingResponse
 {
     /**
      * 列出权限
      *
+     * @acl role.list
      * @param Request $request
      * @return RawTemplate
      */
     public function onSettingVisit(Request $request)
     {
         $controller = new VisitorProvider;
-        $canDelete = $this->context->getVisitor()->hasPermission('role.delete');
-        if ($request->hasGet('delete')) {
+        $controller->loadFromContext($this->context);
+        if ($request->hasGet('delete') && $this->visitor->hasPermission('role.delete')) {
             $controller->deleteRole($request->get('delete'));
             $this->goBack($this->getUrl('role_list'));
             return;

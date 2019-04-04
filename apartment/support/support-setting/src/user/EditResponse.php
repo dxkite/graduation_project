@@ -12,6 +12,7 @@ class EditResponse extends SettingResponse
     /**
      * 添加管理
      *
+     * @acl user.edit
      * @param Request $request
      * @return RawTemplate
      */
