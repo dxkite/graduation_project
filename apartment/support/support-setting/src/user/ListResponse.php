@@ -9,7 +9,7 @@ use support\setting\response\SettingResponse;
 class ListResponse extends SettingResponse
 {
     /**
-     * 列出权限
+     * 管理员列表
      *
      * @param Request $request
      * @return RawTemplate

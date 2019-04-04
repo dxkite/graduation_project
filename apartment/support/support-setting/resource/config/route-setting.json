@@ -26,5 +26,9 @@
     "user_list": {
         "class": "support.setting.response.user.ListResponse",
         "url": "\/user[\/{page:int}]"
+    },
+    "user_add": {
+        "class": "support.setting.response.user.AddResponse",
+        "url": "\/user\/add"
     }
 }

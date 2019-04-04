@@ -4,7 +4,7 @@ namespace support\setting\provider;
 use support\setting\PageData;
 use support\setting\UserSession;
 use support\setting\VerifyImage;
-use support\openmethod\parameter\File;
+use support\setting\table\UserTable;
 use support\setting\exception\UserException;
 use support\setting\controller\UserController;
 
@@ -45,8 +45,21 @@ class UserProvider extends UserSessionAwareProvider
         return $this->session;
     }
     
-    public function add(File $image, string $name, string $password, ?string $mobile, ?string $email)
+    /**
+     * 添加及管理员
+     *
+     * @param string $name
+     * @param string $password
+     * @param string $ip
+     * @param string|null $mobile
+     * @param string|null $email
+     * @param string|null $by
+     * @param integer $status
+     * @return string
+     */
+    public function add(string $name, string $password, string $ip = '', ?string $mobile = null, ?string $email = null, ?string $by = null, int $status = UserTable::NORMAL): string
     {
+        return $this->controller->add($name, $password, $ip, $mobile, $email, $by, $status);
     }
 
     /**

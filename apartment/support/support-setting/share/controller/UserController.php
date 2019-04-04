@@ -57,15 +57,15 @@ class UserController
      * @param string|null $email
      * @param string|null $by
      * @param integer $status
-     * @return boolean
+     * @return string
      */
-    public function add(string $name, string $password, string $ip = '', ?string $mobile = null, ?string $email = null, ?string $by = null, int $status = UserTable::NORMAL): bool
+    public function add(string $name, string $password, string $ip = '', ?string $mobile = null, ?string $email = null, ?string $by = null, int $status = UserTable::NORMAL): string
     {
         $this->assertName($name);
         $this->assertEmail($email);
         $this->assertMobile($mobile);
         try {
-            $id = $this->table->write([
+            return $id = $this->table->write([
                 'name' => $name,
                 'password' => \password_hash($password, PASSWORD_DEFAULT),
                 'mobile' => $mobile,
