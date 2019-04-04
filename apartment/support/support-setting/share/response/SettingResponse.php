@@ -5,17 +5,22 @@ use suda\framework\Request;
 use support\setting\MenuTree;
 use suda\application\template\RawTemplate;
 use support\setting\response\SignedResponse;
+use support\openmethod\exception\PermissionException;
 
 abstract class SettingResponse extends SignedResponse
 {
     public function onAccessVisit(Request $request)
     {
-        $menuTree = new MenuTree($this->context);
         
         $visiter = $this->context->getVisitor();
         if ($visiter->canAccess([$this,'onSettingVisit'])) {
-            $view = $this->onSettingVisit($request);
+            try {
+                $view = $this->onSettingVisit($request);
+            } catch (PermissionException $e) {
+                return $this->onDeny($request);
+            }
             if ($view instanceof RawTemplate) {
+                $menuTree = new MenuTree($this->context);
                 $menu = $menuTree->getMenu($request->getAttribute('route'));
                 $view->set('menuTree', $menu);
                 foreach ($menu as $value) {

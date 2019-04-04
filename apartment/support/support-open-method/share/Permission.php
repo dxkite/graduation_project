@@ -10,6 +10,7 @@ use ReflectionFunction;
 use suda\framework\Config;
 use suda\application\Application;
 use support\openmethod\Permission;
+use support\openmethod\exception\PermissionException;
 
 /**
  * 二级权限验证
@@ -74,7 +75,37 @@ class Permission implements \JsonSerializable, IteratorAggregate, Countable
         $this->permissions = $this->minimum();
     }
 
-    public function surpass(Permission $anthor)
+    /**
+     * 检查权限操作
+     *
+     * @param \support\openmethod\Permission $anthor
+     * @return bool
+     */
+    public function surpass(Permission $anthor):bool
+    {
+        return count($this->need($anthor)) === 0;
+    }
+ 
+    /**
+     * 权限断言
+     *
+     * @param \support\openmethod\Permission $anthor
+     * @return bool
+     */
+    public function assert(Permission $anthor) {
+        $need = $this->need($anthor);
+        if (count($need) > 0 ) {
+            throw new PermissionException($need);
+        }
+    }
+
+    /**
+     * 检查缺失的权限
+     *
+     * @param \support\openmethod\Permission $anthor
+     * @return array
+     */
+    public function need(Permission $anthor)
     {
         if (empty($this->permissions) && empty($anthor->permissions)) {
             return true;
@@ -82,18 +113,20 @@ class Permission implements \JsonSerializable, IteratorAggregate, Countable
         list($this_parent, $this_childs) = $this->explode($this->permissions);
         list($anthor_parent, $anthor_childs) = $this->explode($anthor->permissions);
         // a有的t没有，且t有的a全有
-        if (count(array_diff($anthor_parent, $this_parent)) > 0) {
-            return false;
+        $need = array_diff($anthor_parent, $this_parent);
+        if (count($need) > 0) {
+            return $need;
         }
         foreach ($this_parent as $parent) {
             $anthor_childs = $this->removeChilds($parent, $anthor_childs);
         }
-        if (count(array_diff($anthor_childs, $this_childs)) > 0) {
-            return false;
+        $need  = array_diff($anthor_childs, $this_childs);
+        if (count($need) > 0) {
+            return $need;
         }
-        return true;
+        return [];
     }
- 
+
     /**
      * 检查是否包含单个权限name
      *

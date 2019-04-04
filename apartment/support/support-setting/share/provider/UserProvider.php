@@ -8,6 +8,7 @@ use support\setting\VerifyImage;
 use support\setting\table\UserTable;
 use support\setting\exception\UserException;
 use support\setting\controller\UserController;
+use support\setting\controller\VisitorController;
 
 class UserProvider extends UserSessionAwareProvider
 {
@@ -126,6 +127,7 @@ class UserProvider extends UserSessionAwareProvider
      */
     public function freeze(string $user):bool
     {
+        $this->assert($user);
         return $this->controller->status($user, UserTable::FREEZE);
     }
 
@@ -137,6 +139,7 @@ class UserProvider extends UserSessionAwareProvider
      */
     public function active(string $user):bool
     {
+        $this->assert($user);
         return $this->controller->status($user, UserTable::NORMAL);
     }
 
@@ -148,6 +151,19 @@ class UserProvider extends UserSessionAwareProvider
      */
     public function delete(string $user):bool
     {
+        $this->assert($user);
         return $this->controller->delete($user);
+    }
+
+    /**
+     * 断言权限
+     *
+     * @param string $user
+     * @return void
+     */
+    protected function assert(string $user) {
+        $v = new VisitorController;
+        $p = $v->loadPermission($user);
+        $this->visitor->getPermission()->assert($p);
     }
 }

@@ -18,6 +18,7 @@ use support\openmethod\MethodParameterBag;
 use support\openmethod\AuthorizationInterface;
 use suda\application\processor\RequestProcessor;
 use support\openmethod\processor\ResultProcessor;
+use support\openmethod\exception\PermissionException;
 use support\openmethod\FrameworkContextAwareInterface;
 
 class MethodInterfaceProcessor
@@ -123,7 +124,7 @@ class MethodInterfaceProcessor
                 $currentPermission = new Permission;
             }
             if ($currentPermission->surpass($permission) === false) {
-                throw new RuntimeException('permission deny : required '. implode(',', $permission->toArray()), -32001);
+                throw new PermissionException($permission, -32001);
             }
         }
     }

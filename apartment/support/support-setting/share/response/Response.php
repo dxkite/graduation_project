@@ -4,6 +4,7 @@ namespace support\setting\response;
 use suda\framework\Request;
 use support\setting\Context;
 use support\setting\Visitor;
+use support\setting\MenuTree;
 use suda\application\Application;
 use suda\application\template\ModuleTemplate;
 use suda\application\processor\RequestProcessor;
@@ -93,7 +94,9 @@ abstract class Response implements RequestProcessor
 
     public function onDeny(Request $request)
     {
-        return $this->view('deny');
+        $menuTree = new MenuTree($this->context);
+        $menu = $menuTree->getMenu($request->getAttribute('route'));
+        return $this->view('deny')->set('menuTree', $menu);
     }
 
     /**

@@ -4,6 +4,7 @@ namespace support\setting\provider;
 use suda\framework\Request;
 use suda\framework\Response;
 use support\setting\Context;
+use support\setting\Visitor;
 use support\setting\UserSession;
 use suda\application\Application;
 use support\setting\exception\UserException;
@@ -31,6 +32,13 @@ class UserSessionAwareProvider implements FrameworkContextAwareInterface
     protected $context;
 
     /**
+     * 访问者
+     *
+     * @var Visitor
+     */
+    protected $visitor;
+
+    /**
      * 环境感知
      *
      * @param \suda\application\Application $application
@@ -55,5 +63,6 @@ class UserSessionAwareProvider implements FrameworkContextAwareInterface
         $this->context = $context;
         $this->setBaseContext($context->getApplication(), $context->getRequest(), $context->getResponse());
         $this->session = UserSession::createParameterFromRequest(0, '', '', $context->getApplication(), $context->getRequest());
+        $this->visitor = $context->getVisitor();
     }
 }
