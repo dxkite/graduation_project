@@ -125,7 +125,7 @@ class VisitorController
         if ($this->grant->read('id')->where(['grantee' => $grantee,'grant' => $id])->one()) {
             return true;
         }
-        return $this->role->write(['investor' => $investor,'grantee' => $grantee,'time' => time(),'grant' => $id])->ok();
+        return $this->grant->write(['investor' => $investor,'grantee' => $grantee,'time' => time(),'grant' => $id])->ok();
     }
 
     /**
@@ -138,7 +138,7 @@ class VisitorController
     public function revoke(int $id, int $grantee): bool
     {
         if ($data = $this->grant->read('id')->where(['grantee' => $grantee,'grant' => $id])->one()) {
-            return  $this->grant->delete(['id' => $data])->ok();
+            return  $this->grant->delete(['id' => $data['id']])->ok();
         }
         return false;
     }
@@ -177,7 +177,7 @@ class VisitorController
      */
     public function listUserRole(string $user, ?int $page = null, int $row = 10): PageData
     {
-        $grants = $this->grant->read('grant')->where(['grantee' => $userId])->all();
+        $grants = $this->grant->read(['grant'])->where(['grantee' => $user])->all();
         if (count($grants) > 0) {
             $grantIds = [];
             foreach ($grants as $item) {
@@ -185,7 +185,7 @@ class VisitorController
             }
             return PageData::create($this->role->read('id', 'name', 'permission')->where(['id' => new ArrayObject($grantIds)]), $page, $row);
         }
-        return PageData::empty($page,$row);
+        return PageData::empty($page, $row);
     }
 
     /**

@@ -1,15 +1,20 @@
 <?php
 namespace support\openmethod;
 
+use Countable;
+use ArrayIterator;
 use ReflectionClass;
 use ReflectionMethod;
+use IteratorAggregate;
+use ReflectionFunction;
 use suda\framework\Config;
 use suda\application\Application;
+use support\openmethod\Permission;
 
 /**
  * 二级权限验证
  */
-class Permission implements \JsonSerializable
+class Permission implements \JsonSerializable, IteratorAggregate, Countable
 {
     // 权限表,包含所有的权限结构
     private static $permissionTable = [];
@@ -28,12 +33,12 @@ class Permission implements \JsonSerializable
             // 字符串数组
             if (is_string(current($permissions))) {
                 $this->permissions = $this->filter($permissions);
-                $this->permissions = $this->minimum();
             } elseif (current($permissions) instanceof Permission) {
                 // 合并权限
                 $this->mergeArrays($permissions);
             }
         }
+        $this->permissions = $this->minimum();
     }
 
     /**
@@ -303,6 +308,16 @@ class Permission implements \JsonSerializable
 
     public function __toString()
     {
-        return json_encode($this->minimum());
+        return json_encode($this->permissions);
+    }
+
+    public function getIterator()
+    {
+        return new ArrayIterator($this->permissions);
+    }
+
+    public function count()
+    {
+        return count($this->permissions);
     }
 }

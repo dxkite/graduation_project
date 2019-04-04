@@ -95,7 +95,7 @@ class VisitorProvider extends UserSessionAwareProvider
      */
     public function grant(int $id, string $grantee): bool
     {
-        return $this->controller->grant($id, $grantee, $this->getVisitor()->getId());
+        return $this->controller->grant($id, $grantee, $this->context->getVisitor()->getId());
     }
 
     /**

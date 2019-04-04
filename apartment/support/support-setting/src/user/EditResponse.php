@@ -23,7 +23,7 @@ class EditResponse extends SettingResponse
         $id = $request->get('id');
 
         $user = $provider->getInfoById($id);
-        $view->set('user', $user->toArray());
+        $view->set('user', $user);
 
         if ($request->hasPost('name') && $request->hasPost('password')) {
             $name = $request->post('name');
@@ -37,7 +37,7 @@ class EditResponse extends SettingResponse
             try {
                 $result = $provider->edit($id, $name, $password, $request->getRemoteAddr(), $mobile, $email, $this->visitor->getId());
                 $user = $provider->getInfoById($id);
-                $view->set('user', $user->toArray());
+                $view->set('user', $user);
                 if ($result) {
                     $view->set('error', [
                         'type' => 'success',

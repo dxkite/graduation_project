@@ -34,5 +34,9 @@
     "user_edit": {
         "class": "support.setting.response.user.EditResponse",
         "url": "\/user\/{id:int}\/edit"
+    },
+    "user_role": {
+        "class": "support.setting.response.user.RoleResponse",
+        "url": "\/user\/{id:int}\/role"
     }
 }
