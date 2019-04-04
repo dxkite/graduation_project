@@ -40,6 +40,7 @@ class UserProvider extends UserSessionAwareProvider
         }
         if ($user = $this->controller->signin($account, $password)) {
             $this->session = UserSession::save($user['id'], $this->request->getRemoteAddr(), $remeber ? 3600 : 25200);
+            $this->context->getSession()->update();
         } else {
             throw new UserException('password or account error', UserException::ERR_PASSWORD_OR_ACCOUNT);
         }
@@ -115,5 +116,38 @@ class UserProvider extends UserSessionAwareProvider
     public function search(string $data, ?int $page = null, int $row = 10): PageData
     {
         return $this->controller->search($data, $page, $row);
+    }
+
+    /**
+     * 禁止登陆
+     *
+     * @param string $user
+     * @return boolean
+     */
+    public function freeze(string $user):bool
+    {
+        return $this->controller->status($user, UserTable::FREEZE);
+    }
+
+    /**
+     * 允许登陆
+     *
+     * @param string $user
+     * @return boolean
+     */
+    public function active(string $user):bool
+    {
+        return $this->controller->status($user, UserTable::NORMAL);
+    }
+
+    /**
+     * 删除用户
+     *
+     * @param string $user
+     * @return boolean
+     */
+    public function delete(string $user):bool
+    {
+        return $this->controller->delete($user);
     }
 }

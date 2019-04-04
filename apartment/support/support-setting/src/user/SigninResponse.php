@@ -21,10 +21,7 @@ class SigninResponse extends Response
             $up->loadFromContext($this->context);
             try {
                 $session = $up->signin($account, $password, $code, $remember);
-                $vp = new VisitorProvider;
-                $vp->loadFromContext($this->context);
-                $visitor = $vp->getVisitor($session);
-                $this->context->getSession()->set('visitor', $visitor);
+                $session->processor($this->application, $this->request, $this->response);
                 $last = $this->history->last($this->context->getSession()->id(), 0 , $this->getUrl('index'));
                 $this->redirect($last);
                 return;

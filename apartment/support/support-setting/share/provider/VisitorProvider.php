@@ -35,8 +35,6 @@ class VisitorProvider extends UserSessionAwareProvider
         return  $this->controller->getVisitor($session);
     }
 
-   
-
     /**
      * 创建权限角色
      *

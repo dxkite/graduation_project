@@ -266,4 +266,27 @@ class UserController
     {
         return PageData::create($this->table->read('id', 'headimg', 'name', 'email', 'mobile', 'create_time', 'create_by', 'create_ip', 'status')->where(' `name` LIKE CONCAT("%",:data,"%") OR `email` LIKE CONCAT("%",:data,"%") OR `mobile` LIKE CONCAT("%",:data,"%") ', ['data' => $data]), $page, $row);
     }
+
+    /**
+     * 设置状态
+     *
+     * @param string $user
+     * @param integer $status
+     * @return boolean
+     */
+    public function status(string $user, int $status):bool
+    {
+        return $this->table->write(['status' => $status])->where(['id' => $user])->ok();
+    }
+
+    /**
+     * 删除用户
+     *
+     * @param string $user
+     * @return boolean
+     */
+    public function delete(string $user):bool
+    {
+        return $this->table->delete(['id' => $user])->ok();
+    }
 }

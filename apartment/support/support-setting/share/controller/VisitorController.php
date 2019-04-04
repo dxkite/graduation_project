@@ -46,9 +46,7 @@ class VisitorController
         if ($permissions) {
             $permission = new Permission;
             foreach ($permissions as $item) {
-                if ($item['permission'] instanceof Permission) {
-                    $permission->merge($item['permission']);
-                }
+                $permission->merge(new Permission(json_decode($item['permission'],true)));
             }
             return $permission;
         } else {

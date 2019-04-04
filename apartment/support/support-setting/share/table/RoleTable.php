@@ -34,11 +34,11 @@ class RoleTable extends AutoCreateTable
         if (!($permission instanceof Permission)) {
             $permission = new Permission($permission);
         }
-        return serialize($permission);
+        return json_encode($permission->minimum());
     }
 
     public function _outputPermissionField($permission)
     {
-        return unserialize($permission);
+        return new Permission(json_decode($permission, true));
     }
 }
