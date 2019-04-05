@@ -174,4 +174,22 @@ abstract class Response implements RequestProcessor
         $url = $this->history->last($this->context->getSession()->id(), 0, $default);
         $this->context->getResponse()->redirect($url);
     }
+
+    /**
+     * 去除某个参数跳转当前url
+     *
+     * @param array|string $key
+     * @return void
+     */
+    public function goThisWithout($key)
+    {
+        $get = $this->request->get();
+        if (\is_string($key)) {
+            $key = [$key];
+        }
+        foreach ($key as $name) {
+            unset($get[$name]);
+        }
+        $this->goRoute($this->request->getAttribute('route'), $get);
+    }
 }

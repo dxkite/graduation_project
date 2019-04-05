@@ -21,7 +21,7 @@ class ListResponse extends  SettingResponse
         $controller->loadFromContext($this->context);
         if ($request->hasGet('delete') && $this->visitor->hasPermission('role.delete')) {
             $controller->deleteRole($request->get('delete'));
-            $this->goBack($this->getUrl('role_list'));
+            $this->goThisWithout('delete');
             return;
         }
         $view = $this->view('role/list');

@@ -24,12 +24,12 @@ class ListResponse extends SettingResponse
         if ($this->visitor->hasPermission('user.status')) {
             if ($request->get('active', 0) > 0) {
                 $provider->active($request->get('active'));
-                $this->goThisWithout($request, ['active']);
+                $this->goThisWithout(['active']);
                 return;
             }
             if ($request->get('freeze', 0) > 0) {
                 $provider->freeze($request->get('freeze'));
-                $this->goThisWithout($request, ['freeze']);
+                $this->goThisWithout(['freeze']);
                 return;
             }
         }
@@ -37,7 +37,7 @@ class ListResponse extends SettingResponse
         if ($this->visitor->hasPermission('user.delete')) {
             if ($request->get('delete', 0) > 0) {
                 $provider->delete($request->get('delete'));
-                $this->goThisWithout($request, ['delete']);
+                $this->goThisWithout(['delete']);
                 return;
             }
         }
@@ -54,14 +54,5 @@ class ListResponse extends SettingResponse
         $view->set('list', $list->getRows());
         $view->set('page', $pageBar);
         return $view;
-    }
-
-    public function goThisWithout(Request $request, array $key)
-    {
-        $get = $request->get();
-        foreach ($key as $name) {
-            unset($get[$name]);
-        }
-        $this->goRoute('user_list', $get);
     }
 }
