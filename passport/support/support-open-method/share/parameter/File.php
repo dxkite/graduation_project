@@ -8,11 +8,12 @@ use suda\framework\http\UploadedFile;
 use support\openmethod\MethodParameterInterface;
 use support\openmethod\processor\ResultProcessor;
 use suda\application\processor\FileRangeProccessor;
+use SplFileObject;
 
 /**
  * 表单文件
  */
-class File extends UploadedFile implements ResultProcessor, MethodParameterInterface
+class File extends SplFileObject implements ResultProcessor, MethodParameterInterface
 {
     /**
      * 是否是图片
@@ -28,10 +29,36 @@ class File extends UploadedFile implements ResultProcessor, MethodParameterInter
      */
     protected $extension;
 
+    /**
+     * Mime描述符
+     *
+     * @var string
+     */
+    protected $mimeType;
+
+    /**
+     * 上传的文件名
+     *
+     * @var string
+     */
+    protected $originalName;
+
     public function __construct(UploadedFile $file)
     {
-        parent::__construct($file->getPathname(), $file->getOriginalName(), $file->getMimeType(), $file->getError());
+        parent::__construct($file->getTempname());
+        $this->mimeType = $file->getMimeType();
         $this->image = $this->guessImage();
+        $this->originalName = $file->getOriginalName();
+    }
+
+    /**
+     * Get 上传的文件名
+     *
+     * @return  string
+     */
+    public function getOriginalName()
+    {
+        return $this->originalName;
     }
 
     /**

@@ -14,5 +14,9 @@
     "home": {
         "class": "dxkite.openuser.response.HomeResponse",
         "url": "\/home"
+    },
+    "setting": {
+        "class": "dxkite.openuser.response.HomeSettingResponse",
+        "url": "\/home\/setting"
     }
 }

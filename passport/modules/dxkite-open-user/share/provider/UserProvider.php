@@ -116,13 +116,31 @@ class UserProvider extends VisitorAwareProvider
      * @param string|null $email
      * @return boolean
      */
-    public function edit(File $headimg, string $name, ?string $mobile = null, ?string $email = null): bool
+    public function edit(?File $headimg, ?string $name, ?string $mobile = null, ?string $email = null): bool
     {
-        // TODO save file to protected
-        $path = UploadUtil::save($headimg);
+        if ($headimg !== null) {
+            $path = UploadUtil::save($headimg);
+        } else {
+            $path = null;
+        }
         return $this->controller->edit($this->visitor->getId(), $name, $path, $mobile, $email);
     }
     
+    /**
+     * 修改密码
+     *
+     * @param string $oldpassword
+     * @param string $password
+     * @return boolean
+     */
+    public function password(string $oldpassword, string $password):bool {
+        $user = $this->visitor->getId();
+        if ($this->controller->checkPassword($user, $oldpassword) === false) {
+            throw new UserException('password error', UserException::ERR_PASSWORD_OR_ACCOUNT);
+        }
+        return $this->controller->changePassword($user, $password);
+    }
+
     /**
      * 获取当前用户信息
      *

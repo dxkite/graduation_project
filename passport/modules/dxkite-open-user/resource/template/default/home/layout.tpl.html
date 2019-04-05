@@ -1,5 +1,5 @@
 @extend ('support/setting:bootstrap')
-@set('title',__('用户中心')) @set('lang','Zh-cn')
+
 @startInsert('bs-head')
 <link rel="stylesheet" href="@static/home.css"> 
 @endInsert 
@@ -8,7 +8,7 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="#">{= 用户中心 }</a>
-        <a class="btn btn-light btn-sm" href="@u('signout')" role="button">退出登录</a>
+        <a class="btn btn-light btn-sm" href="@u('signout')" role="button">{=退出登录}</a>
     </div>
 </nav>
 <div class="container">
@@ -16,7 +16,7 @@
 
         <div class="col-sm-4">
             @if (strlen($:user.headimg('')))
-            <img class="user-avatar rounded-circle" src="{{ $:user.headimg }}-100x100-q80.jpg" alt="User Avatar">
+            <img class="user-avatar rounded-circle" src="/upload/{{ $:user.headimg }}-100x100-q80.jpg" alt="User Avatar">
             @else
             <img class="user-avatar rounded-circle" src="@static/image/avatar.png" alt="User Avatar">
             @endif

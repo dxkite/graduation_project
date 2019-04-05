@@ -137,10 +137,7 @@ class UserController
         $this->assertEmail($email);
         $this->assertMobile($mobile);
         try {
-            $data = [
-                'mobile' => $mobile,
-                'email' => $email,
-            ];
+            $data = [];
             if ($name !== null) {
                 $data['name'] = $name;
             }
@@ -149,11 +146,16 @@ class UserController
             }
             if ($mobile !== null) {
                 $data['mobile_checked'] = 0;
+                $data['mobile'] = $mobile;
             }
             if ($email !== null) {
                 $data['email_checked'] = 0;
+                $data['email'] = $mobile;
             }
-            return $this->table->write($data)->where(['id' => $id])->ok();
+            if (count($data) > 0) {
+                return $this->table->write($data)->where(['id' => $id])->ok();
+            }
+            return false;
         } catch (SQLException $e) {
             $message = $e->getMessage();
             if (strpos($message, 'name')) {
@@ -167,6 +169,37 @@ class UserController
             }
             throw new UserException('account exist error', UserException::ERR_ACCOUNT_EXISTS);
         }
+    }
+
+    /**
+     * 检查密码
+     *
+     * @param string $user
+     * @param string $password
+     * @return bool
+     */
+    public function checkPassword(string $user, string $password):bool
+    {
+        if ($data = $this->table->read(['password'])->where(['id' => $user])->one()) {
+            if (password_verify($password, $data['password'])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 修改密码
+     *
+     * @param string $user
+     * @param string $password
+     * @return boolean
+     */
+    public function changePassword(string $user, string $password):bool
+    {
+        return $this->table->write([
+            'password' => \password_hash($password, PASSWORD_DEFAULT),
+        ])->where(['id' => $user])->ok();
     }
 
     /**
@@ -264,7 +297,7 @@ class UserController
         }
     }
 
-    protected function assertName(string $name)
+    protected function assertName(?string $name)
     {
         $name = trim($name);
         if (strlen($name) > 0 && !preg_match(UserController::NAME_PREG, $name)) {
