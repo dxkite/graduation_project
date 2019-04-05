@@ -1,6 +1,7 @@
 <?php
 namespace support\upload;
 
+use SplFileInfo;
 use support\openmethod\parameter\File;
 use suda\framework\filesystem\FileSystem;
 
@@ -35,10 +36,62 @@ class UploadUtil
         } else {
             $path = $extension;
         }
-        $path .='/'.$hash.'/0.jpg';
+        $path .= '/'.$hash.'/0.jpg';
         $save = SUDA_DATA.'/upload/'.$path;
         FileSystem::make(dirname($save));
         FileSystem::copy($file->getPathname(), $save);
         return $path;
+    }
+
+    public static function thumb(
+        string $input,
+        string $output,
+        ?int $width = null,
+        ?int $height = null,
+        ?int $size = null,
+        ?int $quality = null,
+        ?string $cut = '',
+        string $outType = 'jpeg'
+    ) {
+        list($_width, $_height, $_mime, $_attr) = getimagesize($input);
+        $ext = image_type_to_extension($_mime, false);
+        $imageCreate = 'imagecreatefrom'.$ext;
+        $source = $imageCreate($input);
+        if (!$source) {
+            return false;
+        }
+        if ($size !== null) {
+            if ($size <= 0) {
+                $size = 100;
+            }
+            $width = $_width * $size / 100;
+            $height = $_height * $size / 100;
+        } elseif ($width !== null) {
+            if ($height !== null) {
+            } else {
+                $height = ($width / $_width) * $_height;
+            }
+            if ($width > $_width) {
+                $width = $_width;
+                $height = $_height;
+            }
+        } else {
+            $width = $_width;
+            $height = $_height;
+        }
+        $thumb = imagecreatetruecolor($width, $height);
+        if (empty($cut)) {
+            if ($thumb && !imagecopyresized($thumb, $source, 0, 0, 0, 0, $width, $height, $_width, $_height)) {
+                return false;
+            }
+        }
+        if ($quality !== null) {
+            if ($quality < 0 && $quality > 100) {
+                $quality = 75;
+            }
+            return imagejpeg($thumb, $output, $quality);
+        } else {
+            return imagepng($thumb, $output);
+        }
     }
 }
