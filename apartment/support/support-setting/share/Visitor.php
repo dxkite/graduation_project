@@ -75,7 +75,17 @@ class Visitor
         $this->attribute = $attribute;
         return $this;
     }
-
+    
+    /**
+     * 获取属性
+     *
+     * @return  mixed
+     */
+    public function getAttributes()
+    {
+        return $this->attribute;
+    }
+    
     /**
      * Get 用户ID
      *

@@ -10,6 +10,9 @@
     <ul class="navbar-nav px-3">
         {:view.setting.header.navlist.prepend}
         <li class="nav-item text-nowrap">
+            <a class="nav-link" href="#">{{ $:currentUser.name }}</a>
+        </li>
+        <li class="nav-item text-nowrap">
             <a class="nav-link" href="@u('signout')">退出登录</a>
         </li>
         <li class="nav-item text-nowrap">

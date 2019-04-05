@@ -6,6 +6,7 @@ use support\setting\Context;
 use support\setting\Visitor;
 use support\setting\MenuTree;
 use suda\application\Application;
+use suda\application\template\RawTemplate;
 use suda\application\template\ModuleTemplate;
 use suda\application\processor\RequestProcessor;
 use suda\framework\Response as FrameworkResponse;
@@ -86,10 +87,28 @@ abstract class Response implements RequestProcessor
     {
         if ($this->context->getVisitor()->canAccess([$this, 'onAccessVisit'])) {
             $this->history->log($this->context->getSession()->id(), $request, $this->context->getVisitor()->getId());
-            return $this->onAccessVisit($request);
+            $view = $this->onAccessVisit($request);
         } else {
-            return $this->onDeny($request);
+            $view = $this->onDeny($request);
         }
+        if ($view instanceof RawTemplate) {
+            $menuTree = new MenuTree($this->context);
+            $menu = $menuTree->getMenu($request->getAttribute('route'));
+            $view->set('menuTree', $menu);
+            $view->set('currentUser', $this->visitor->getAttributes());
+            foreach ($menu as $value) {
+                if ($value['select']) {
+                    $view->set('title', $value['name']);
+                    $view->set('menuName', $value['name']);
+                    foreach ($value['child'] as $key => $submenu) {
+                        if ($submenu['select']) {
+                            $view->set('submenu', $submenu['name']);
+                        }
+                    }
+                }
+            }
+        }
+        return $view;
     }
 
     public function onDeny(Request $request)

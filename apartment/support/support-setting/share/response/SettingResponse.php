@@ -15,27 +15,10 @@ abstract class SettingResponse extends SignedResponse
         $visiter = $this->context->getVisitor();
         if ($visiter->canAccess([$this,'onSettingVisit'])) {
             try {
-                $view = $this->onSettingVisit($request);
+                return $this->onSettingVisit($request);
             } catch (PermissionException $e) {
                 return $this->onDeny($request);
             }
-            if ($view instanceof RawTemplate) {
-                $menuTree = new MenuTree($this->context);
-                $menu = $menuTree->getMenu($request->getAttribute('route'));
-                $view->set('menuTree', $menu);
-                foreach ($menu as $value) {
-                    if ($value['select']) {
-                        $view->set('title', $value['name']);
-                        $view->set('menuName', $value['name']);
-                        foreach ($value['child'] as $key => $submenu) {
-                            if ($submenu['select']) {
-                                $view->set('submenu', $submenu['name']);
-                            }
-                        }
-                    }
-                }
-            }
-            return $view;
         } else {
             return $this->onDeny($request);
         }
