@@ -61,7 +61,7 @@ class UserProvider extends UserSessionAwareProvider
     /**
      * 添加及管理员
      * 
-     * @acl user.add
+     * @acl setting:user.add
      * @param string $name
      * @param string $password
      * @param string $ip
@@ -79,7 +79,7 @@ class UserProvider extends UserSessionAwareProvider
     /**
      * 编辑管理员
      *
-     * @acl user.edit
+     * @acl setting:user.edit
      * @param string $id
      * @param string $name
      * @param string $password
@@ -98,7 +98,7 @@ class UserProvider extends UserSessionAwareProvider
     /**
      * 通过用户ID获取用户信息
      * 
-     * @acl user.edit
+     * @acl setting:user.edit
      * @param string $name
      * @return TableStruct|null
      */
@@ -110,7 +110,7 @@ class UserProvider extends UserSessionAwareProvider
     /**
      * 列出用户
      * 
-     * @acl user.list
+     * @acl setting:user.list
      * @param integer|null $page
      * @param integer $row
      * @return PageData
@@ -123,7 +123,7 @@ class UserProvider extends UserSessionAwareProvider
     /**
      * 搜索用户
      * 
-     * @acl user.list
+     * @acl setting:user.list
      * @param string $data
      * @param integer|null $page
      * @param integer $row
@@ -137,7 +137,7 @@ class UserProvider extends UserSessionAwareProvider
     /**
      * 禁止登陆
      *
-     * @acl user.status
+     * @acl setting:user.status
      * @param string $user
      * @return boolean
      */
@@ -150,7 +150,7 @@ class UserProvider extends UserSessionAwareProvider
     /**
      * 允许登陆
      *
-     * @acl user.status
+     * @acl setting:user.status
      * @param string $user
      * @return boolean
      */
@@ -163,7 +163,7 @@ class UserProvider extends UserSessionAwareProvider
     /**
      * 删除用户
      * 
-     * @acl user.delete
+     * @acl setting:user.delete
      * @param string $user
      * @return boolean
      */

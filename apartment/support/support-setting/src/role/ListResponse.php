@@ -11,7 +11,7 @@ class ListResponse extends  SettingResponse
     /**
      * 列出权限
      *
-     * @acl role.list
+     * @acl setting:role.list
      * @param Request $request
      * @return RawTemplate
      */
@@ -19,7 +19,7 @@ class ListResponse extends  SettingResponse
     {
         $controller = new VisitorProvider;
         $controller->loadFromContext($this->context);
-        if ($request->hasGet('delete') && $this->visitor->hasPermission('role.delete')) {
+        if ($request->hasGet('delete') && $this->visitor->hasPermission('setting:role.delete')) {
             $controller->deleteRole($request->get('delete'));
             $this->goThisWithout('delete');
             return;

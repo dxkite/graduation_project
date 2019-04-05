@@ -55,7 +55,6 @@ class Permission implements \JsonSerializable, IteratorAggregate, Countable
         foreach ($permissions as $permission) {
             static::$permissionFilter[] = $name.'.'.$permission;
         }
-        static::$permissionFilter = array_merge(static::$permissionFilter, $permissions);
         static::$permissionTable[$name] = $permissions;
     }
     
@@ -200,7 +199,7 @@ class Permission implements \JsonSerializable, IteratorAggregate, Countable
 
     protected function canLevelUp(string $parent, array $childs)
     {
-        if (count(static::$permissionTable[$parent]) === count($childs)) {
+        if (array_key_exists($parent,static::$permissionTable) && count(static::$permissionTable[$parent]) === count($childs)) {
             return true;
         }
         return false;
@@ -271,13 +270,13 @@ class Permission implements \JsonSerializable, IteratorAggregate, Countable
 
     public static function alias(string $permission):string
     {
-        if (static::isParent($permission)) {
-            return static::$permissionConfig[$permission]['name'];
-        } elseif (strpos($permission, '.')) {
+        if (strpos($permission, '.')) {
             list($parent, $child) = explode('.', $permission, 2);
             if (static::isParent($parent) && static::isChild($parent, $child)) {
                 return static::$permissionConfig[$parent]['childs'][$child];
             }
+        }else{
+            return static::$permissionConfig[$permission]['name'];
         }
         return $permission;
     }

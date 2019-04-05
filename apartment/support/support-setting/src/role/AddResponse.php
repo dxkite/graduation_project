@@ -11,7 +11,7 @@ class AddResponse extends SettingResponse
     /**
      * 列出权限
      *
-     * @acl role.add
+     * @acl setting:role.add
      * @param Request $request
      * @return RawTemplate
      */
