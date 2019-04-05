@@ -187,7 +187,7 @@ class UserSession implements MethodParameterInterface, ResultProcessor
      */
     public function processor(Application $application, Request $request, Response $response)
     {
-        $response->setCookie('x-token', $this->token);
+        $response->setCookie('x-'.$this->group.'-token', $this->token);
         $response->setCookie('x-token-group', $this->group);
         return [
             'id' => $this->id,
@@ -210,13 +210,24 @@ class UserSession implements MethodParameterInterface, ResultProcessor
      */
     public static function createParameterFromRequest(int $position, string $name, string $from, Application $application, Request $request)
     {
-        $token = $request->getHeader('x-token', $request->getCookie('x-token', ''));
         $group = $request->getHeader('x-token-group', $request->getCookie('x-token-group', 'system'));
+        return static::createFromRequest($request, $group);
+    }
+
+    /**
+     * 从响应中创建对象
+     *
+     * @param \suda\framework\Request $request
+     * @param string $group
+     * @return self
+     */
+    public static function createFromRequest(Request $request, string $group) {
+        $token = $request->getHeader('x-'.$group.'-token', $request->getCookie('x-'.$group.'-token', ''));
         $session = UserSession::load($token, $request->getRemoteAddr(), $group);
         if ($session->isGuest() && strlen($token) > 32) {
             if (\strpos($token = 'debug:') === 0 && substr_count($token, ':', 32) === 2) {
                 list($debug, $user, $password) = \explode(':', $token, 3);
-                if ($password === $application->conf('app.debug-token')) {
+                if ($password === $application->conf('app.system-debug-token')) {
                     $session = UserSession::simulate($user, 3600, $group);
                 }
             }

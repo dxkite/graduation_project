@@ -39,6 +39,13 @@ class UserSessionAwareProvider implements FrameworkContextAwareInterface
     protected $visitor;
 
     /**
+     * 用户会话分组
+     *
+     * @var string
+     */
+    protected $group;
+
+    /**
      * 环境感知
      *
      * @param \suda\application\Application $application
@@ -50,7 +57,7 @@ class UserSessionAwareProvider implements FrameworkContextAwareInterface
     {
         $this->setBaseContext($application, $request, $response);
         $this->context = new Context($application, $request, $response);
-        $this->session = UserSession::createParameterFromRequest(0, '', '', $application, $request);
+        $this->session = UserSession::createFromRequest($request, $this->group);
     }
 
     /**
@@ -59,10 +66,11 @@ class UserSessionAwareProvider implements FrameworkContextAwareInterface
      * @param \support\setting\Context $context
      * @return void
      */
-    public function loadFromContext(Context $context) {
+    public function loadFromContext(Context $context)
+    {
         $this->context = $context;
         $this->setBaseContext($context->getApplication(), $context->getRequest(), $context->getResponse());
-        $this->session = UserSession::createParameterFromRequest(0, '', '', $context->getApplication(), $context->getRequest());
+        $this->session = UserSession::createFromRequest($this->request, $this->group);
         $this->visitor = $context->getVisitor();
     }
 }

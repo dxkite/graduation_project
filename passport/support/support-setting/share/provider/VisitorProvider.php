@@ -9,8 +9,9 @@ use support\openmethod\Permission;
 use support\setting\exception\UserException;
 use support\setting\controller\UserController;
 use support\setting\controller\VisitorController;
+use support\setting\provider\SettingBaseProvider;
 
-class VisitorProvider extends UserSessionAwareProvider
+class VisitorProvider extends SettingBaseProvider
 {
     /**
      * VisitorController
