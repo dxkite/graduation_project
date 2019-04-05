@@ -7,10 +7,10 @@ use support\setting\Context;
 use support\setting\Visitor;
 use support\setting\UserSession;
 use suda\application\Application;
-use support\setting\exception\UserException;
+use dxkite\openuser\processor\UserInfoProcessor;
 use support\openmethod\FrameworkContextAwareTrait;
 use support\openmethod\FrameworkContextAwareInterface;
-use support\setting\processor\SettingContextProcessor;
+
 
 class UserSessionAwareProvider implements FrameworkContextAwareInterface
 {
@@ -44,7 +44,7 @@ class UserSessionAwareProvider implements FrameworkContextAwareInterface
      *
      * @var string
      */
-    protected $group = 'system';
+    protected $group;
 
     /**
      * 环境感知
@@ -56,7 +56,7 @@ class UserSessionAwareProvider implements FrameworkContextAwareInterface
      */
     public function setContext(Application $application, Request $request, Response $response)
     {
-        $processor = new SettingContextProcessor;
+        $processor = new UserInfoProcessor;
         $this->setBaseContext($application, $request, $response);
         $this->context = $processor->onRequest($application, $request, $response);
         $this->session = UserSession::createFromRequest($request, $this->group);

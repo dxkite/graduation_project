@@ -8,10 +8,18 @@ use support\setting\VerifyImage;
 use dxkite\openuser\table\UserTable;
 use support\openmethod\parameter\File;
 use dxkite\openuser\controller\UserController;
-use support\setting\provider\UserSessionAwareProvider;
 
-class UserProvider extends UserSessionAwareProvider
+
+class UserProvider extends VisitorAwareProvider
 {
+
+    /**
+     * 登陆分组
+     *
+     * @var string
+     */
+    protected $group = 'openuser';
+
     /**
      * UserController
      *
@@ -40,7 +48,7 @@ class UserProvider extends UserSessionAwareProvider
             throw new UserException('code error', UserException::ERR_CODE);
         }
         if ($user = $this->controller->signin($account, $password)) {
-            $this->session = UserSession::save($user['id'], $this->request->getRemoteAddr(), $remeber ? 3600 : 25200, 'openuser');
+            $this->session = UserSession::save($user['id'], $this->request->getRemoteAddr(), $remeber ? 3600 : 25200, $this->group);
             $this->context->getSession()->update();
         } else {
             throw new UserException('password or account error', UserException::ERR_PASSWORD_OR_ACCOUNT);
@@ -56,7 +64,7 @@ class UserProvider extends UserSessionAwareProvider
      */
     public function signout(string $user): bool
     {
-        return UserSession::expire($user, 'openuser');
+        return UserSession::expire($user, $this->group);
     }
     
     /**
@@ -77,7 +85,7 @@ class UserProvider extends UserSessionAwareProvider
             throw new UserException('code error', UserException::ERR_CODE);
         }
         $user = $this->controller->add($name, $password, $ip, $mobile, $email, UserTable::NORMAL);
-        $this->session = UserSession::save($user, $this->request->getRemoteAddr(), $remeber ? 3600 : 25200, 'openuser');
+        $this->session = UserSession::save($user, $this->request->getRemoteAddr(), $remeber ? 3600 : 25200, $this->group);
         $this->context->getSession()->update();
         return $this->session;
     }

@@ -9,9 +9,9 @@ use support\setting\table\UserTable;
 use support\setting\exception\UserException;
 use support\setting\controller\UserController;
 use support\setting\controller\VisitorController;
-use support\setting\provider\SettingBaseProvider;
+use support\setting\provider\UserSessionAwareProvider;
 
-class UserProvider extends SettingBaseProvider
+class UserProvider extends UserSessionAwareProvider
 {
     /**
      * UserController
