@@ -1,3 +1,4 @@
 *bootstrap* linguist-vendored
 jquery* linguist-vendored
+vendor/* linguist-vendored
 docs/* linguist-documentation

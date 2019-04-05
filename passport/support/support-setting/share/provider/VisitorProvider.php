@@ -38,7 +38,7 @@ class VisitorProvider extends UserSessionAwareProvider
     /**
      * 创建权限角色
      *
-     * @acl role.create
+     * @acl setting:role.create
      * @param string $name 角色名
      * @param array $permission 权限
      * @param integer $sort 排序
@@ -54,7 +54,7 @@ class VisitorProvider extends UserSessionAwareProvider
     /**
      * 编辑角色
      *
-     * @acl role.edit
+     * @acl setting:role.edit
      * @param integer $id
      * @param string $name
      * @param array $permission
@@ -71,7 +71,7 @@ class VisitorProvider extends UserSessionAwareProvider
     /**
      * 删除角色
      *
-     * @acl role.delete
+     * @acl setting:role.delete
      * @param integer $id
      * @return boolean
      */
@@ -83,7 +83,7 @@ class VisitorProvider extends UserSessionAwareProvider
     /**
      * 获取
      *
-     * @role.edit
+     * @acl setting:role.edit
      * @param integer $id
      * @return TableStruct|null
      */
@@ -95,7 +95,7 @@ class VisitorProvider extends UserSessionAwareProvider
     /**
      * 授权
      *
-     * @acl role.grant
+     * @acl setting:role.grant
      * @param integer $id 角色ID
      * @param string $grantee 权限所有者
      * @return boolean
@@ -109,7 +109,7 @@ class VisitorProvider extends UserSessionAwareProvider
     /**
      * 收回权限
      *
-     * @acl role.revoke
+     * @acl setting:role.revoke
      * @param integer $id
      * @param integer $grantee
      * @return boolean
@@ -123,7 +123,7 @@ class VisitorProvider extends UserSessionAwareProvider
     /**
      * 收回某个用户的全部权限
      *
-     * @acl role.revoke
+     * @acl setting:role.revoke
      * @param integer $grantee
      * @return boolean
      */
@@ -136,7 +136,7 @@ class VisitorProvider extends UserSessionAwareProvider
     /**
      * 列出角色列表
      *
-     * @acl role.list
+     * @acl setting:role.list
      * @param integer|null $page
      * @param integer $row
      * @return PageData
@@ -149,7 +149,7 @@ class VisitorProvider extends UserSessionAwareProvider
     /**
      * 列出角色列表
      *
-     * @acl role.list
+     * @acl setting:role.list
      * @param string $user
      * @param integer|null $page
      * @param integer $row

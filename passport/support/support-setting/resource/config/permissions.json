@@ -1,5 +1,5 @@
 {
-    "user": {
+    "setting:user": {
         "name": "管理用户",
         "childs": {
             "add": "添加用户",
@@ -10,13 +10,13 @@
             "status": "编辑状态"
         }
     },
-    "visitor": {
+    "setting:visitor": {
         "name": "管理访问者",
         "childs": {
             "simulate": "切换用户"
         }
     },
-    "role": {
+    "setting:role": {
         "name": "管理授权",
         "childs": {
             "create": "添加授权",

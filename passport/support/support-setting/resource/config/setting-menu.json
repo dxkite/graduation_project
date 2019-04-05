@@ -5,22 +5,22 @@
     },
     "${module}@${group}:user_list": {
         "name": "系统管理",
-        "acl": ["user.list"],
+        "acl": ["setting:user.list"],
         "child": {
             "${module}@${group}:user_list": {
-                "acl": ["user.list"],
+                "acl": ["setting:user.list"],
                 "name": "管理列表"
             },
             "${module}@${group}:user_add": {
-                "acl": ["user.add"],
+                "acl": ["setting:user.add"],
                 "name": "添加管理"
             },
             "${module}@${group}:role_list": {
-                "acl": ["role.list"],
+                "acl": ["setting:role.list"],
                 "name": "角色列表"
             },
             "${module}@${group}:role_add": {
-                "acl": ["role.add"],
+                "acl": ["setting:role.add"],
                 "name": "添加角色"
             }
         }

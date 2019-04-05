@@ -11,7 +11,7 @@ class EditResponse extends SettingResponse
     /**
      * 列出权限
      *
-     * @acl role.edit
+     * @acl setting:role.edit
      * @param Request $request
      * @return RawTemplate
      */

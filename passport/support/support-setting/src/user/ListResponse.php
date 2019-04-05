@@ -11,7 +11,7 @@ class ListResponse extends SettingResponse
     /**
      * 管理员列表
      *
-     * @acl user.list
+     * @acl setting:user.list
      * @param Request $request
      * @return RawTemplate
      */
@@ -21,7 +21,7 @@ class ListResponse extends SettingResponse
         $provider->loadFromContext($this->context);
         $view = $this->view('user/list');
         $page = $request->get('page', 1);
-        if ($this->visitor->hasPermission('user.status')) {
+        if ($this->visitor->hasPermission('setting:user.status')) {
             if ($request->get('active', 0) > 0) {
                 $provider->active($request->get('active'));
                 $this->goThisWithout(['active']);
@@ -34,7 +34,7 @@ class ListResponse extends SettingResponse
             }
         }
 
-        if ($this->visitor->hasPermission('user.delete')) {
+        if ($this->visitor->hasPermission('setting:user.delete')) {
             if ($request->get('delete', 0) > 0) {
                 $provider->delete($request->get('delete'));
                 $this->goThisWithout(['delete']);
