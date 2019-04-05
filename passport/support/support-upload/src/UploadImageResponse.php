@@ -23,7 +23,7 @@ class UploadImageResponse implements RequestProcessor
         $options = $request->get('options');
         $extension = pathinfo($options, PATHINFO_EXTENSION);
         $resource = new Resource([ SUDA_DATA.'/upload' ]);
-        $path = $resource->getResourcePath('image/'.$type.'/'.$hash.'.'.$type);
+        $path = $resource->getResourcePath($type.'/'.$hash.'.'.$type);
         if ($path) {
             if (FileSystem::isWritable(SUDA_PUBLIC.'/upload')) {
                 $savePath = SUDA_PUBLIC.'/upload/image/'.$type.'/'.$hash.'/'.$options;

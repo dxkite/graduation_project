@@ -30,14 +30,15 @@ class UploadUtil
     public static function save(File $file):string
     {
         $hash = static::hash($file->getPathname());
-        $extension = strtolower($file->getExtension());
         if ($file->isImage()) {
-            $path = 'image/'.$extension;
+            $extension = strtolower($file->getExtension());
+            $path = 'image/'.$extension.'/'.$hash.'/0.jpg';
+            $savePath = $extension.'/'.$hash.'.'.$extension;
         } else {
-            $path = $extension;
+            $extension = strtolower(\pathinfo($file->getOriginalName(), PATHINFO_EXTENSION));
+            $savePath = $extension.'/'.$hash.'.'.$extension;
         }
-        $path .= '/'.$hash.'/0.jpg';
-        $save = SUDA_DATA.'/upload/'.$path;
+        $save = SUDA_DATA.'/upload/'.$savePath;
         FileSystem::make(dirname($save));
         FileSystem::copy($file->getPathname(), $save);
         return $path;
