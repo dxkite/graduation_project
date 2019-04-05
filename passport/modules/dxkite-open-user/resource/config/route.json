@@ -6,5 +6,9 @@
     "signin": {
         "class": "dxkite.openuser.response.SigninResponse",
         "url": "\/signin"
+    },
+    "signup": {
+        "class": "dxkite.openuser.response.SignupResponse",
+        "url": "\/signup"
     }
 }
