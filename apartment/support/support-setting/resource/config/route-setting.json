@@ -7,6 +7,10 @@
         "class": "support.setting.response.user.SigninResponse",
         "url": "\/signin"
     },
+    "signout": {
+        "class": "support.setting.response.user.SignoutResponse",
+        "url": "\/signout"
+    },
     "verify": {
         "class": "support.setting.response.user.VerifyImageResponse",
         "url": "\/verify-image"

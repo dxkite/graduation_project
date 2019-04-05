@@ -96,10 +96,27 @@ class UserSession implements MethodParameterInterface, ResultProcessor
                 'grantee' => $userId,
                 'expire' => $session->expireTime,
                 'token' => $session->token,
+                'time' => time(),
                 'ip' => $ip,
             ])->id();
         }
         return $session;
+    }
+
+
+    /**
+     * 设置会话过期
+     *
+     * @param string $user
+     * @param string $group
+     * @return boolean
+     */
+    public static function expire(string $user, string $group = 'system'): bool
+    {
+        $table = new SessionTable;
+        return $table->write([
+            'expire' => time()
+        ])->where(['group' => $group,])->ok();
     }
 
     /**

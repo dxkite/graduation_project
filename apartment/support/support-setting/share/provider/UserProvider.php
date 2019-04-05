@@ -47,6 +47,16 @@ class UserProvider extends UserSessionAwareProvider
         }
         return $this->session;
     }
+
+    /**
+     * 退出登陆
+     *
+     * @param string $user
+     * @return boolean
+     */
+    public function signout(string $user): bool {
+        return UserSession::expire($user);
+    }
     
     /**
      * 添加及管理员
