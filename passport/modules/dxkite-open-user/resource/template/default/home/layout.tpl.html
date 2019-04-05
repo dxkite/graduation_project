@@ -16,7 +16,9 @@
 
         <div class="col-sm-4">
             @if (strlen($:user.headimg('')))
-            <img class="user-avatar rounded-circle" src="{{ $:user.headimg }}" alt="User Avatar">
+            <img class="user-avatar rounded-circle" src="{{ $:user.headimg }}-100x100-q80.jpg" alt="User Avatar">
+            @else
+            <img class="user-avatar rounded-circle" src="@static/image/avatar.png" alt="User Avatar">
             @endif
             <h4 class="user-name">{{ $:user.name('用户名') }}</h4>
             @insert('home-sidebar') {:user.home.sidebar}
