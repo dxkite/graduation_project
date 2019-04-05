@@ -1,15 +1,10 @@
 {
     "${module}@${group}:index": {
-        "name": "网站设置",
-        "sort": -999,
-        "child": {
-            "${module}@${group}:index": {
-                "name": "网站状态"
-            }
-        }
+        "name": "网站环境",
+        "sort": -999
     },
     "${module}@${group}:user_list": {
-        "name": "管理员管理",
+        "name": "系统管理",
         "acl": ["user.list"],
         "child": {
             "${module}@${group}:user_list": {

@@ -68,7 +68,7 @@
     color: #6c757d;
 }
 
-.sidebar-heading:hover {
+.sidebar-heading:hover,.sidebar-heading.active {
     transition: .5s;
     text-decoration: none;
     color: #007bff;
