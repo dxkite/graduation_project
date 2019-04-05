@@ -97,9 +97,10 @@ class UserProvider extends VisitorAwareProvider
      * @param string $code
      * @return bool
      */
-    public function check(string $code) {
+    public function check(string $code)
+    {
         $codeType = $this->visitor->getAttribute('code_type', 0);
-        if ($codeType > 0 ) {
+        if ($codeType > 0) {
             return $this->controller->check($this->visitor->getId(), $code);
         }
         return true;
@@ -129,6 +130,10 @@ class UserProvider extends VisitorAwareProvider
      */
     public function getInfo():?TableStruct
     {
-        return $this->controller->getInfoById($this->visitor->getId());
+        $data = $this->controller->getInfoById($this->visitor->getId());
+        if ($data['headimg'] === null) {
+            $data['headimg'] = '/upload/'.$data['headimg'];
+        }
+        return $data;
     }
 }

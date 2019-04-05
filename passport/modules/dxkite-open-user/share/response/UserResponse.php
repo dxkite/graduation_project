@@ -129,7 +129,11 @@ abstract class UserResponse implements RequestProcessor
         if (strlen($url) > 0) {
             $this->redirect($url);
         } else {
-            $this->goRoute('home');
+            $route = $this->request->getAttribute('route');
+            $home = $this->application->getRouteName('home', $this->application->getRunning()->getFullName());
+            if ($route !== $home) {
+                $this->goRoute('home');
+            }
         }
     }
 

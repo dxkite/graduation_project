@@ -10,5 +10,9 @@
     "signup": {
         "class": "dxkite.openuser.response.SignupResponse",
         "url": "\/signup"
+    },
+    "home": {
+        "class": "dxkite.openuser.response.HomeResponse",
+        "url": "\/home"
     }
 }
