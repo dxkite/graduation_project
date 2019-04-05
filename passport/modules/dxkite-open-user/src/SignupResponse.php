@@ -31,8 +31,6 @@ class SignupResponse extends UserResponse
             $mobile = empty($mobile)?null:$mobile;
 
             if ($name && $password == $repeat) {
-                
-                
                 if ($type == 'email') {
                     if (empty($email)) {
                         $view->set('checkField', true);
@@ -42,7 +40,6 @@ class SignupResponse extends UserResponse
                         $view->set('checkField', true);
                     }
                 }
-
                 if ($view->get('checkField', false) != true) {
                     try {
                         $p = new UserProvider;

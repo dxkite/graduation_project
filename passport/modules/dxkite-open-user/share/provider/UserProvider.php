@@ -91,6 +91,19 @@ class UserProvider extends VisitorAwareProvider
     }
 
     /**
+     * 账号验证
+     *
+     * @param string $code
+     * @return bool
+     */
+    public function check(string $code) {
+        $codeType = $this->visitor->getAttribute('code_type', 0);
+        if ($codeType > 0 ) {
+            
+        }
+    }
+
+    /**
      * 编辑用户信息
      *
      * @param \support\openmethod\parameter\File $headimg

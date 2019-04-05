@@ -20,8 +20,8 @@ class UserInfoProcessor implements RequestProcessor
         $context = new Context($application, $request, $response);
         $session = UserSession::createFromRequest($request, 'openuser');
         $user = new UserController;
-        if (strlen($session->getUserId())) {
-            $visitor = new Visitor($session->getUserId(), $user->getById($session->getUserId()));
+        if (strlen($session->getUserId()) && ($data = $user->getById($session->getUserId())) !== null) {
+            $visitor = new Visitor($session->getUserId(), $data);
         } else {
             $visitor = new Visitor;
         }

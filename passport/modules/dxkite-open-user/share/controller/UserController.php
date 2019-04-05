@@ -26,7 +26,7 @@ class UserController
      *
      * @var array
      */
-    protected $listFields = ['id', 'headimg', 'name', 'email', 'email_checked', 'mobile', 'mobile_checked', 'signin_time', 'signin_ip', 'status'];
+    protected $listFields = ['id', 'headimg', 'name', 'email', 'email_checked', 'mobile', 'mobile_checked', 'signin_time', 'signin_ip', 'status', 'code_type', 'code_expires'];
     
     public function __construct()
     {
@@ -92,6 +92,25 @@ class UserController
             }
             throw new UserException('account exist error', UserException::ERR_ACCOUNT_EXISTS);
         }
+    }
+
+    /**
+     * 验证邮箱/短信验证码码
+     *
+     * @param string $user
+     * @param string $code
+     * @param integer $type
+     * @return boolean
+     */
+    public function check(string $user, string $code):bool
+    {
+        if ($data = $this->table->read(['code', 'code_type', 'code_expires'])->where(['id' => $user])->one()) {
+            if ($data['code_type'] > 0 && $data['code_expires'] > time() && $data['code'] !== $code) {
+                return false;
+            }
+            return $this->table->write(['code' => null, 'code_type' => 0, 'code_expires' => 0])->ok();
+        }
+        return true;
     }
 
     /**

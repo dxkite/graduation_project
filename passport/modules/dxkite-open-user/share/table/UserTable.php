@@ -13,6 +13,9 @@ class UserTable extends AutoCreateTable
     const NORMAL = 1;  //  正常状态
     const CREATED = 1;  // 刚刚创建
 
+    const CODE_EMAIL = 1;
+    const CODE_MOBILE = 2;
+    
     public function __construct()
     {
         parent::__construct('open_user');
@@ -31,6 +34,7 @@ class UserTable extends AutoCreateTable
             $struct->field('mobile_sended', 'int', 11)->default(0)->comment('上次发送短信时间'),
             $struct->field('email_checked', 'tinyint', 0)->default(0)->comment('邮箱验证'),
             $struct->field('code', 'varchar', 6)->default(null)->comment('6位验证码'),
+            $struct->field('code_type', 'tinyint', 1)->default(0)->comment('验证类型'),
             $struct->field('code_expires', 'int', 11)->default(null)->comment('验证时间'),
             $struct->field('signin_ip', 'varchar', 32)->comment('创建IP'),
             $struct->field('signin_time', 'int', 11)->key()->comment('创建时间'),
