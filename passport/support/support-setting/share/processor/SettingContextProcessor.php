@@ -10,7 +10,10 @@ use suda\application\Application;
 use support\setting\provider\VisitorProvider;
 use suda\application\processor\RequestProcessor;
 
-class ContextCreateProcessor implements RequestProcessor
+/**
+ * 设置环境状态
+ */
+class SettingContextProcessor implements RequestProcessor
 {
     public function onRequest(Application $application, Request $request, Response $response)
     {
