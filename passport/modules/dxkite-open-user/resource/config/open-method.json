@@ -1,6 +1,6 @@
 {
-    "open-user": {
-        "url": "/open-user[/{_method:string}]",
+    "user": {
+        "url": "[/{_method:string}]",
         "class": [
             "dxkite.openuser.provider.UserProvider"
         ]

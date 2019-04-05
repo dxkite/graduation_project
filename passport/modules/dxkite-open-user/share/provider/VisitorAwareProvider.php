@@ -59,7 +59,7 @@ class VisitorAwareProvider implements FrameworkContextAwareInterface
         $this->setBaseContext($application, $request, $response);
         $this->context = $processor->onRequest($application, $request, $response);
         $this->session = UserSession::createFromRequest($request, $this->group);
-        $this->visitor = $context->getVisitor();
+        $this->visitor = $this->context->getVisitor();
     }
 
     /**

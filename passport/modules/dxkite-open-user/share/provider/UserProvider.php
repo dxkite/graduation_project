@@ -3,6 +3,7 @@ namespace dxkite\openuser\provider;
 
 use suda\orm\TableStruct;
 use support\setting\PageData;
+use support\upload\UploadUtil;
 use support\setting\UserSession;
 use support\setting\VerifyImage;
 use dxkite\openuser\table\UserTable;
@@ -99,8 +100,9 @@ class UserProvider extends VisitorAwareProvider
     public function check(string $code) {
         $codeType = $this->visitor->getAttribute('code_type', 0);
         if ($codeType > 0 ) {
-            
+            return $this->controller->check($this->visitor->getId(), $code);
         }
+        return true;
     }
 
     /**
@@ -116,7 +118,8 @@ class UserProvider extends VisitorAwareProvider
     public function edit(File $headimg, string $name, ?string $mobile = null, ?string $email = null): bool
     {
         // TODO save file to protected
-        return $this->controller->edit($this->visitor->getId(), $name, $headimg, $ip, $mobile, $email, $by, $status);
+        $path = UploadUtil::save($headimg);
+        return $this->controller->edit($this->visitor->getId(), $name, $path, $mobile, $email);
     }
     
     /**

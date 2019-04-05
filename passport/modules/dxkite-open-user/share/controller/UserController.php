@@ -108,7 +108,14 @@ class UserController
             if ($data['code_type'] > 0 && $data['code_expires'] > time() && $data['code'] !== $code) {
                 return false;
             }
-            return $this->table->write(['code' => null, 'code_type' => 0, 'code_expires' => 0])->ok();
+            $write = ['code' => null, 'code_type' => 0, 'code_expires' => 0];
+            if ($data['code_type'] == UserTable::CODE_EMAIL) {
+                $write['email_checked'] = 1;
+            }
+            if ($data['code_type'] == UserTable::CODE_MOBILE) {
+                $write['mobile_checked'] = 1;
+            }
+            return $this->table->write($write)->ok();
         }
         return true;
     }
@@ -124,19 +131,22 @@ class UserController
      * @param integer $status
      * @return boolean
      */
-    public function edit(string $id, string $name, ?string $headimg = null, ?string $mobile = null, ?string $email = null, int $status = UserTable::NORMAL): bool
+    public function edit(string $id, ?string $name = null, ?string $headimg = null, ?string $mobile = null, ?string $email = null): bool
     {
         $this->assertName($name);
         $this->assertEmail($email);
         $this->assertMobile($mobile);
         try {
             $data = [
-                'name' => $name,
-                'headimg' => $headimg,
                 'mobile' => $mobile,
                 'email' => $email,
-                'status' => $status,
             ];
+            if ($name !== null) {
+                $data['name'] = $name;
+            }
+            if ($headimg !== null) {
+                $data['headimg'] = $headimg;
+            }
             if ($mobile !== null) {
                 $data['mobile_checked'] = 0;
             }
@@ -257,7 +267,7 @@ class UserController
     protected function assertName(string $name)
     {
         $name = trim($name);
-        if (!preg_match(UserController::NAME_PREG, $name)) {
+        if (strlen($name) > 0 && !preg_match(UserController::NAME_PREG, $name)) {
             throw new UserException('invalid user name', UserException::ERR_NAME_FORMAT);
         }
         return $name;
