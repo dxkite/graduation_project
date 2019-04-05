@@ -2,5 +2,9 @@
     "verify": {
         "class": "dxkite.openuser.response.VerifyImageResponse",
         "url": "\/verify-image"
+    },
+    "signin": {
+        "class": "dxkite.openuser.response.SigninResponse",
+        "url": "\/signin"
     }
 }

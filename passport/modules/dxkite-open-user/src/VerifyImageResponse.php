@@ -19,7 +19,7 @@ class VerifyImageResponse extends UserResponse
 
     public function generateImage()
     {
-        $verify = new VerifyImage($this->context, 'openuser');
+        $verify = new VerifyImage($this->context, 'dxkite/openuser');
         \ob_start();
         $verify->display();
         $content = \ob_get_clean();

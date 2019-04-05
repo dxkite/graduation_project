@@ -215,11 +215,14 @@ class UserController
     public function getByAccount(string $account):TableStruct
     {
         if (preg_match(UserController::EMAIL_PREG, $account)) {
-            return $this->getByEmail($account);
+            $accountData = $this->getByEmail($account);
         } elseif (preg_match(UserController::MOBILE_PREG, $account)) {
-            return $this->getByMobile($account);
+            $accountData = $this->getByMobile($account);
         } else {
-            return $this->getByName($account);
+            $accountData = $this->getByName($account);
+        }
+        if ($accountData) {
+            return $accountData;
         }
         throw new UserException('account not exists', UserException::ERR_ACCOUNT_NOT_FOUND);
     }

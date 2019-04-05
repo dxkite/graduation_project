@@ -6,6 +6,7 @@ use support\setting\Context;
 use support\setting\Visitor;
 use suda\application\Application;
 use suda\application\template\RawTemplate;
+use suda\application\template\ModuleTemplate;
 use dxkite\openuser\processor\UserInfoProcessor;
 use suda\application\processor\RequestProcessor;
 use suda\framework\Response as FrameworkResponse;
@@ -115,6 +116,21 @@ abstract class UserResponse implements RequestProcessor
     public function redirect(string $url)
     {
         $this->context->getResponse()->redirect($url);
+    }
+
+    /**
+     * 跳转页面
+     *
+     * @return void
+     */
+    public function jumpForward()
+    {
+        $url = $this->request->get('redirect_uri');
+        if (strlen($url) > 0) {
+            $this->redirect($url);
+        } else {
+            $this->goRoute('home');
+        }
     }
 
     /**

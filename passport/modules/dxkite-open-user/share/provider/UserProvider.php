@@ -1,5 +1,5 @@
 <?php
-namespace dxkite\openuser\exception;
+namespace dxkite\openuser\provider;
 
 use suda\orm\TableStruct;
 use support\setting\PageData;
@@ -7,6 +7,7 @@ use support\setting\UserSession;
 use support\setting\VerifyImage;
 use dxkite\openuser\table\UserTable;
 use support\openmethod\parameter\File;
+use dxkite\openuser\exception\UserException;
 use dxkite\openuser\controller\UserController;
 
 

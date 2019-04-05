@@ -1,5 +1,5 @@
 <?php
-namespace support\setting\provider;
+namespace dxkite\openuser\provider;
 
 use suda\framework\Request;
 use suda\framework\Response;
@@ -11,8 +11,7 @@ use dxkite\openuser\processor\UserInfoProcessor;
 use support\openmethod\FrameworkContextAwareTrait;
 use support\openmethod\FrameworkContextAwareInterface;
 
-
-class UserSessionAwareProvider implements FrameworkContextAwareInterface
+class VisitorAwareProvider implements FrameworkContextAwareInterface
 {
     use FrameworkContextAwareTrait {
         setContext as setBaseContext;
