@@ -11,7 +11,7 @@ class Visitor
     /**
      * 属性
      *
-     * @var array
+     * @var array|\ArrayAccess
      */
     protected $attribute;
 
@@ -33,9 +33,9 @@ class Visitor
      * 创建访问者
      *
      * @param string $id
-     * @param array $attribute
+     * @param array|\ArrayAccess $attribute
      */
-    public function __construct(string $id = '', array $attribute = [])
+    public function __construct(string $id = '',  $attribute = [])
     {
         $this->id = $id;
         $this->attribute = $attribute;

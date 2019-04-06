@@ -136,7 +136,7 @@ class MenuTree
     {
         usort($array, function ($a, $b) {
             if (\array_key_exists('child', $a) && \array_key_exists('child', $b)) {
-                return $a['sort'] - $b['sort'];
+                return  - ($a['sort'] - $b['sort']);
             }
             return 0;
         });

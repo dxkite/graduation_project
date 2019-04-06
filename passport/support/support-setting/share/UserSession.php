@@ -67,7 +67,8 @@ class UserSession implements MethodParameterInterface, ResultProcessor
         $table = new SessionTable;
         $session = new static;
         $session->group = $group;
-        $session->token = str_replace(['=','+','/'], 'o', base64_encode(\md5(\microtime(true).$userId.$group.$expireIn, true)));
+        $token = \md5(\microtime(true).$userId.$group.$expireIn, true);
+        $session->token = static::encode($userId.':'.$token);
         // 用户会话有效
         if ($data = $table->read('id', 'expire', 'token', 'grantee')->where([
             'ip' => $ip,
@@ -79,7 +80,7 @@ class UserSession implements MethodParameterInterface, ResultProcessor
             $session->userId = $data['grantee'];
             // 小于10倍心跳时长则更新
             $limit = time() + static::$beat * 10;
-            $write = $table->write('token', $session->token);
+            $write = $table->write('token', static::encode($token));
             if ($data['expire'] < $limit && $expireIn === 0) {
                 $session->expireTime = $session->expireTime + $beat;
                 $write->write('expire', $session->expireTime);
@@ -95,7 +96,7 @@ class UserSession implements MethodParameterInterface, ResultProcessor
                 'group' => $group,
                 'grantee' => $userId,
                 'expire' => $session->expireTime,
-                'token' => $session->token,
+                'token' => static::encode($token),
                 'time' => time(),
                 'ip' => $ip,
             ])->id();
@@ -136,17 +137,23 @@ class UserSession implements MethodParameterInterface, ResultProcessor
         $session->expireTime = time() ;
         $session->userId = '';
         $session->token = '';
-        if (strlen($token) < 10 || strlen($token) > 32) {
+        $target = static::decode($token);
+
+        if (strlen($token) < 10 || strlen($token) > 32 || strpos($target, ':') === false) {
             return $session;
         }
+        
+        list($user, $token) = \explode(':', $target, 2); 
+
         if ($data = $table->read('id', 'expire', 'token', 'grantee')->where([
+            'grantee' => $user,
             'ip' => $ip,
             'group' => $group,
-            'token' => $token,
+            'token' => static::encode($token),
             'expire' => ['>', time()],
         ])->one()) {
             $session->id = $data['id'];
-            $session->token = $data['token'];
+            $session->token = static::encode($user.':'. static::decode($data['token']));
             $session->expireTime = $data['expire'];
             $session->userId = $data['grantee'];
             // 小于10倍心跳时长则更新
@@ -173,7 +180,7 @@ class UserSession implements MethodParameterInterface, ResultProcessor
         $session->group = $group;
         $session->expireTime = time() + $exporeIn;
         $session->userId = $userId;
-        $session->token = str_replace('=', '', base64_encode(\md5(\microtime(true).$userId.$group.$expireIn, true)));
+        $session->token = static::encode(\md5(\microtime(true).$userId.$group.$expireIn, true));
         return $session;
     }
 
@@ -199,6 +206,28 @@ class UserSession implements MethodParameterInterface, ResultProcessor
     }
 
     /**
+     * 换表编码
+     *
+     * @param string $data
+     * @return string
+     */
+    public static function encode(string $data):string
+    {
+        return str_replace(['=','/','+'], ['','$','_'], base64_encode($data));
+    }
+
+    /**
+     * 换表解码
+     *
+     * @param string $data
+     * @return string
+     */
+    public static function decode(string $data):string
+    {
+        return \base64_decode(str_replace(['$','_'], ['/','+'], $data));
+    }
+
+    /**
      * 从请求中创建
      *
      * @param integer $position
@@ -221,7 +250,8 @@ class UserSession implements MethodParameterInterface, ResultProcessor
      * @param string $group
      * @return self
      */
-    public static function createFromRequest(Request $request, string $group) {
+    public static function createFromRequest(Request $request, string $group)
+    {
         $token = $request->getHeader('x-'.$group.'-token', $request->getCookie('x-'.$group.'-token', ''));
         $session = UserSession::load($token, $request->getRemoteAddr(), $group);
         if ($session->isGuest() && strlen($token) > 32) {

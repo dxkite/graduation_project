@@ -10,6 +10,7 @@ use suda\application\Application;
 use support\setting\exception\UserException;
 use support\openmethod\FrameworkContextAwareTrait;
 use support\openmethod\FrameworkContextAwareInterface;
+use support\setting\processor\SettingContextProcessor;
 
 class UserSessionAwareProvider implements FrameworkContextAwareInterface
 {
@@ -39,6 +40,13 @@ class UserSessionAwareProvider implements FrameworkContextAwareInterface
     protected $visitor;
 
     /**
+     * 用户会话分组
+     *
+     * @var string
+     */
+    protected $group = 'system';
+
+    /**
      * 环境感知
      *
      * @param \suda\application\Application $application
@@ -48,9 +56,11 @@ class UserSessionAwareProvider implements FrameworkContextAwareInterface
      */
     public function setContext(Application $application, Request $request, Response $response)
     {
+        $processor = new SettingContextProcessor;
         $this->setBaseContext($application, $request, $response);
-        $this->context = new Context($application, $request, $response);
-        $this->session = UserSession::createParameterFromRequest(0, '', '', $application, $request);
+        $this->context = $processor->onRequest($application, $request, $response);
+        $this->session = UserSession::createFromRequest($request, $this->group);
+        $this->visitor = $context->getVisitor();
     }
 
     /**
@@ -59,10 +69,11 @@ class UserSessionAwareProvider implements FrameworkContextAwareInterface
      * @param \support\setting\Context $context
      * @return void
      */
-    public function loadFromContext(Context $context) {
+    public function loadFromContext(Context $context)
+    {
         $this->context = $context;
         $this->setBaseContext($context->getApplication(), $context->getRequest(), $context->getResponse());
-        $this->session = UserSession::createParameterFromRequest(0, '', '', $context->getApplication(), $context->getRequest());
+        $this->session = UserSession::createFromRequest($this->request, $this->group);
         $this->visitor = $context->getVisitor();
     }
 }

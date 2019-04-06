@@ -10,12 +10,15 @@ use suda\application\Application;
 use support\setting\provider\VisitorProvider;
 use suda\application\processor\RequestProcessor;
 
-class ContextCreateProcessor implements RequestProcessor
+/**
+ * 设置环境状态
+ */
+class SettingContextProcessor implements RequestProcessor
 {
     public function onRequest(Application $application, Request $request, Response $response)
     {
         $context = new Context($application, $request, $response);
-        $session = UserSession::createParameterFromRequest(0, '', '', $application, $request);
+        $session = UserSession::createFromRequest($request, 'system');
         $vp = new VisitorProvider;
         $context->setVisitor($vp->getVisitor($session));
         return $context;

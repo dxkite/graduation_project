@@ -8,11 +8,12 @@ use suda\framework\http\UploadedFile;
 use support\openmethod\MethodParameterInterface;
 use support\openmethod\processor\ResultProcessor;
 use suda\application\processor\FileRangeProccessor;
+use SplFileObject;
 
 /**
  * 表单文件
  */
-class File extends UploadedFile implements ResultProcessor, MethodParameterInterface
+class File extends SplFileObject implements ResultProcessor, MethodParameterInterface
 {
     /**
      * 是否是图片
@@ -28,10 +29,36 @@ class File extends UploadedFile implements ResultProcessor, MethodParameterInter
      */
     protected $extension;
 
+    /**
+     * Mime描述符
+     *
+     * @var string
+     */
+    protected $mimeType;
+
+    /**
+     * 上传的文件名
+     *
+     * @var string
+     */
+    protected $originalName;
+
     public function __construct(UploadedFile $file)
     {
-        parent::__construct($file->getPathname(), $file->$this->originalName(), $file->getMimeType(), $file->getError());
+        parent::__construct($file->getTempname());
+        $this->mimeType = $file->getMimeType();
         $this->image = $this->guessImage();
+        $this->originalName = $file->getOriginalName();
+    }
+
+    /**
+     * Get 上传的文件名
+     *
+     * @return  string
+     */
+    public function getOriginalName()
+    {
+        return $this->originalName;
     }
 
     /**
@@ -43,15 +70,7 @@ class File extends UploadedFile implements ResultProcessor, MethodParameterInter
     {
         $type = strtolower($this->getExtension());
         if (preg_match('/image\/*/i', $this->mimeType) || in_array($type, ['swf','jpc','jbx','jb2','swc'])) {
-            $imageType = false;
-            if (function_exists('exif_imagetype')) {
-                $imageType = exif_imagetype($this->getPathname());
-            } else {
-                $value = getimagesize($this->getPathname());
-                if ($value) {
-                    $imageType = $value[2];
-                }
-            }
+            $imageType = static::getImageTypeIfy($this->getPathname());
             if ($imageType) {
                 $this->mimeType = image_type_to_mime_type($imageType);
                 $this->extension = image_type_to_extension($imageType, false);
@@ -59,6 +78,24 @@ class File extends UploadedFile implements ResultProcessor, MethodParameterInter
             }
         }
         return false;
+    }
+
+    /**
+     * 获取图片类型
+     *
+     * @param string $path
+     * @return string|null
+     */
+    public static function getImageTypeIfy(string $path):?string {
+        if (function_exists('exif_imagetype')) {
+            return exif_imagetype($path);
+        } else {
+            $value = getimagesize($path);
+            if ($value) {
+                return $value[2];
+            }
+        }
+        return null;
     }
 
     /**
