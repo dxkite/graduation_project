@@ -1,0 +1,14 @@
+{
+    "user_list": {
+        "class": "dxkite.openuser.setting.response.user.ListResponse",
+        "url": "\/user[\/{page:int}]"
+    },
+    "user_add": {
+        "class": "dxkite.openuser.setting.response.user.AddResponse",
+        "url": "\/user\/add"
+    },
+    "user_edit": {
+        "class": "dxkite.openuser.setting.response.user.EditResponse",
+        "url": "\/user\/{id:int}\/edit"
+    }
+}

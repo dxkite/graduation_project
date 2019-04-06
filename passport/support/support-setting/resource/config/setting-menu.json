@@ -1,10 +1,11 @@
 {
     "${module}@${group}:index": {
         "name": "网站环境",
-        "sort": -999
+        "sort": 999
     },
     "${module}@${group}:user_list": {
         "name": "系统管理",
+        "sort": 998,
         "acl": ["setting:user.list"],
         "child": {
             "${module}@${group}:user_list": {

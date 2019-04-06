@@ -1,0 +1,16 @@
+{
+    "${module}@${group}:user_list": {
+        "name": "用户管理",
+        "acl": ["open-user.list"],
+        "child": {
+            "${module}@${group}:user_list": {
+                "acl": ["open-user.list"],
+                "name": "用户列表"
+            },
+            "${module}@${group}:user_add": {
+                "acl": ["open-user.add"],
+                "name": "添加用户"
+            }
+        }
+    }
+}

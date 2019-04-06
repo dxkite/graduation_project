@@ -18,7 +18,7 @@ class UploadUtil
      */
     public static function hash(string $path)
     {
-        return \str_replace(['+','/', '='], ['_','__',''], \base64_encode(\md5_file($path, true)));
+        return \str_replace(['+','/', '='], ['$','_',''], \base64_encode(\md5_file($path, true)));
     }
 
     /**
