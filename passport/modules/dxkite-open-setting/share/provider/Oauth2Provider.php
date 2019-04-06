@@ -51,7 +51,9 @@ class Oauth2Provider extends VisitorAwareProvider
             $this->goRoute('dxkite/open-user:signin', ['redirect_uri' => $this->request->getUrl()]);
             return;
         }
-        if ($this->client->read(['id'])->where(['appid' => $appid, 'status' => 1])->one()) {
+
+        if ($data = $this->client->read(['id', 'hostname'])->where(['appid' => $appid, 'status' => 1])->one()) {
+            $this->assertHost($redirect_uri, $data['hostname']);
             $code = $this->packToken($appid, $this->visitor->getId(), md5($appid.microtime(true), true));
             if ($this->auth->write([
                     'appid' => $appid,
@@ -149,7 +151,7 @@ class Oauth2Provider extends VisitorAwareProvider
 
     /**
      * 获取用户信息
-     * 
+     *
      * @param-source GET
      * @param string $user
      * @param string $access_token
@@ -257,5 +259,13 @@ class Oauth2Provider extends VisitorAwareProvider
     protected function packToken(string $appid, string $user, string $token):string
     {
         return  UserSession::encode($appid.':'.$user.':'.$token);
+    }
+
+    protected function assertHost(string $url, ?string $hostname)
+    {
+        $parsed = parse_url($url);
+        if ($hostname !== null && $parsed['host'] !== $hostname) {
+            throw new Oauth2Exception('invalid host name', Oauth2Exception::ERR_HOSTNAME);
+        }
     }
 }

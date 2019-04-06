@@ -9,4 +9,5 @@ class Oauth2Exception extends \Exception
     const ERR_ACCESS_TOKEN = 50003;
     const ERR_REFRESH_TOKEN = 50004;
     const ERR_USER = 50005;
+    const ERR_HOSTNAME = 50006;
 }
