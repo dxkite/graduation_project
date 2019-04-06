@@ -58,6 +58,7 @@ class UserController
                 'mobile' => $mobile,
                 'email' => $email,
                 'status' => $status,
+                'signin_time' => time(),
             ])->id();
         } catch (SQLException $e) {
             $message = $e->getMessage();
@@ -107,7 +108,7 @@ class UserController
             }
             if ($email !== null) {
                 $data['email_checked'] = 0;
-                $data['email'] = $mobile;
+                $data['email'] = $email;
             }
             if (count($data) > 0) {
                 return $this->table->write($data)->where(['id' => $id])->ok();

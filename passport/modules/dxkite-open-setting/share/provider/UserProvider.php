@@ -51,7 +51,7 @@ class UserProvider extends UserSessionAwareProvider
      *
      * @param string $id
      * @param File|null $headimg
-     * @param string $name
+     * @param string|null $name
      * @param string|null $password
      * @param string|null $mobile
      * @param string|null $email

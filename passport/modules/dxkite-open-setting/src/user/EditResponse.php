@@ -1,11 +1,12 @@
 <?php
-namespace support\setting\response\user;
+namespace dxkite\openuser\setting\response\user;
 
 use suda\framework\Request;
 use support\openmethod\Permission;
-use support\setting\provider\UserProvider;
+
 use support\setting\exception\UserException;
 use support\setting\response\SettingResponse;
+use dxkite\openuser\setting\provider\UserProvider;
 
 class EditResponse extends SettingResponse
 {
@@ -26,17 +27,24 @@ class EditResponse extends SettingResponse
         $user = $provider->getInfoById($id);
         $view->set('user', $user);
 
-        if ($request->hasPost('name') && $request->hasPost('password')) {
+        if ($request->hasPost('name')) {
             $name = $request->post('name');
             $password = $request->post('password');
-
+            $file = $request->getFile('avatar');
             $email = $request->post('email');
             $mobile = $request->post('mobile');
             $email = empty($email)?null:$email;
             $mobile = empty($mobile)?null:$mobile;
-            
+            $password = empty($password)?null:$password;
+
+            if ($file->isValid()) {
+                $file = new File($file);
+            } else {
+                $file = null;
+            }
+
             try {
-                $result = $provider->edit($id, $name, $password, $request->getRemoteAddr(), $mobile, $email, $this->visitor->getId());
+                $result = $provider->edit($id, $file,  $name, $password, $mobile, $email);
                 $user = $provider->getInfoById($id);
                 $view->set('user', $user);
                 if ($result) {
