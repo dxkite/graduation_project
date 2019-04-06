@@ -167,6 +167,7 @@ class Oauth2Provider extends VisitorAwareProvider
         if ($data === null) {
             throw new Oauth2Exception('invalid user id', Oauth2Exception::ERR_USER);
         }
+        $data['headimg'] = $this->request->getUribase().'/upload/'.$data['headimg'];
         return $data;
     }
 
