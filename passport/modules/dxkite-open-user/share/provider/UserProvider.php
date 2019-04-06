@@ -13,14 +13,6 @@ use dxkite\openuser\controller\UserController;
 
 class UserProvider extends VisitorAwareProvider
 {
-
-    /**
-     * 登陆分组
-     *
-     * @var string
-     */
-    protected $group = 'openuser';
-
     /**
      * UserController
      *

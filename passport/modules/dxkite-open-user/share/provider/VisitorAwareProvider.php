@@ -39,12 +39,12 @@ class VisitorAwareProvider implements FrameworkContextAwareInterface
     protected $visitor;
 
     /**
-     * 用户会话分组
+     * 登陆分组
      *
      * @var string
      */
-    protected $group;
-
+    protected $group = 'openuser';
+    
     /**
      * 环境感知
      *

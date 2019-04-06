@@ -232,7 +232,7 @@ class UserController
      */
     public function getBaseInfoById(string $id):?TableStruct
     {
-        return $this->table->read('name', 'headimg', 'signin_time')->where('id = ?', $id)->one();
+        return $this->table->read('id', 'name', 'headimg', 'signin_time')->where('id = ?', $id)->one();
     }
 
     /**
