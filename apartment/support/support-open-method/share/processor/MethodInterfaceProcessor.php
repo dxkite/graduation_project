@@ -50,11 +50,13 @@ class MethodInterfaceProcessor
             list($id, $parameterBag) = $this->buildMethodParameterBag($methods, $id, $method, $application, $request);
             $application->debug()->timeEnd('build parameter');
             $result = $this->invokeMethod($parameterBag, $application, $request, $response);
-            if ($result instanceof ResultProcessor) {
+            if ($result === null) {
+                return;
+            } elseif ($result instanceof ResultProcessor) {
                 return $result->processor($application, $request, $response);
-            } else if ($result instanceof RawTemplate) {
+            } elseif ($result instanceof RawTemplate) {
                 return (new TemplateResultProcessor($result))->processor($application, $request, $response);
-            }else{
+            } else {
                 return [
                     'id' => $id,
                     'result' => $result,

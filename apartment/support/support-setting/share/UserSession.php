@@ -213,7 +213,7 @@ class UserSession implements MethodParameterInterface, ResultProcessor
      */
     public static function encode(string $data):string
     {
-        return str_replace(['=','/','+'], ['','$','_'], base64_encode($data));
+        return str_replace(['=','/','+'], ['','-','_'], base64_encode($data));
     }
 
     /**
@@ -224,7 +224,7 @@ class UserSession implements MethodParameterInterface, ResultProcessor
      */
     public static function decode(string $data):string
     {
-        return \base64_decode(str_replace(['$','_'], ['/','+'], $data));
+        return \base64_decode(str_replace(['-','_'], ['/','+'], $data));
     }
 
     /**
