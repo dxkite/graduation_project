@@ -2,6 +2,7 @@
 namespace dxkite\apartment\provider;
 
 use Exception;
+use support\setting\UserSession;
 use support\setting\VerifyImage;
 use dxkite\apartment\table\StudentTable;
 use dxkite\apartment\table\ApartmentTable;
@@ -117,6 +118,12 @@ class ApartmentProvider extends VisitorAwareProvider
         $d = $this->seekIndex($apart[$a]['children'][$b]['children'][$c]['children'] ?? [], $in['bed']);
         $apart[$a]['children'][$b]['children'][$c]['children'][$d]['text'] = $in['bed'].'床位';
         $apart[$a]['children'][$b]['children'][$c]['children'][$d]['value'] = $in['bed'];
+    }
+
+    public function signout()
+    {
+        UserSession::expire($this->visitor->getId(), $this->group);
+        return true;
     }
 
     private function seekIndex(array $input, int $value)

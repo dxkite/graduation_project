@@ -49,7 +49,7 @@ class Oauth2Provider extends VisitorAwareProvider
     public function authorize(string $appid, string $redirect_uri, string $state, string $grant_type)
     {
         if ($this->visitor->isGuest()) {
-            $this->goRoute('signin', ['redirect_uri' => $this->request->getUrl()]);
+            $this->goRoute('@default:signin', ['redirect_uri' => $this->request->getUrl()]);
             return;
         }
 
