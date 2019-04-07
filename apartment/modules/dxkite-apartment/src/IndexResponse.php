@@ -3,6 +3,7 @@ namespace dxkite\apartment\response;
 
 use suda\framework\Request;
 use dxkite\apartment\response\UserResponse;
+use dxkite\apartment\controller\UserController;
 
 class IndexResponse extends UserResponse
 {
@@ -20,6 +21,9 @@ class IndexResponse extends UserResponse
     public function onUserVisit(Request $request)
     {
         $view = $this->view('index');
+        $controller = new UserController;
+        $view->set('title', '涉外学院宿舍选择系统');
+        $view->set('bind', $controller->isBinded($this->visitor->getId()));
         $view->set('user', $this->visitor->getAttributes());
         return $view;
     }
