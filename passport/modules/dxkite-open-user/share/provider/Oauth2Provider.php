@@ -112,6 +112,7 @@ class Oauth2Provider extends VisitorAwareProvider
                 }
                 throw new Oauth2Exception('clould not create access_token', Oauth2Exception::ERR_SYSTEM);
             }
+            throw new Oauth2Exception('code not available', Oauth2Exception::ERR_CODE);
         }
         throw new Oauth2Exception('appid not available', Oauth2Exception::ERR_APPID);
     }
@@ -224,7 +225,7 @@ class Oauth2Provider extends VisitorAwareProvider
         if (strpos($target, ':') === false) {
             throw new Oauth2Exception($message, $errcode);
         }
-        list($user, $appid, $token) = \explode(':', $target, 3);
+        list($appid, $user,  $token) = \explode(':', $target, 3);
         return [$appid, $user];
     }
 
