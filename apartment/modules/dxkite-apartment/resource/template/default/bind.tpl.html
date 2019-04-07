@@ -65,7 +65,7 @@
                 vcode = $('#vcode').val();
                 dx.acall('bind',[idcard,password,vcode])
                 .then(function(ret){
-                    if (ret == 0 ){
+                    if (ret){
                         dxui.Toast('账号绑定成功');
                         window.location.href = "@u('home')";
                     }

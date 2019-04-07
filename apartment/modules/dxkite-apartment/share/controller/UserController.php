@@ -50,7 +50,7 @@ class UserController
         $data = $this->getByUser($user);
         // 欠费金额
         if ($data['arrearage'] <= $setting->get('apartment_min_pay', 0)) {
-            if ($setting->get('apartment_must_pay')) {
+            if ($setting->get('apartment_must_pay') && $data['arrearage'] != 0) {
                 return false;
             }
             return true;
