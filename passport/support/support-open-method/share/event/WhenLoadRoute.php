@@ -12,11 +12,12 @@ class WhenLoadRoute
     public function prepareRoute(Application $application, string $moduleFullName, string $prefix, Module $module, array $routeConfig)
     {
         foreach ($routeConfig as $name => $config) {
-            $exname = $moduleFullName.':'.$name;
+            $exname = $application->getRouteName($name, $moduleFullName, 'open-method');
             $method = $config['method'] ?? [];
             $attriute = [];
             $attriute['module'] = $moduleFullName;
             $attriute['open-method'] = $config['class'] ?? [];
+            $attriute['group'] = 'open-method';
             $config['class'] = MethodInterfaceProcessor::class;
             $attriute['config'] = $config;
             $attriute['route'] = $exname;
@@ -38,6 +39,7 @@ class WhenLoadRoute
                 ]);
                 if ($routeConfig !== null) {
                     $prefix = $module->getConfig('route-prefix.open-method', '');
+                    
                     $this->prepareRoute($application, $fullName, $prefix, $module, $routeConfig);
                 }
             }

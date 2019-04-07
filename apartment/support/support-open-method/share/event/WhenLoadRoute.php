@@ -19,6 +19,7 @@ class WhenLoadRoute
             $attriute['open-method'] = $config['class'] ?? [];
             $config['class'] = MethodInterfaceProcessor::class;
             $attriute['config'] = $config;
+            $attriute['group'] = 'open-method';
             $attriute['route'] = $exname;
             $attriute['application'] = $application;
             $uri = $config['url'];
