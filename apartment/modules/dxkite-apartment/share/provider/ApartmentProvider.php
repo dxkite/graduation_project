@@ -12,8 +12,6 @@ use dxkite\openclient\provider\VisitorAwareProvider;
 
 class ApartmentProvider extends VisitorAwareProvider
 {
-    protected $table;
-    protected $apartment;
 
     /**
      * 用户控制器
@@ -22,9 +20,17 @@ class ApartmentProvider extends VisitorAwareProvider
      */
     protected $user;
 
+    /**
+     * ApartmentController
+     *
+     * @var ApartmentController
+     */
+    protected $apartment;
+
     public function __construct()
     {
         $this->user = new UserController;
+        $this->apartment = new ApartmentController;
     }
 
     public function bind(string $idcard, string $password, string $code): bool
@@ -56,12 +62,7 @@ class ApartmentProvider extends VisitorAwareProvider
         $userId = $this->visitor->getId();
         $user = $this->user->getByUser($userId);
         if ($user) {
-            $apartments = $this->apartment->read(['build','floor','room','bed'])->where([
-                'sex' => $user['sex'],
-                'major' => $user['major'],
-                'user' => ['is', null],
-            ]);
-            if ($apartments) {
+            if ($apartments = $this->apartment->query($user['major'], $user['sex'])) {
                 return $this->treeThis($apartments);
             }
             return null;
@@ -72,23 +73,23 @@ class ApartmentProvider extends VisitorAwareProvider
 
     public function select(array $room, string $code)
     {
-        $ap = new ApartmentController;
-        $u = new UserController;
+        $this->apartment = new ApartmentController;
+        $this->user = new UserController;
 
-        if ($ap->isClose()) {
-            throw new \Exception('系统关闭', -2);
+        if ($this->apartment->isClose()) {
+            throw new \Exception('系统关闭', 50030);
         }
-        if (!$u->selectable()) {
-            throw new \Exception('当前用户不可选择', -3);
+        if (!$this->user->selectable($this->visitor->getId())) {
+            throw new \Exception('当前用户不可选择', 50031);
         }
-        if ($ap->isSelected($room)) {
-            throw new \Exception('当前宿舍刚刚被选中', -4);
+        if ($this->apartment->isSelected($room)) {
+            throw new \Exception('当前宿舍刚刚被选中', 50032);
         }
         $verify = new VerifyImage($this->context, 'apartment');
         if ($verify->checkCode($code) === false) {
-            throw new Exception('验证码错误', 50011);
+            throw new Exception('验证码错误', 50033);
         }
-        return $ap->select($this->visitor->getId(), $room);
+        return $this->apartment->select($this->visitor->getId(), $room, $this->request->getRemoteAddr());
     }
 
  
@@ -96,7 +97,7 @@ class ApartmentProvider extends VisitorAwareProvider
     {
         $tree = [];
         foreach ($apart as $item) {
-            $this->add($tree, $item);
+            $this->add($tree, $item->toArray());
         }
         return $tree;
     }

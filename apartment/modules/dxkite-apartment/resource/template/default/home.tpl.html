@@ -65,11 +65,11 @@
 </div>
 
 @startInsert('ap-script')
-<script src="@static('support')/call.js" data-api="@api(:v1.0)"></script>
+<script src="@static('support/setting')/call.js" data-api="@u('@open-method:apartment')"></script>
 <script>
     $(function () {
         $('#signout').on('click', function () {
-            dx.call('apartment', 'signout').then(() => {
+            dx.acall('signout').then(() => {
                 dxui.Toast('退出登陆成功啦！密码别忘了哦~');
                 window.location.href = "@u('index')";
             })

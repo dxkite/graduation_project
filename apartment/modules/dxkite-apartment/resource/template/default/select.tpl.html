@@ -30,7 +30,7 @@
 </div>
 
 @endinsert @startInsert('ap-script')
-<script src="@static('support')/call.js" data-api="@api(:v1.0)"></script>
+<script src="@static('support/setting')/call.js" data-api="@u('@open-method:apartment')"></script>
 <script src="@static/hui.js"></script>
 <script src="@static/hui-picker.js"></script>
 <script>
@@ -67,7 +67,7 @@
             };
 
             console.log(data);
-            dx.call('apartment', 'select', data)
+            dx.acall('select', data)
                 .then(ret => {
                     if (ret > 0) {
                         dxui.Toast('选择成功');

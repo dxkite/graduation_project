@@ -123,7 +123,7 @@ class ExcelController
                         'room' => intval($value['E']),
                         'bed' => intval($value['F']),
                     ];
-                    if (!$table->read('*')->where($where)->one()) {
+                    if ($table->read('*')->where($where)->one() === null) {
                         $table->write([
                             'major' => $value['A'],
                             'build' => intval($value['B']),
@@ -131,7 +131,7 @@ class ExcelController
                             'floor' => intval($value['D']),
                             'room' => intval($value['E']),
                             'bed' => intval($value['F']),
-                        ]);
+                        ])->ok();
                     }
                     $i++;
                     // debug()->info('upload>', $value);

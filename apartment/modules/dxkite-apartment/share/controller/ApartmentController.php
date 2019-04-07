@@ -65,13 +65,13 @@ class ApartmentController
     public function select(int $user, array $room, string $ip):bool
     {
         $this->apartment->write('user', null)->where(['user' => $user])->ok();
-        return
-        $this->student->write('selected', 1)->where(['user' => $user])->ok()
-        &&
-        $this->apartment->write([
+         
+        $this->student->write('selected', 1)->where(['user' => $user])->ok();
+         
+        return $this->apartment->write([
             'user' => $user,
             'time' => time(),
-            'ip' => request()->ip()
+            'ip' => $ip,
         ])
         ->where([
             'build' => $room['build'],
@@ -113,5 +113,20 @@ class ApartmentController
             return false;
         }
         return false;
+    }
+
+    /**
+     * 查询可选宿舍
+     *
+     * @param string $major
+     * @param string $sex
+     * @return array
+     */
+    public function query(string $major, string $sex): array{
+        return $this->apartment->read(['build','floor','room','bed'])->where([
+            'sex' => $sex,
+            'major' => $major,
+            'user' => ['is', null],
+        ])->all();
     }
 }
