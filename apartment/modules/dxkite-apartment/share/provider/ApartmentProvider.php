@@ -122,8 +122,7 @@ class ApartmentProvider extends VisitorAwareProvider
 
     public function signout()
     {
-        UserSession::expire($this->visitor->getId(), $this->group);
-        return true;
+        return UserSession::expire($this->visitor->getId(), $this->group);
     }
 
     private function seekIndex(array $input, int $value)

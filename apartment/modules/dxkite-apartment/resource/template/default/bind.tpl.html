@@ -34,48 +34,53 @@
     </div>
     <div class="weui-btn-area">
         <a class="weui-btn weui-btn_primary" id="signin">绑定系统</a>
-        <a class="weui-btn weui-btn_warn" href="@u('signout')">退出登录</a>
+        <a class="weui-btn weui-btn_warn" id="signout">退出登录</a>
     </div>
 </div>
 
 @endInsert
 
 @startInsert('ap-script')
- 
+
 <script src="@static('support/setting')/call.js" data-api="@u('@open-method:apartment')"></script>
 
 <script>
-        $(function () {
-            var refershcode = function () {
-                var src = '';
-                var img = $('.weui-vcode-img');
-                if (img.attr('src').indexOf('random') == -1) {
-                    src = img.attr('src');
-                } else {
-                    src = img.attr('src').split('?')[0];
-                }
-                img.attr('src', src + '?random=' + Math.random());
-            };
-            //点击更换验证码
-            $('.weui-vcode-img').on('click', refershcode);
-
-            $('#signin').on('click', function () {
-                idcard = $('#idcard').val();
-                password = $('#password').val();
-                vcode = $('#vcode').val();
-                dx.acall('bind',[idcard,password,vcode])
-                .then(function(ret){
-                    if (ret){
+    $(function () {
+        var refershcode = function () {
+            var src = '';
+            var img = $('.weui-vcode-img');
+            if (img.attr('src').indexOf('random') == -1) {
+                src = img.attr('src');
+            } else {
+                src = img.attr('src').split('?')[0];
+            }
+            img.attr('src', src + '?random=' + Math.random());
+        };
+        //点击更换验证码
+        $('.weui-vcode-img').on('click', refershcode);
+        $('#signout').on('click', function () {
+            dx.acall('signout').then(() => {
+                dxui.Toast('退出登陆成功啦！密码别忘了哦~');
+                window.location.href = "@u('index')";
+            })
+        })
+        $('#signin').on('click', function () {
+            idcard = $('#idcard').val();
+            password = $('#password').val();
+            vcode = $('#vcode').val();
+            dx.acall('bind', [idcard, password, vcode])
+                .then(function (ret) {
+                    if (ret) {
                         dxui.Toast('账号绑定成功');
                         window.location.href = "@u('home')";
                     }
-                }).catch(function(err){ 
+                }).catch(function (err) {
                     console.log(err);
-                    dxui.Toast(err.message +' ('+ err.code + ')');
+                    dxui.Toast(err.message + ' (' + err.code + ')');
                     refershcode();
                 });
-            });
         });
-    </script>
-    
+    });
+</script>
+
 @endInsert
