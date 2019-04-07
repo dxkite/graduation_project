@@ -5,7 +5,7 @@ use suda\orm\TableStruct;
 use support\setting\PageData;
 use support\setting\UserSession;
 use suda\orm\exception\SQLException;
-use dxkite\openuser\setting\table\ClientTable;
+use dxkite\openuser\table\ClientTable;
 
 class ClientController
 {

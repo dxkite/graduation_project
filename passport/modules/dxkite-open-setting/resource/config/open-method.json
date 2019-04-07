@@ -1,8 +1,0 @@
-{
-    "oauth2": {
-        "url": "/auth2/{_method:string}",
-        "class": [
-            "dxkite.openuser.setting.provider.Oauth2Provider"
-        ]
-    }
-}

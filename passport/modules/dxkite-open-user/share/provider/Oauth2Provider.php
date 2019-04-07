@@ -1,13 +1,14 @@
 <?php
-namespace dxkite\openuser\setting\provider;
+namespace dxkite\openuser\provider;
 
 use suda\orm\TableStruct;
 use support\setting\UserSession;
+use dxkite\openuser\table\ClientTable;
+use dxkite\openuser\table\AuthClientTable;
 use dxkite\openuser\controller\UserController;
-use dxkite\openuser\setting\table\ClientTable;
 use dxkite\openuser\provider\VisitorAwareProvider;
-use dxkite\openuser\setting\table\AuthClientTable;
-use dxkite\openuser\setting\exception\Oauth2Exception;
+use dxkite\openuser\exception\Oauth2Exception;
+
 
 /**
  * Oauth2服务提供
@@ -48,7 +49,7 @@ class Oauth2Provider extends VisitorAwareProvider
     public function authorize(string $appid, string $redirect_uri, string $state, string $grant_type)
     {
         if ($this->visitor->isGuest()) {
-            $this->goRoute('dxkite/open-user:signin', ['redirect_uri' => $this->request->getUrl()]);
+            $this->goRoute('signin', ['redirect_uri' => $this->request->getUrl()]);
             return;
         }
 
@@ -105,6 +106,7 @@ class Oauth2Provider extends VisitorAwareProvider
                     return [
                         'access_token' => $access_token,
                         'refresh_token' => $refresh_token,
+                        'user' => $user,
                         'expires_in' => 7200
                     ];
                 }
@@ -169,7 +171,7 @@ class Oauth2Provider extends VisitorAwareProvider
         if ($data === null) {
             throw new Oauth2Exception('invalid user id', Oauth2Exception::ERR_USER);
         }
-        $data['headimg'] = $this->request->getUribase().'/upload/'.$data['headimg'];
+        $data['headimg'] = $this->application->getUribase($this->request).'/upload/'.$data['headimg'];
         return $data;
     }
 
@@ -214,36 +216,6 @@ class Oauth2Provider extends VisitorAwareProvider
             return $target.'?'. \http_build_query($parameter, '_');
         }
         return $target;
-    }
-
-    /**
-     * 跳转到某路由
-     *
-     * @param string $name
-     * @param array $parameter
-     * @param boolean $allowQuery
-     * @param string $default
-     * @return void
-     */
-    public function goRoute(string $name, array $parameter = [], bool $allowQuery = true, ?string $default = null)
-    {
-        $url = $this->getUrl($name, $parameter, $allowQuery, $default);
-        return $this->response->redirect($url);
-    }
-
-    /**
-     * 获取URL
-     *
-     * @param string $name
-     * @param array $parameter
-     * @param boolean $allowQuery
-     * @param string|null $default
-     * @return string
-     */
-    public function getUrl(string $name, array $parameter = [], bool $allowQuery = true, ?string $default = null)
-    {
-        $default = $default ?: $this->application->getRunning()->getFullName();
-        return $this->application->getUrl($this->request, $name, $parameter, $allowQuery, $default ?? $this->request->getAttribute('group'));
     }
 
     protected function unpackToken(string $token, string $message, int $errcode):array

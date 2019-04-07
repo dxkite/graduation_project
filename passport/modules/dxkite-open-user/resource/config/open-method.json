@@ -4,5 +4,11 @@
         "class": [
             "dxkite.openuser.provider.UserProvider"
         ]
+    },
+    "oauth2": {
+        "url": "/auth2/{_method:string}",
+        "class": [
+            "dxkite.openuser.provider.Oauth2Provider"
+        ]
     }
-}
+} 
