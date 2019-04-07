@@ -51,162 +51,80 @@ class ApartmentProvider extends VisitorAwareProvider
         }
     }
 
-    // public function queryRooms():?array
-    // {
-    //     $userId= get_user_id();
-    //     $user=$this->table->select('*', ['user'=>$userId])->fetch();
-    //     if ($user) {
-    //         $apartments = $this->apartment->setFields(['build','floor','room','bed'])->listWhere('`sex`=:sex and `major`=:major and `user` is null', [
-    //             'sex'=>$user['sex'],
-    //             'major'=>$user['major']
-    //         ]);
-    //         if ($apartments) {
-    //             return self::treeThis($apartments);
-    //         }
-    //         return null;
-    //     } else {
-    //         throw new \Exception(__('用户未绑定'), -1);
-    //     }
-    // }
+    public function queryRooms():?array
+    {
+        $userId = $this->visitor->getId();
+        $user = $this->user->getByUser($userId);
+        if ($user) {
+            $apartments = $this->apartment->read(['build','floor','room','bed'])->where([
+                'sex' => $user['sex'],
+                'major' => $user['major'],
+                'user' => ['is', null],
+            ]);
+            if ($apartments) {
+                return $this->treeThis($apartments);
+            }
+            return null;
+        } else {
+            throw new \Exception('用户未绑定', 50001);
+        }
+    }
 
-    // public function select(array $room, string $code)
-    // {
-    //     $ap =new ApartmentController;
-    //     $u = new UserController;
+    public function select(array $room, string $code)
+    {
+        $ap = new ApartmentController;
+        $u = new UserController;
 
-    //     if ($ap->isClose()) {
-    //         throw new \Exception(__('系统关闭'), -2);
-    //     }
-    //     if (!$u->selectable()) {
-    //         throw new \Exception(__('当前用户不可选择'), -3);
-    //     }
-    //     if ($ap->isSelected($room)) {
-    //         throw new \Exception(__('当前宿舍刚刚被选中'), -4);
-    //     }
-    //     if (HumanCode::check($code)) {
-    //         return $ap->select(get_user_id(), $room);
-    //     } else {
-    //         throw new \Exception(__('验证码错误'), -1);
-    //     }
-    // }
+        if ($ap->isClose()) {
+            throw new \Exception('系统关闭', -2);
+        }
+        if (!$u->selectable()) {
+            throw new \Exception('当前用户不可选择', -3);
+        }
+        if ($ap->isSelected($room)) {
+            throw new \Exception('当前宿舍刚刚被选中', -4);
+        }
+        $verify = new VerifyImage($this->context, 'apartment');
+        if ($verify->checkCode($code) === false) {
+            throw new Exception('验证码错误', 50011);
+        }
+        return $ap->select($this->visitor->getId(), $room);
+    }
 
-    // public function signout()
-    // {
-    //     visitor()->signout();
-    // }
+ 
+    private function treeThis(array $apart)
+    {
+        $tree = [];
+        foreach ($apart as $item) {
+            $this->add($tree, $item);
+        }
+        return $tree;
+    }
 
-    // /**
-    //  * @acl apartment.modify
-    //  *
-    //  * @return void
-    //  */
-    // public function setMustPay()
-    // {
-    //     setting_set('apartment_must_pay', ! setting('apartment_must_pay'));
-    //     return  setting('apartment_must_pay');
-    // }
-   
-    // /**
-    //  * @acl apartment.modify
-    //  *
-    //  * @param float $arrearage
-    //  * @return void
-    //  */
-    // public function setMinPay(float $arrearage)
-    // {
-    //     setting_set('apartment_min_pay', $arrearage * 100);
-    //     return setting('apartment_min_pay') == $arrearage * 100;
-    // }
+    private function add(array &$apart, array $in)
+    {
+        // TODO 递归实现
+        $a = $this->seekIndex($apart, $in['build']);
+        $apart[$a]['value'] = $in['build'];
+        $apart[$a]['text'] = '第'.$in['build'].'栋';
+        $b = $this->seekIndex($apart[$a]['children'] ?? [], $in['floor']);
+        $apart[$a]['children'][$b]['text'] = $in['floor'].'楼';
+        $apart[$a]['children'][$b]['value'] = $in['floor'];
+        $c = $this->seekIndex($apart[$a]['children'][$b]['children'] ?? [], $in['room']);
+        $apart[$a]['children'][$b]['children'][$c]['text'] = $in['room'].'房';
+        $apart[$a]['children'][$b]['children'][$c]['value'] = $in['room'];
+        $d = $this->seekIndex($apart[$a]['children'][$b]['children'][$c]['children'] ?? [], $in['bed']);
+        $apart[$a]['children'][$b]['children'][$c]['children'][$d]['text'] = $in['bed'].'床位';
+        $apart[$a]['children'][$b]['children'][$c]['children'][$d]['value'] = $in['bed'];
+    }
 
-    // /**
-    //  * @acl apartment.modify
-    //  *
-    //  * @param string $start
-    //  * @param string $end
-    //  * @return void
-    //  */
-    // public function setOpenTime(string $start, string $end)
-    // {
-    //     if (date_create_from_format('Y-m-d H:i:s', $start) && date_create_from_format('Y-m-d H:i:s', $end)) {
-    //         setting_set('apartment_start_time', $start);
-    //         setting_set('apartment_end_time', $end);
-    //         return true;
-    //     }
-    //     return false;
-    // }
-
-    // /**
-    //  *
-    //  * @acl apartment.modify
-    //  *
-    //  * @param File $students
-    //  * @return void
-    //  */
-    // public function uploadStudents(File $students)
-    // {
-    //     $excel=new ExcelController;
-    //     return $excel->uploadStudentInfo($students->getPath());
-    // }
-
-    // /**
-    //  *
-    //  * @acl apartment.modify
-    //  *
-    //  * @param File $pays
-    //  * @return void
-    //  */
-    // public function uploadPays(File $pays)
-    // {
-    //     $excel=new ExcelController;
-    //     return $excel->uploadPayInfo($pays->getPath());
-    // }
-
-    // /**
-    //  *
-    //  * @acl apartment.modify
-    //  *
-    //  * @param File $builds
-    //  * @return void
-    //  */
-    // public function uploadBuilds(File $builds)
-    // {
-    //     $excel=new ExcelController;
-    //     return $excel->uploadBuildInfo($builds->getPath());
-    // }
-
-    // private function treeThis(array $apart)
-    // {
-    //     $tree=[];
-    //     foreach ($apart as $item) {
-    //         self::add($tree, $item);
-    //     }
-    //     return $tree;
-    // }
-
-    // private function add(array &$apart, array $in)
-    // {
-    //     // TODO 递归实现
-    //     $a=self::seekIndex($apart, $in['build']);
-    //     $apart[$a]['value']=$in['build'];
-    //     $apart[$a]['text']='第'.$in['build'].'栋';
-    //     $b=self::seekIndex($apart[$a]['children']??[], $in['floor']);
-    //     $apart[$a]['children'][$b]['text']=$in['floor'].'楼';
-    //     $apart[$a]['children'][$b]['value']=$in['floor'];
-    //     $c=self::seekIndex($apart[$a]['children'][$b]['children']??[], $in['room']);
-    //     $apart[$a]['children'][$b]['children'][$c]['text']=$in['room'].'房';
-    //     $apart[$a]['children'][$b]['children'][$c]['value']=$in['room'];
-    //     $d=self::seekIndex($apart[$a]['children'][$b]['children'][$c]['children']??[], $in['bed']);
-    //     $apart[$a]['children'][$b]['children'][$c]['children'][$d]['text']=$in['bed'].'床位';
-    //     $apart[$a]['children'][$b]['children'][$c]['children'][$d]['value']=$in['bed'];
-    // }
-
-    // private function seekIndex(array $input, int $value)
-    // {
-    //     foreach ($input as $index=>$item) {
-    //         if ($item['value']==$value) {
-    //             return $index;
-    //         }
-    //     }
-    //     return count($input);
-    // }
+    private function seekIndex(array $input, int $value)
+    {
+        foreach ($input as $index => $item) {
+            if ($item['value'] == $value) {
+                return $index;
+            }
+        }
+        return count($input);
+    }
 }

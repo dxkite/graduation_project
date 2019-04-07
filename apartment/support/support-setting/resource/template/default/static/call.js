@@ -33,7 +33,16 @@ window.dx = window.dx || {};
                     }
                 } else {
                     if (params.fail) {
-                        params.fail.call(that, ajax);
+                        if (ajax.getResponseHeader('Content-Type').match('json')) {
+                            try {
+                                var json = JSON.parse(ajax.responseText);
+                                params.fail.call(that, json.error);
+                            } catch (e) {
+                                params.fail.call(that, ajax);
+                            }
+                        } else {
+                            params.fail.call(that, ajax);
+                        }
                     } else {
                         console.error('server return ' + ajax.status);
                     }
@@ -68,7 +77,7 @@ window.dx = window.dx || {};
         }
 
         if (param instanceof FormData) {
-            ajax.open("POST", url + '?method=' + method);
+            ajax.open("POST", url + '?_method=' + method);
             ajax.send(param);
         } else {
             ajax.open("POST", url);
@@ -82,38 +91,10 @@ window.dx = window.dx || {};
     }
     dx.xcall = call;
 
-    dx.acall = function (name, method, args) {
-        return new Promise((resolve, reject) => {
-            if (typeof args == 'undefined') {
-                if (typeof method == 'string') {
-                    dx.xcall(name, method, {
-                        args: [],
-                        finish: resolve,
-                        error: reject,
-                        fail: reject,
-                    });
-                } else {
-                    args = method;
-                    method = name;
-                    dx.xcall(method, {
-                        args: args || [],
-                        finish: resolve,
-                        error: reject,
-                        fail: reject,
-                    });
-                }
-
-            } else {
-                dx.xcall(name, method, {
-                    args: args || [],
-                    finish: resolve,
-                    error: reject,
-                    fail: reject,
-                });
-            }
-        });
+    dx.acall = function (method, args) {
+        return dx.call(thatDom.dataset.api, method, args);
     }
-    
+
     dx.call = function (name, method, args) {
         return new Promise((resolve, reject) => {
             if (typeof args == 'undefined') {

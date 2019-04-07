@@ -1,0 +1,46 @@
+<form id="query" method="POST" action="@u">
+    <div class="form-group  row">
+        <label class="col-2 col-form-label">查询用户</label>
+        <div class="col">
+            <input type="text" id="query" class="form-control" name="query" placeholder="身份证" value="{{$:query('')}}">
+        </div>
+        <div class="col-2">
+            <button class="btn btn-primary">查询</button>
+        </div>
+    </div>
+</form>
+
+@if ($?:student)
+<table class="table">
+    <tbody>
+        <tr>
+            <th scope="row">{= 姓名 }</th>
+            <td>{{$:student.name}}</td>
+        </tr>
+        <tr>
+            <th scope="row">{= 性别 }</th>
+            <td>{{$:student.sex}}</td>
+        </tr>
+        <tr>
+            <th scope="row">{= 身份证 }</th>
+            <td>{{$:student.idcard}}</td>
+        </tr>
+        <tr>
+            <th scope="row">{= 考生号 }</th>
+            <td>{{$:student.exam_number}}</td>
+        </tr>
+        <tr>
+            <th scope="row">{= 学号 }</th>
+            <td>{{$:student.number}}</td>
+        </tr>
+        <tr>
+            <th scope="row">{= 专业班级 }</th>
+            <td>{{$:student.major}} {{$:student.class}}</td>
+        </tr>
+        <tr>
+            <th scope="row">{= 欠费 }</th>
+            <td>{{ number_format( $:student.arrearage /100, 2, '.',',') }}</td>
+        </tr>
+    </tbody>
+</table>
+@endif

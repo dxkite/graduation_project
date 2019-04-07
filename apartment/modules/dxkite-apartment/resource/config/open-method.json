@@ -4,5 +4,11 @@
         "class": [
             "dxkite.apartment.provider.ApartmentProvider"
         ]
+    },
+    "setting": {
+        "url": "/apartment-setting[/{_method:string}]",
+        "class": [
+            "dxkite.apartment.provider.setting.ApartmentProvider"
+        ]
     }
 }

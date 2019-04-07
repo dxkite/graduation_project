@@ -1,0 +1,97 @@
+@extend ('support/setting:setting-view')
+@startInsert('admin-content')
+
+
+<div class="form-group  row">
+    <label class="col-2 col-form-label">最高欠费金额</label>
+    <div class="col-2">
+        <form id="arrearage">
+            <input type="number" class="form-control" name="arrearage" value="{{$:minpay('')}}">
+        </form>
+    </div>
+    <div class="col-2">
+        <button class="btn btn-primary" data-param="arrearage" data-method="setMinPay" remote-setting>设置</button>
+    </div>
+    <label for="toggle-pay" class="col-2 col-form-label">必须缴费，设置后，欠费不可选择宿舍</label>
+    <div class="col-2">
+        <button class="btn btn-primary" data-method="setMustPay" toggle>{{ $:mustpay(false)?'关闭':'开启' }}</button>
+    </div>
+</div>
+
+<div class="form-group  row">
+    <label for="reset" class="col-2 col-form-label">开放时间</label>
+    <form id="timeForm" class="col-8 row">
+        <div class="col">
+            <input type="text" class="form-control" name="start" placeholder="开始时间 (Y-m-d H:i:s)" value="{{$:time_start('')}}">
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" name="end" placeholder="结束时间 (Y-m-d H:i:s)" value="{{$:time_end('')}}">
+        </div>
+    </form>
+    <div class="col-2">
+        <button class="btn btn-primary" data-param="timeForm" data-method="setOpenTime" remote-setting>设置</button>
+    </div>
+</div>
+
+<div class="form-group  row">
+    <label class="col-2 col-form-label">导入学生数据</label>
+    <div class="col-6">
+        <form id="uploadStudent">
+            <input type="file" class="form-control-file" name="students" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                required>
+        </form>
+    </div>
+    <div class="col-4">
+        <button class="btn btn-primary" data-param="uploadStudent" data-method="uploadStudents" upload>导入数据</button>
+    </div>
+</div>
+<div class="form-group  row">
+    <label for="uploadApartment" class="col-2 col-form-label">导入公寓数据</label>
+    <div class="col-6">
+        <form id="uploadApartment">
+            <input type="file" class="form-control-file" name="builds" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                required>
+        </form>
+    </div>
+    <div class="col-4">
+        <button class="btn btn-primary" data-param="uploadApartment" data-method="uploadBuilds" upload>导入数据</button>
+    </div>
+</div>
+<div class="form-group  row">
+    <label for="uploadPay" class="col-2 col-form-label">导入财务数据</label>
+    <div class="col-6">
+        <form id="uploadPay">
+            <input type="file" class="form-control-file" name="pays" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                required>
+        </form>
+    </div>
+    <div class="col-4">
+        <button class="btn btn-primary" data-param="uploadPay" data-method="uploadPays" upload>导入数据</button>
+    </div>
+</div>
+<a href="@u('download')" class="btn btn-success">下载分配数据</a>
+<div class="modal fade" id="process" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="processWindow" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body console">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@startInsert('bs-footer')
+<script src="@static('support/setting')/call.js" data-api="@u('@open-method:setting')"></script>
+<script src="@static/upload.js"></script>
+@endInsert
+@endInsert
+

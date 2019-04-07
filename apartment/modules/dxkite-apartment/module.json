@@ -18,5 +18,8 @@
     "require": {
         "support/open-method": ""
     },
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "route-prefix": {
+        "setting": "/setting/apartment"
+    }
 }

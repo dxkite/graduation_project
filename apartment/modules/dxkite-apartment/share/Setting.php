@@ -31,8 +31,10 @@ class Setting
         $path = $resource->getConfigResourcePath('config/'.$name);
         if ($path) {
             $this->config = Config::loadConfig($path);
+            $this->path = $path;
         } else {
             $this->config = [];
+            $this->path = SUDA_DATA.'/config/'.$name.'.json';
         }
     }
 

@@ -42,7 +42,7 @@
 
 @startInsert('ap-script')
  
-<script src="@static('support/setting')/call.js"></script>
+<script src="@static('support/setting')/call.js" data-api="@u('@open-method:apartment')"></script>
 
 <script>
         $(function () {
@@ -63,7 +63,7 @@
                 idcard = $('#idcard').val();
                 password = $('#password').val();
                 vcode = $('#vcode').val();
-                dx.call("@u('@open-method:apartment')",'bind',[idcard,password,vcode])
+                dx.acall('bind',[idcard,password,vcode])
                 .then(function(ret){
                     if (ret == 0 ){
                         dxui.Toast('账号绑定成功');
