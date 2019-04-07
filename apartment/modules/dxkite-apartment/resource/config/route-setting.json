@@ -2,5 +2,13 @@
     "index": {
         "class": "dxkite.apartment.response.setting.IndexResponse",
         "url": "\/configuration"
+    },
+    "download": {
+        "class": "dxkite.apartment.response.setting.DownloadResponse",
+        "url": "\/download"
+    },
+    "query": {
+        "class": "dxkite.apartment.response.setting.QueryResponse",
+        "url": "\/query"
     }
 }

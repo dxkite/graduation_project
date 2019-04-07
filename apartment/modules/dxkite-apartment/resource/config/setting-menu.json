@@ -1,6 +1,10 @@
 {
     "${module}@${group}:index": {
         "name": "选宿舍配置",
+        "sort": 1001
+    },
+    "${module}@${group}:query": {
+        "name": "选宿舍查询",
         "sort": 1000
     }
 }
