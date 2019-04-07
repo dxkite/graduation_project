@@ -2,5 +2,25 @@
     "index": {
         "class": "dxkite.apartment.response.IndexResponse",
         "url": "\/"
+    },
+    "bind": {
+        "class": "dxkite.apartment.response.BindAccountResponse",
+        "url": "/bind"
+    },
+    "home": {
+        "class": "dxkite.apartment.response.HomeResponse",
+        "url": "/home"
+    },
+    "select": {
+        "class": "dxkite.apartment.response.SelectResponse",
+        "url": "/select"
+    },
+    "download": {
+        "class": "dxkite.apartment.response.setting.DownloadResponse",
+        "url": "/download"
+    },
+    "verify": {
+        "class": "dxkite.apartment.response.VerifyResponse",
+        "url": "/verify"
     }
 }

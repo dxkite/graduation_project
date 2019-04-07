@@ -1,0 +1,8 @@
+{
+    "apartment": {
+        "url": "/apartment[/{_method:string}]",
+        "class": [
+            "dxkite.apartment.provider.ApartmentProvider"
+        ]
+    }
+}

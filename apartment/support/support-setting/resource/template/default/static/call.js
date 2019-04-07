@@ -9,24 +9,10 @@ window.dx = window.dx || {};
         return scripts[scripts.length - 1];
     }();
 
-    function call(proxy, method, params, thatParent) {
+    function call(url, method, params, thatParent) {
         var that = thatParent || this;
         var ajax = new XMLHttpRequest;
-        var url = null;
-        var baseUrl = null;
 
-        if (typeof params == 'undefined') {
-            params = method;
-            method = proxy;
-            baseUrl = params.url || thatDom.dataset.api;
-            url = baseUrl;
-        } else {
-            baseUrl = params.url || thatDom.dataset.api;
-            url = baseUrl + '/' + proxy;
-        }
-        if (/\:\/\//.test(proxy)) {
-            url = proxy;
-        }
         ajax.addEventListener("readystatechange", function () {
             if (ajax.readyState == 4) {
                 if (ajax.status == 200) {

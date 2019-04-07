@@ -2,6 +2,7 @@
 namespace dxkite\apartment\controller;
 
 use suda\orm\DataSource;
+use dxkite\apartment\Setting;
 use dxkite\apartment\table\StudentTable;
 use dxkite\apartment\table\ApartmentTable;
 
@@ -94,19 +95,23 @@ class ApartmentController
         ])->one();
     }
 
+    /**
+     * 是否关闭选择
+     *
+     * @return boolean
+     */
     public function isClose()
     {
-        // $start = setting('apartment_start_time');
-        // $end = setting('apartment_end_time');
-        // if ($start && $end) {
-        //     $start_time = date_timestamp_get(date_create_from_format('Y-m-d H:i:s', $start));
-        //     $end_time = date_timestamp_get(date_create_from_format('Y-m-d H:i:s', $end));
-        //     if (time() > $start_time && time() < $end_time) {
-        //         return false;
-        //     }
-        // } else {
-        //     return false;
-        // }
+        $setting = new Setting('apartment');
+        $start = $setting->get('apartment_start_time');
+        $end = $setting->get('apartment_end_time');
+        if ($start && $end) {
+            if (time() > $start && time() < $end) {
+                return false;
+            }
+        } else {
+            return false;
+        }
         return false;
     }
 }

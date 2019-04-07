@@ -1,6 +1,6 @@
 @extend ('layout') @startInsert('ap-body')
 <div class="page__title">
-    <div class="page__title_center"> @setting('website_name','公寓选择系统 v2.0')</div>
+    <div class="page__title_center"> {= 公寓选择系统 3.0 }</div>
 </div>
 
 <div class="weui-cells weui-cells_form">
@@ -34,7 +34,7 @@
     </div>
     <div class="weui-btn-area">
         <a class="weui-btn weui-btn_primary" id="signin">绑定系统</a>
-        <a class="weui-btn weui-btn_warn" href="@u('user-center-client:signout')">退出登录</a>
+        <a class="weui-btn weui-btn_warn" href="@u('signout')">退出登录</a>
     </div>
 </div>
 
@@ -42,7 +42,7 @@
 
 @startInsert('ap-script')
  
-<script src="@static('support')/call.js" data-api="@api(:v1.0)"></script>
+<script src="@static('support/setting')/call.js"></script>
 
 <script>
         $(function () {
@@ -63,7 +63,7 @@
                 idcard = $('#idcard').val();
                 password = $('#password').val();
                 vcode = $('#vcode').val();
-                dx.call('apartment','bind',[idcard,password,vcode])
+                dx.call("@u('@open-method:apartment')",'bind',[idcard,password,vcode])
                 .then(function(ret){
                     if (ret == 0 ){
                         dxui.Toast('账号绑定成功');

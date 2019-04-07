@@ -26,6 +26,19 @@ class UserController
     }
 
     /**
+     * 绑定用户
+     *
+     * @param string $user
+     * @param string $id
+     * @return boolean
+     */
+    public function bind(string $user, string $id):bool {
+        return $this->table->write([
+            'user' => $user,
+        ])->where(['id'  => $id])->ok();
+    }
+
+    /**
      * 检查用户是否可选
      *
      * @param string $user
