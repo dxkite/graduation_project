@@ -150,10 +150,16 @@ class PageData implements JsonSerializable
     public static function create($statement, int $page = null, int $row = 10): PageData
     {
         $access = $statement->getAccess();
+        $fields = $access->getStruct()->getFields()->all();
+        $total = clone $statement;
+        if (count($fields) > 0 ){
+            $field = \array_shift($fields);
+            $total->read([$field->getName()]);
+        }
+        $totalQuery = new QueryStatement($access, 'SELECT count(*) as count from ('.$total.') as total', $statement->getBinder());
         if ($page !== null) {
             $statement->page($page, $row);
         }
-        $totalQuery = new QueryStatement($access, 'SELECT count(*) as count from ('.$statement.') as total', $statement->getBinder());
         $data = $totalQuery->one();
         $total = intval($data['count']);
         return PageData::build($statement->all(), $total, $page, $row);
