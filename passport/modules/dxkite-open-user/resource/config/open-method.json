@@ -1,12 +1,12 @@
 {
     "user": {
-        "url": "[/{_method:string}]",
+        "url": "/user[/{_method:string}]",
         "class": [
             "dxkite.openuser.provider.UserProvider"
         ]
     },
     "oauth2": {
-        "url": "/auth2/{_method:string}",
+        "url": "/oauth2[/{_method:string}]",
         "class": [
             "dxkite.openuser.provider.Oauth2Provider"
         ]

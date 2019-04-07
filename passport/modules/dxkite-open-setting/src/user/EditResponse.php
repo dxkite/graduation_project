@@ -3,7 +3,7 @@ namespace dxkite\openuser\setting\response\user;
 
 use suda\framework\Request;
 use support\openmethod\Permission;
-
+use support\openmethod\parameter\File;
 use support\setting\exception\UserException;
 use support\setting\response\SettingResponse;
 use dxkite\openuser\setting\provider\UserProvider;
@@ -42,7 +42,6 @@ class EditResponse extends SettingResponse
             } else {
                 $file = null;
             }
-
             try {
                 $result = $provider->edit($id, $file,  $name, $password, $mobile, $email);
                 $user = $provider->getInfoById($id);
@@ -55,8 +54,7 @@ class EditResponse extends SettingResponse
                 } else {
                     $view->set('error', [
                         'type' => 'danger',
-                        'title' => '修改用户失败',
-                        'message' => $e->getMessage()
+                        'message' => '修改用户失败'
                     ]);
                 }
             } catch (UserException $e) {
