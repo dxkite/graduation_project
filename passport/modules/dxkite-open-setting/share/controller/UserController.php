@@ -26,7 +26,7 @@ class UserController
      *
      * @var array
      */
-    protected $listFields = ['id', 'headimg', 'name', 'email', 'email_checked', 'mobile', 'mobile_checked', 'signin_time', 'signin_ip', 'status', 'code_type', 'code_expires'];
+    protected $listFields = ['id', 'headimg', 'name', 'email', 'email_checked', 'mobile', 'mobile_checked', 'signup_time', 'signup_ip', 'status', 'code_type', 'code_expires'];
     
     public function __construct()
     {
@@ -58,7 +58,7 @@ class UserController
                 'mobile' => $mobile,
                 'email' => $email,
                 'status' => $status,
-                'signin_time' => time(),
+                'signup_time' => time(),
             ])->id();
         } catch (SQLException $e) {
             $message = $e->getMessage();

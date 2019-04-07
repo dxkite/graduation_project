@@ -36,8 +36,8 @@ class UserTable extends AutoCreateTable
             $struct->field('code', 'varchar', 6)->default(null)->comment('6位验证码'),
             $struct->field('code_type', 'tinyint', 1)->default(0)->comment('验证类型'),
             $struct->field('code_expires', 'int', 11)->default(null)->comment('验证时间'),
-            $struct->field('signin_ip', 'varchar', 32)->comment('创建IP'),
-            $struct->field('signin_time', 'int', 11)->key()->comment('创建时间'),
+            $struct->field('signup_ip', 'varchar', 32)->comment('注册IP'),
+            $struct->field('signup_time', 'int', 11)->key()->comment('注册时间'),
             $struct->field('status', 'tinyint', 1)->key()->default(UserTable::NORMAL)->comment('用户状态'),
         ]);
     }

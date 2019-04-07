@@ -26,7 +26,7 @@ class UserController
      *
      * @var array
      */
-    protected $listFields = ['id', 'headimg', 'name', 'email', 'email_checked', 'mobile', 'mobile_checked', 'signin_time', 'signin_ip', 'status', 'code_type', 'code_expires'];
+    protected $listFields = ['id', 'headimg', 'name', 'email', 'email_checked', 'mobile', 'mobile_checked', 'signup_time', 'signup_ip', 'status', 'code_type', 'code_expires'];
     
     public function __construct()
     {
@@ -75,8 +75,8 @@ class UserController
                 'password' => \password_hash($password, PASSWORD_DEFAULT),
                 'mobile' => $mobile,
                 'email' => $email,
-                'signin_ip' => $ip,
-                'signin_time' => time(),
+                'signup_ip' => $ip,
+                'signup_time' => time(),
                 'status' => $status,
             ])->id();
         } catch (SQLException $e) {
@@ -232,7 +232,7 @@ class UserController
      */
     public function getBaseInfoById(string $id):?TableStruct
     {
-        return $this->table->read('id', 'name', 'headimg', 'signin_time')->where('id = ?', $id)->one();
+        return $this->table->read('id', 'name', 'headimg', 'signup_time')->where('id = ?', $id)->one();
     }
 
     /**

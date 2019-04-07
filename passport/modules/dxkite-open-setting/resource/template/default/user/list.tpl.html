@@ -47,7 +47,7 @@
 
             <td>{{ $item['email'] ?? '' }} </td>
             <td>{{ $item['mobile'] ?? '' }} </td>
-            <td>{{ date('Y-m-d H:i:s',$item['signin_time']) }} </td>
+            <td>{{ date('Y-m-d H:i:s',$item['signup_time']) }} </td>
             <td>
                 <div class="btn-group btn-group-toggle">
                     <a class="btn btn-outline-secondary btn-sm" href="@u('user_edit',['id'=>$item['id']])">编辑</a>
