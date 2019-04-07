@@ -1,0 +1,38 @@
+@extend ('layout') @startInsert('ap-body')
+
+<div class="page__title_center"> 欢迎使用公寓选择系统 3.0 </div>
+
+
+<ol class="page__body-list">
+    <li>在使用系统前，请注册绑定ATD统一账户，可以用来修改密码</li>
+    <li>选择登陆系统，注册好账户，会跳回本页面</li>
+    <li>在登陆成功后，选择确认身份信息，以便后续选择宿舍，如果提示身份证不存在，则是数据还未导入，不用急</li>
+    <li>身份信息确认完成后，将开始选择宿舍，请不要疯狂刷新</li>
+    <li>选择宿舍选择完成后会有提示，有时候选择的时候会出现已经被选中的可能，请不要疯狂刷新</li>
+    <li>缴费数据不会实时刷新，所以交费后不用立刻来选宿舍</li>
+    <li>由于经费问题，系统稳定性不高，请不要随意刷新</li>
+</ol>
+
+<div class="page__bottom">
+    @if ($?:close)
+    <div class="text-center">
+        <div class="page__notice">系统开放时间</div>
+        <div class="page__notice">{{$:time}}</div>
+    </div>
+    @endif
+    <div class="weui-btn-area">
+        @if ($?:guest)
+        <a class="weui-btn weui-btn_primary" href="{{! $:signin }}">登陆系统</a>
+        @else
+
+        @if ($:bind(false))
+        <a class="weui-btn weui-btn_primary" href="@u('home')">进入系统</a>
+        @else
+        <a class="weui-btn weui-btn_primary" href="@u('bind')">绑定账号</a>
+        @endif
+
+        @endif
+    </div>
+</div>
+
+@endInsert

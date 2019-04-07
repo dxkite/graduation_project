@@ -1,0 +1,79 @@
+@extend ('layout') @startInsert('ap-body')
+<div class="page__hd">
+    <div class="page__title">{{ $:welcome }}</div>
+    <div class="page__desc">{{ $:hello }} {= 欢迎使用公寓自选系统 }</div>
+    <div class="page__desc">
+        <div>
+            <a href="@static/how-to-use.docx">下载《宿舍自选图解以及图册》</a>
+        </div>
+    </div>
+</div>
+
+@if ($?:selected)
+<div class="weui-cells__title">{= 你的宿舍如下 }</h2>
+    <div class="weui-form-preview">
+        <div class="weui-form-preview__hd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">宿舍号</label>
+                <em class="weui-form-preview__value">{{$:selected['build']}}-{{$:selected['room']}}({{$:selected['bed']}})</em>
+            </div>
+        </div>
+        <div class="weui-form-preview__bd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">公寓</label>
+                <span class="weui-form-preview__value">{{$:selected['build']}}栋</span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">楼层</label>
+                <span class="weui-form-preview__value">{{$:selected['floor']}}楼</span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">房间</label>
+                <span class="weui-form-preview__value">{{$:selected['room']}}</span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">床位</label>
+                <span class="weui-form-preview__value">{{$:selected['bed']}}号床</span>
+            </div>
+        </div>
+        <div class="weui-form-preview__ft">
+
+            <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="@u('select')">重新选择</a>
+        </div>
+    </div>
+</div>
+@else
+<div class="weui-btn-area">
+    @if ($?:close)
+    <div class="text-center">
+        <div class="page__notice">系统开放时间</div>
+        <div class="page__notice">{{$:time}}</div>
+    </div>
+    @endif @if ($?:open) @if ($?:selectable)
+    <a class="weui-btn weui-btn_primary" href="@u('select')">{= 开始选择宿舍 }</a>
+    @else
+    <div class="page__notice"> {= 学费欠费或没有缴费，你需要缴费后才能选择宿舍 } </div>
+    <a class="weui-btn weui-btn_disabled weui-btn_primary" href="javascript:void(0)">{= 选择宿舍 }</a>
+    @endif @else
+    <div class="page__notice"> {= 还没到系统开放时间 } </div>
+    <a class="weui-btn weui-btn_disabled weui-btn_primary" href="javascript:void(0)">{= 选择宿舍 }</a>
+    @endif
+</div>
+@endif
+<div class="weui-btn-area">
+    <a class="weui-btn weui-btn_warn" href="javascript:void(0)" id="signout">退出登陆</a>
+</div>
+
+@startInsert('ap-script')
+<script src="@static('support')/call.js" data-api="@api(:v1.0)"></script>
+<script>
+    $(function () {
+        $('#signout').on('click', function () {
+            dx.call('apartment', 'signout').then(() => {
+                dxui.Toast('退出登陆成功啦！密码别忘了哦~');
+                window.location.href = "@u('index')";
+            })
+        })
+    })
+</script>
+@endInsert @endInsert

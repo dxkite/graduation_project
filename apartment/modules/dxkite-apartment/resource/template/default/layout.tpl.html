@@ -1,16 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{= Welcome to Use Suda }</title>
+    <title>{{ $:title }}</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <link rel="stylesheet" href="@static/weui.min.css">
     <link rel="stylesheet" href="@static/style.css">
+    <link rel="stylesheet" href="@static/mobile.css">
+    <link rel="stylesheet" href="@static/dxui/css/dxui.css">
+    <script src="@static/dxui/dxui.js"></script>
+    <meta charset="UTF-8"> @insert('ap-head')
 </head>
 
 <body>
-   @insert('content')
+    @insert('ap-body')
+    <div class="weui-footer page__footer">
+        <p class="weui-footer__links">
+            <a href="https://jq.qq.com/?_wv=1027&k=5tVPYGw" class="weui-footer__link">ATD计算机协会新生群</a>
+        </p>
+        <p class="weui-footer__links">
+            <a href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI5NzQ4NTk4OQ==&scene=124#wechat_redirect" class="weui-footer__link">口袋青年</a>
+            <a href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzA3OTEzNDc0OQ==&scene=124#wechat_redirect" class="weui-footer__link">涉外学院</a>
+        </p>
+
+        <p class="weui-footer__text">Copyright &copy; {{ date('Y',time())}}
+            <a href="http://atd3.cn">ATD计算机协会</a>
+        </p>
+        <p class="weui-footer__text">由
+            <a href="https://github.com/DXkite/suda">suda {{ SUDA_VERSION }}</a> 强力驱动
+            <a href="https://github.com/DXkite">@DXkite</a>
+        </p>
+    </div>
 </body>
 
+<script src="@static/jquery-3.3.1.min.js"></script>
+<script src="@static/fix.js"></script> @insert('ap-script')
+<script src="https://hm.baidu.com/hm.js?8c0224cd79b01f43bf3c56a93ce78a53"></script>
 </html>

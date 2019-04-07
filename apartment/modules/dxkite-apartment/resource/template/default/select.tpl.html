@@ -1,0 +1,98 @@
+@extend ('layout') @startInsert('ap-head')
+<link rel="stylesheet" href="@static/hui.css"> @endinsert @startInsert('ap-body')
+<div class="weui-cells__title">学校公寓选择</div>
+<div class="image-box">
+    <img src="@static/position.png" alt="room">
+</div>
+<div class="weui-cells weui-cells_form">
+    <div class="weui-cell weui-cell_select weui-cell_select-after">
+        <div class="weui-cell__hd">
+            <label for="" class="weui-label">公寓</label>
+        </div>
+        <div class="weui-cell__bd">
+            <a class="picker-button" id="picker" href="javascript:;">{= 查看可选房间 }</a>
+        </div>
+    </div>
+    <div class="weui-cell weui-cell_vcode">
+        <div class="weui-cell__hd">
+            <label class="weui-label">验证码</label>
+        </div>
+        <div class="weui-cell__bd weui-cell_primary">
+            <input class="weui-input" id="vcode" type="text" placeholder="请输入验证码">
+        </div>
+        <div class="weui-cell__ft">
+            <img class="weui-vcode-img" src="@u('verify')" alt="code">
+        </div>
+    </div>
+    <div class="weui-btn-area">
+        <a class="weui-btn weui-btn_primary" href="javascript:void(0)" id="select">确认选择</a>
+    </div>
+</div>
+
+@endinsert @startInsert('ap-script')
+<script src="@static('support')/call.js" data-api="@api(:v1.0)"></script>
+<script src="@static/hui.js"></script>
+<script src="@static/hui-picker.js"></script>
+<script>
+    $(function () {
+        var data = JSON.parse('{{! $:data }}');
+
+        /* 关联型数据 */
+        var picker = new huiPicker('#picker', function () {
+            var build = picker.getVal(0);
+            var floor = picker.getVal(1);
+            var room = picker.getVal(2);
+            var bed = picker.getVal(3);
+            hui('#picker').html(build + '-' + room + '(' + bed + ')');
+        });
+
+        picker.level = 4;
+
+        picker.bindRelevanceData(data);
+
+        $('#select').on('click', function () {
+            var build = picker.getVal(0);
+            var floor = picker.getVal(1);
+            var room = picker.getVal(2);
+            var bed = picker.getVal(3);
+            var code = $('#vcode').val();
+            var data = {
+                room: {
+                    build: build,
+                    floor: floor,
+                    room: room,
+                    bed: bed,
+                },
+                code: code
+            };
+
+            console.log(data);
+            dx.call('apartment', 'select', data)
+                .then(ret => {
+                    if (ret > 0) {
+                        dxui.Toast('选择成功');
+                        window.location.href="@u('home')";
+                    } else {
+                        dxui.Toast('选择失败');
+                    }
+                }).catch(err => {
+                    console.log(err);
+                    dxui.Toast(err.message + ' (' + err.code + ')');
+                    refershcode();
+                })
+        });
+        var refershcode = function () {
+            var src = '';
+            var img = $('.weui-vcode-img');
+            if (img.attr('src').indexOf('random') == -1) {
+                src = img.attr('src');
+            } else {
+                src = img.attr('src').split('?')[0];
+            }
+            img.attr('src', src + '?random=' + Math.random());
+        };
+        //点击更换验证码
+        $('.weui-vcode-img').on('click', refershcode);
+    })
+</script>
+@endinsert

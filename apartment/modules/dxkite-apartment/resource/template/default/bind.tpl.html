@@ -1,0 +1,81 @@
+@extend ('layout') @startInsert('ap-body')
+<div class="page__title">
+    <div class="page__title_center"> @setting('website_name','公寓选择系统 v2.0')</div>
+</div>
+
+<div class="weui-cells weui-cells_form">
+    <div class="weui-cell">
+        <div class="weui-cell__hd">
+            <label class="weui-label">身份证号</label>
+        </div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" id="idcard" type="text" pattern="[0-9X]*" placeholder="请输入身份证号" />
+        </div>
+    </div>
+    <div class="weui-cells__tips">初始密码为考生号后4位+身份证号后4位</div>
+    <div class="weui-cell">
+        <div class="weui-cell__hd">
+            <label class="weui-label">密码</label>
+        </div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" id="password" type="password" placeholder="请输入密码" />
+        </div>
+    </div>
+    <div class="weui-cell weui-cell_vcode">
+        <div class="weui-cell__hd">
+            <label class="weui-label">验证码</label>
+        </div>
+        <div class="weui-cell__bd weui-cell_primary">
+            <input class="weui-input" id="vcode" type="text" placeholder="请输入验证码">
+        </div>
+        <div class="weui-cell__ft">
+            <img id="vcode" class="weui-vcode-img" src="@u('verify')" alt="code">
+        </div>
+    </div>
+    <div class="weui-btn-area">
+        <a class="weui-btn weui-btn_primary" id="signin">绑定系统</a>
+        <a class="weui-btn weui-btn_warn" href="@u('user-center-client:signout')">退出登录</a>
+    </div>
+</div>
+
+@endInsert
+
+@startInsert('ap-script')
+ 
+<script src="@static('support')/call.js" data-api="@api(:v1.0)"></script>
+
+<script>
+        $(function () {
+            var refershcode = function () {
+                var src = '';
+                var img = $('.weui-vcode-img');
+                if (img.attr('src').indexOf('random') == -1) {
+                    src = img.attr('src');
+                } else {
+                    src = img.attr('src').split('?')[0];
+                }
+                img.attr('src', src + '?random=' + Math.random());
+            };
+            //点击更换验证码
+            $('.weui-vcode-img').on('click', refershcode);
+
+            $('#signin').on('click', function () {
+                idcard = $('#idcard').val();
+                password = $('#password').val();
+                vcode = $('#vcode').val();
+                dx.call('apartment','bind',[idcard,password,vcode])
+                .then(function(ret){
+                    if (ret == 0 ){
+                        dxui.Toast('账号绑定成功');
+                        window.location.href = "@u('home')";
+                    }
+                }).catch(function(err){ 
+                    console.log(err);
+                    dxui.Toast(err.message +' ('+ err.code + ')');
+                    refershcode();
+                });
+            });
+        });
+    </script>
+    
+@endInsert
