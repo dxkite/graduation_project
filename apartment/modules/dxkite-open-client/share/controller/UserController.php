@@ -96,4 +96,18 @@ class UserController
         }
         return null;
     }
+
+    /**
+     * 检查是否需要数据
+     *
+     * @param string $id
+     * @return TableStruct|null
+     */
+    public function getById(string $id):?TableStruct
+    {
+        if ($data = $this->table->read('*')->where(['id' => $id])->one()) {
+            return $data;
+        }
+        return null;
+    }
 }

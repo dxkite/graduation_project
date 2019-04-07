@@ -47,7 +47,11 @@ class UserProvider extends VisitorAwareProvider
         if ($this->visitor->isGuest()) {
             $this->config['server'];
             $redirect_uri = $this->application->getUribase($this->request).$this->getUrl('user', ['redirect_uri' => $redirect_uri, '_method' => 'authorize' ]);
-            $url = sprintf($this->config['signin'], $this->config['server'], $redirect_uri, $this->config['appid']);
+            $url = $this->prepareUrl('signin', [
+                'server' => $this->config['server'],
+                'redirect_uri' => $redirect_uri,
+                'appid' => $this->config['appid']
+            ]);
             $this->response->redirect($url);
         } else {
             $this->response->redirect($redirect_uri);
@@ -62,7 +66,12 @@ class UserProvider extends VisitorAwareProvider
      */
     public function authorize(string $redirect_uri, string $code, string $state): UserSession
     {
-        $url = sprintf($this->config['access_token'], $this->config['server'], $this->config['appid'], $this->config['secret'], $code);
+        $url = $this->prepareUrl('access_token', [
+            'server' => $this->config['server'],
+            'secret' => $this->config['secret'],
+            'code' => $code,
+            'appid' => $this->config['appid']
+        ]);
         $data = HTTPUtil::get($url);
         if (\array_key_exists('result', $data)) {
             $data = $data['result'];
@@ -74,7 +83,11 @@ class UserProvider extends VisitorAwareProvider
                 $this->request->getRemoteAddr()
             );
             if ($this->controller->wantUserInfo($data['user'])) {
-                $userinfo = sprintf($this->config['userinfo'], $this->config['server'], $data['user'], $data['access_token']);
+                $userinfo = $this->prepareUrl('userinfo', [
+                    'server' => $this->config['server'],
+                    'user' => $data['user'] ,
+                    'access_token' => $data['access_token']
+                ]);
                 $userinfo_data = HTTPUtil::get($userinfo);
                 if (\array_key_exists('result', $userinfo_data)) {
                     $userinfo_data = $userinfo_data['result'];
@@ -120,5 +133,15 @@ class UserProvider extends VisitorAwareProvider
         } else {
             $this->config = [];
         }
+    }
+    
+    protected function prepareUrl(string $name, array $parameter)
+    {
+        $url = $this->config[$name];
+        $keys = [];
+        foreach ($parameter as $key => $value) {
+            $keys[] = '{'.$key.'}';
+        }
+        return \str_replace($keys, \array_values($parameter), $url);
     }
 }
