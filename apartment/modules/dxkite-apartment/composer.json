@@ -1,0 +1,15 @@
+{
+    "name": "dxkite/apartment",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "DXkite",
+            "email": "dxkite@163.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "phpoffice/phpspreadsheet": "dev-master"
+    }
+}
