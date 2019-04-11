@@ -35,7 +35,7 @@
                 "acl": [
                     "open-client.add"
                 ],
-                "name": "添加用户"
+                "name": "添加网站"
             }
         }
     }

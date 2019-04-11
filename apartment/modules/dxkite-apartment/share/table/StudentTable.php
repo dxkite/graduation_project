@@ -29,7 +29,7 @@ class StudentTable extends AutoCreateTable
             $struct->field('sex', 'char', 1)->key()->comment('性别'),
             $struct->field('major', 'varchar', 255)->comment('录取专业'),
             $struct->field('class', 'varchar', 255)->comment('录取班级'),
-            $struct->field('arrearage', 'int', 11 )->key()->default(0)->comment('欠费金额'),
+            $struct->field('arrearage', 'int', 11)->key()->default(0)->comment('欠费金额'),
             $struct->field('selected', 'tinyint', 1)->key()->default(0)->comment('是否已经选择'),
             $struct->field('export', 'tinyint', 1)->key()->default(0)->comment('导出标记')
         ]);
