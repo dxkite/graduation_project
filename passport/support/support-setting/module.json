@@ -14,5 +14,9 @@
         "setting": "/setting",
         "open-method": "/setting-provider"
     },
-    "discription": "设置模块"
+    "discription": "设置模块",
+    "require": {
+        "support/open-method": "",
+        "support/session": ""
+    }
 }

@@ -6,5 +6,8 @@
             "support\\session": "share"
         }
     },
-    "discription": "通用用户session"
+    "discription": "通用用户session",
+    "require": {
+        "support/open-method": ""
+    }
 }
