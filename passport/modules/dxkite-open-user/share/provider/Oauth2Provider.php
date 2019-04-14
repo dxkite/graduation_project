@@ -2,7 +2,7 @@
 namespace dxkite\openuser\provider;
 
 use suda\orm\TableStruct;
-use support\setting\UserSession;
+use support\session\UserSession;
 use dxkite\openuser\table\ClientTable;
 use dxkite\openuser\table\AuthClientTable;
 use dxkite\openuser\controller\UserController;

@@ -2,7 +2,7 @@
 namespace dxkite\apartment\provider;
 
 use Exception;
-use support\setting\UserSession;
+use support\session\UserSession;
 use support\setting\VerifyImage;
 use dxkite\apartment\table\StudentTable;
 use dxkite\apartment\table\ApartmentTable;

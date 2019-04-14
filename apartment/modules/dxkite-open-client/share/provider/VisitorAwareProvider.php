@@ -5,7 +5,7 @@ use suda\framework\Request;
 use suda\framework\Response;
 use support\setting\Context;
 use support\setting\Visitor;
-use support\setting\UserSession;
+use support\session\UserSession;
 use suda\application\Application;
 use dxkite\openclient\processor\UserInfoProcessor;
 use support\openmethod\FrameworkContextAwareTrait;

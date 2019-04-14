@@ -5,7 +5,7 @@ use ArrayObject;
 use suda\orm\TableStruct;
 use support\setting\Visitor;
 use support\setting\PageData;
-use support\setting\UserSession;
+use support\session\UserSession;
 use support\openmethod\Permission;
 use support\setting\table\RoleTable;
 use support\setting\table\GrantTable;
@@ -189,7 +189,7 @@ class VisitorController
     /**
      * 获取用户
      *
-     * @param \support\setting\UserSession $session
+     * @param \support\session\UserSession $session
      * @return Visitor
      */
     public function getVisitor(UserSession $session):Visitor

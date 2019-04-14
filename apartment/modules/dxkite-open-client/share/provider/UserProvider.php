@@ -6,7 +6,7 @@ use suda\framework\Config;
 use support\setting\PageData;
 use suda\application\Resource;
 use dxkite\openclient\HTTPUtil;
-use support\setting\UserSession;
+use support\session\UserSession;
 use support\openmethod\parameter\File;
 use dxkite\openclient\controller\UserController;
 use dxkite\openclient\provider\VisitorAwareProvider;
@@ -62,7 +62,7 @@ class UserProvider extends VisitorAwareProvider
      * 登陆
      * @param-source GET
      * @param string $redirect_uri
-     * @return \support\setting\UserSession
+     * @return \support\session\UserSession
      */
     public function authorize(string $redirect_uri, string $code, string $state): UserSession
     {

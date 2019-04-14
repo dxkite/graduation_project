@@ -3,7 +3,7 @@ namespace support\setting\provider;
 
 use suda\orm\TableStruct;
 use support\setting\PageData;
-use support\setting\UserSession;
+use support\session\UserSession;
 use support\setting\VerifyImage;
 use support\setting\table\UserTable;
 use support\setting\exception\UserException;
@@ -32,7 +32,7 @@ class UserProvider extends UserSessionAwareProvider
      * @param string $password 密码
      * @param string $code 验证码
      * @param boolean $remeber 记住登陆状态7天
-     * @return \support\setting\UserSession 登陆会话
+     * @return \support\session\UserSession 登陆会话
      */
     public function signin(string $account, string $password, string $code, bool $remeber = false): UserSession
     {

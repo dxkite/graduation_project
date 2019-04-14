@@ -3,7 +3,7 @@ namespace dxkite\openuser\setting\provider;
 
 use suda\orm\TableStruct;
 use support\setting\PageData;
-use support\setting\UserSession;
+use support\session\UserSession;
 use support\setting\provider\UserSessionAwareProvider;
 use dxkite\openuser\setting\controller\ClientController;
 
