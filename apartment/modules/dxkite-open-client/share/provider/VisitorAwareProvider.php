@@ -43,7 +43,7 @@ class VisitorAwareProvider implements FrameworkContextAwareInterface
      *
      * @var string
      */
-    protected $group = 'openclient';
+    protected $group = 'openuser';
     
     /**
      * 环境感知
