@@ -9,10 +9,24 @@ window.dx = window.dx || {};
         return scripts[scripts.length - 1];
     }();
 
-    function call(url, method, params, thatParent) {
+    function call(proxy, method, params, thatParent) {
         var that = thatParent || this;
         var ajax = new XMLHttpRequest;
+        var url = null;
+        var baseUrl = null;
 
+        if (typeof params == 'undefined') {
+            params = method;
+            method = proxy;
+            baseUrl = params.url || thatDom.dataset.api;
+            url = baseUrl;
+        } else {
+            baseUrl = params.url || thatDom.dataset.api;
+            url = baseUrl + '/' + proxy;
+        }
+        if (/\:\/\//.test(proxy)) {
+            url = proxy;
+        }
         ajax.addEventListener("readystatechange", function () {
             if (ajax.readyState == 4) {
                 if (ajax.status == 200) {
@@ -33,16 +47,7 @@ window.dx = window.dx || {};
                     }
                 } else {
                     if (params.fail) {
-                        if (ajax.getResponseHeader('Content-Type').match('json')) {
-                            try {
-                                var json = JSON.parse(ajax.responseText);
-                                params.fail.call(that, json.error);
-                            } catch (e) {
-                                params.fail.call(that, ajax);
-                            }
-                        } else {
-                            params.fail.call(that, ajax);
-                        }
+                        params.fail.call(that, ajax);
                     } else {
                         console.error('server return ' + ajax.status);
                     }
@@ -77,7 +82,7 @@ window.dx = window.dx || {};
         }
 
         if (param instanceof FormData) {
-            ajax.open("POST", url + '?_method=' + method);
+            ajax.open("POST", url + '?method=' + method);
             ajax.send(param);
         } else {
             ajax.open("POST", url);
@@ -91,10 +96,38 @@ window.dx = window.dx || {};
     }
     dx.xcall = call;
 
-    dx.acall = function (method, args) {
-        return dx.call(thatDom.dataset.api, method, args);
-    }
+    dx.acall = function (name, method, args) {
+        return new Promise((resolve, reject) => {
+            if (typeof args == 'undefined') {
+                if (typeof method == 'string') {
+                    dx.xcall(name, method, {
+                        args: [],
+                        finish: resolve,
+                        error: reject,
+                        fail: reject,
+                    });
+                } else {
+                    args = method;
+                    method = name;
+                    dx.xcall(method, {
+                        args: args || [],
+                        finish: resolve,
+                        error: reject,
+                        fail: reject,
+                    });
+                }
 
+            } else {
+                dx.xcall(name, method, {
+                    args: args || [],
+                    finish: resolve,
+                    error: reject,
+                    fail: reject,
+                });
+            }
+        });
+    }
+    
     dx.call = function (name, method, args) {
         return new Promise((resolve, reject) => {
             if (typeof args == 'undefined') {

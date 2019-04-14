@@ -1,8 +1,8 @@
 <?php
-namespace support\setting\table;
+namespace support\session\table;
 
 use suda\orm\TableStruct;
-use support\setting\table\AutoCreateTable;
+use support\session\table\AutoCreateTable;
 
 /**
  * 登陆日志
@@ -11,7 +11,7 @@ class SessionTable extends AutoCreateTable
 {
     public function __construct()
     {
-        parent::__construct('setting_session');
+        parent::__construct('support_session');
     }
 
     public function onCreateStruct(TableStruct $struct):TableStruct

@@ -1,11 +1,11 @@
 <?php
-namespace support\setting;
+namespace support\session;
 
 use suda\framework\Request;
 use suda\framework\Response;
 use suda\framework\http\Cookie;
 use suda\application\Application;
-use support\setting\table\SessionTable;
+use support\session\table\SessionTable;
 use support\openmethod\MethodParameterInterface;
 use support\openmethod\processor\ResultProcessor;
 

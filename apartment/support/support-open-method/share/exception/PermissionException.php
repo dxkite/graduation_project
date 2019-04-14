@@ -18,7 +18,7 @@ class PermissionException extends RuntimeException
     public function __construct($permission)
     {
         if ($permission instanceof Permission) {
-            $permission = $permission->minimum();
+            $permission = $permission->toArray();
         } elseif (is_string($permission)) {
             $permission = [$permission];
         }

@@ -107,7 +107,7 @@ class Permission implements \JsonSerializable, IteratorAggregate, Countable
     public function need(Permission $anthor)
     {
         if (empty($this->permissions) && empty($anthor->permissions)) {
-            return [];
+            return true;
         }
         list($this_parent, $this_childs) = $this->explode($this->permissions);
         list($anthor_parent, $anthor_childs) = $this->explode($anthor->permissions);
