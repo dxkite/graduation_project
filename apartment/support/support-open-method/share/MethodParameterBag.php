@@ -30,14 +30,14 @@ class MethodParameterBag
     /**
      * 响应
      *
-     * @var Requset
+     * @var Request
      */
     protected $request;
 
     /**
      * 是否含JSON数据
      *
-     * @var array|null
+     * @var mixed
      */
     protected $json;
     
@@ -48,7 +48,7 @@ class MethodParameterBag
      */
     protected $sourceFrom;
 
-    public function __construct(Application $app, Request $request, ExportMethod $method, ?array $json = null)
+    public function __construct(Application $app, Request $request, ExportMethod $method, $json = null)
     {
         $this->applcation = $app;
         $this->request = $request;
@@ -134,7 +134,7 @@ class MethodParameterBag
         $typeName = $parameter->getType()->__toString();
         $typeRef = new ReflectionClass($typeName);
         if ($typeRef->implementsInterface(MethodParameterInterface::class) || $typeRef->hasMethod('createParameterFromRequest')) {
-            return $typeName::createParameterFromRequest($position, $name, $from, $this->applcation, $this->request);
+            return $typeName::createParameterFromRequest($position, $name, $from, $this);
         }
         if ($typeRef->isSubclassOf(UploadedFile::class) && $from === 'POST') {
             return $this->request->file($name);
@@ -162,6 +162,102 @@ class MethodParameterBag
     public function setMethod(ExportMethod $method)
     {
         $this->method = $method;
+
+        return $this;
+    }
+
+    /**
+     * Get 是否含JSON数据
+     *
+     * @return  mixed
+     */
+    public function getJson()
+    {
+        return $this->json;
+    }
+
+    /**
+     * Set 是否含JSON数据
+     *
+     * @param  mixed  $json  是否含JSON数据
+     *
+     * @return  self
+     */
+    public function setJson($json)
+    {
+        $this->json = $json;
+
+        return $this;
+    }
+
+    /**
+     * Get 数据源
+     *
+     * @return  array
+     */
+    public function getSourceFrom()
+    {
+        return $this->sourceFrom;
+    }
+
+    /**
+     * Set 数据源
+     *
+     * @param  array  $sourceFrom  数据源
+     *
+     * @return  self
+     */
+    public function setSourceFrom(array $sourceFrom)
+    {
+        $this->sourceFrom = $sourceFrom;
+
+        return $this;
+    }
+
+    /**
+     * Get 响应
+     *
+     * @return  Request
+     */
+    public function getRequest():Request
+    {
+        return $this->request;
+    }
+
+    /**
+     * Set 响应
+     *
+     * @param  Request  $request  响应
+     *
+     * @return  self
+     */
+    public function setRequest(Request $request)
+    {
+        $this->request = $request;
+
+        return $this;
+    }
+
+    /**
+     * Get 类引用
+     *
+     * @return  Application
+     */
+    public function getApplcation():Application
+    {
+        return $this->applcation;
+    }
+
+    /**
+     * Set 类引用
+     *
+     * @param  Application  $applcation  类引用
+     *
+     * @return  self
+     */
+    public function setApplcation(Application $applcation)
+    {
+        $this->applcation = $applcation;
 
         return $this;
     }

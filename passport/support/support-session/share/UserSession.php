@@ -1,11 +1,13 @@
 <?php
 namespace support\session;
 
+use ReflectionMethod;
 use suda\framework\Request;
 use suda\framework\Response;
 use suda\framework\http\Cookie;
 use suda\application\Application;
 use support\session\table\SessionTable;
+use support\openmethod\MethodParameterBag;
 use support\openmethod\MethodParameterInterface;
 use support\openmethod\processor\ResultProcessor;
 
@@ -194,8 +196,8 @@ class UserSession implements MethodParameterInterface, ResultProcessor
      */
     public function processor(Application $application, Request $request, Response $response)
     {
-        $response->setCookie('x-'.$this->group.'-token', $this->token);
-        $response->setCookie('x-token-group', $this->group);
+        $response->setCookie('x-'.$this->group.'-token', $this->token)->httpOnly();
+        $response->setCookie('x-token-group', $this->group)->httpOnly();
         return [
             'id' => $this->id,
             'user' => $this->userId,
@@ -228,17 +230,17 @@ class UserSession implements MethodParameterInterface, ResultProcessor
     }
 
     /**
-     * 从请求中创建
+     * 创建参数
      *
      * @param integer $position
      * @param string $name
      * @param string $from
-     * @param \suda\application\Application $application
-     * @param \suda\framework\Request $request
-     * @return self
+     * @param \support\openmethod\MethodParameterBag $bag
+     * @return mixed
      */
-    public static function createParameterFromRequest(int $position, string $name, string $from, Application $application, Request $request)
+    public static function createParameterFromRequest(int $position, string $name, string $from, MethodParameterBag $bag)
     {
+        $request = $bag->getRequest();
         $group = $request->getHeader('x-token-group', $request->getCookie('x-token-group', 'system'));
         return static::createFromRequest($request, $group);
     }
@@ -255,7 +257,7 @@ class UserSession implements MethodParameterInterface, ResultProcessor
         $token = $request->getHeader('x-'.$group.'-token', $request->getCookie('x-'.$group.'-token', ''));
         $session = UserSession::load($token, $request->getRemoteAddr(), $group);
         if ($session->isGuest() && strlen($token) > 32) {
-            if (\strpos($token = 'debug:') === 0 && substr_count($token, ':', 32) === 2) {
+            if (\strpos($token = 'debug:') === 0 && substr_count($token, ':') === 2) {
                 list($debug, $user, $password) = \explode(':', $token, 3);
                 if ($password === $application->conf('app.system-debug-token')) {
                     $session = UserSession::simulate($user, 3600, $group);

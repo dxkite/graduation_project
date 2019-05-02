@@ -1,14 +1,14 @@
 {
     "index": {
         "class": "dxkite.apartment.response.setting.IndexResponse",
-        "url": "\/configuration"
+        "uri": "\/configuration"
     },
     "download": {
         "class": "dxkite.apartment.response.setting.DownloadResponse",
-        "url": "\/download"
+        "uri": "\/download"
     },
     "query": {
         "class": "dxkite.apartment.response.setting.QueryResponse",
-        "url": "\/query"
+        "uri": "\/query"
     }
 }

@@ -1,12 +1,12 @@
 {
     "apartment": {
-        "url": "/apartment[/{_method:string}]",
+        "uri": "/apartment[/{_method:string}]",
         "class": [
             "dxkite.apartment.provider.ApartmentProvider"
         ]
     },
     "setting": {
-        "url": "/apartment-setting[/{_method:string}]",
+        "uri": "/apartment-setting[/{_method:string}]",
         "class": [
             "dxkite.apartment.provider.setting.ApartmentProvider"
         ]

@@ -1,0 +1,8 @@
+{
+    "user": {
+        "uri": "[/{_method:string}]",
+        "class": [
+            "dxkite.openclient.provider.UserProvider"
+        ]
+    }
+} 

@@ -4,6 +4,8 @@ namespace support\upload;
 use SplFileInfo;
 use support\openmethod\parameter\File;
 use suda\framework\filesystem\FileSystem;
+use support\upload\table\UploadTable;
+
 
 /**
  * 上传处理工具
@@ -18,7 +20,18 @@ class UploadUtil
      */
     public static function hash(string $path)
     {
-        return \str_replace(['+','/', '='], ['$','_',''], \base64_encode(\md5_file($path, true)));
+        return static::md5encode(\md5_file($path, true));
+    }
+
+    /**
+     * Hash掩码
+     *
+     * @param string $path
+     * @return boolean
+     */
+    public static function md5encode(string $md5)
+    {
+        return \str_replace(['+','/', '='], ['$','_',''], \base64_encode(\hex2bin($md5)));
     }
 
     /**
@@ -30,6 +43,18 @@ class UploadUtil
     public static function save(File $file):string
     {
         $hash = static::hash($file->getPathname());
+        return static::saveFile($file, $hash);
+    }
+
+    /**
+     * 保存文件
+     *
+     * @param \support\openmethod\parameter\File $file
+     * @param string $hash
+     * @return string
+     */
+    protected static function saveFile(File $file, string $hash)
+    {
         if ($file->isImage()) {
             $extension = strtolower($file->getExtension());
             $path = 'image/'.$extension.'/'.$hash.'/0.jpg';
@@ -37,11 +62,24 @@ class UploadUtil
         } else {
             $extension = strtolower(\pathinfo($file->getOriginalName(), PATHINFO_EXTENSION));
             $savePath = $extension.'/'.$hash.'.'.$extension;
+            $path = $savePath;
         }
         $save = SUDA_DATA.'/upload/'.$savePath;
         FileSystem::make(dirname($save));
         FileSystem::copy($file->getPathname(), $save);
         return $path;
+    }
+
+    public static function saveFileDatabase(File $file, string $user, string $ip)
+    {
+        $md5 = md5_file($file->getPathname());
+        $fileInfo = BlockFileWriter::create($file->getOriginalName(), $md5, $user, $ip, UploadTable::CHECKED);
+        if ($fileInfo !== null) {
+            $path = static::saveFile($file, static::md5encode($md5));
+            $fileInfo['path'] = $path;
+            return $fileInfo;
+        }
+        return null;
     }
 
     public static function thumb(
