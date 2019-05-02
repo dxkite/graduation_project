@@ -27,7 +27,7 @@ class VisitorProvider extends UserSessionAwareProvider
     /**
      * 获取用户
      *
-     * @param \support\session\UserSession $session
+     * @param UserSession $session
      * @return Visitor
      */
     public function getVisitor(UserSession $session):Visitor
@@ -153,7 +153,7 @@ class VisitorProvider extends UserSessionAwareProvider
      * @param string $user
      * @param integer|null $page
      * @param integer $row
-     * @return \support\setting\PageData
+     * @return PageData
      */
     public function listUserRole(string $user, ?int $page = null, int $row = 10): PageData
     {

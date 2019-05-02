@@ -97,7 +97,7 @@ abstract class UserResponse implements RequestProcessor
      *
      * @param string $name
      * @param array $parameter
-     * @param boolean $allowQuery
+     * @param bool $allowQuery
      * @param string|null $default
      * @return string
      */

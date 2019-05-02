@@ -13,8 +13,8 @@ class VisitorAwareProvider extends  UserSessionAwareProvider
      *
      * @param string $name
      * @param array $parameter
-     * @param boolean $allowQuery
-     * @param string $default
+     * @param bool $allowQuery
+     * @param string|null $default
      * @return void
      */
     public function goRoute(string $name, array $parameter = [], bool $allowQuery = true, ?string $default = null)

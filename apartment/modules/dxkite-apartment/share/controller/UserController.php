@@ -60,22 +60,20 @@ class UserController
 
     /**
      * 通过ID获取用户
-     *
-     * @param integer $user
-     * @return \suda\orm\TableStruct|null
+     * @param int $user
+     * @return array|null
      */
-    public function getByUser(int $user):?TableStruct
+    public function getByUser(int $user):?array
     {
         return $this->table->read('*')->where(['user' => $user])->one();
     }
 
     /**
      * 通过身份证获取用户
-     *
      * @param string $idcard
-     * @return \suda\orm\TableStruct|null
+     * @return array|null
      */
-    public function getByIdCard(string $idcard):?TableStruct
+    public function getByIdCard(string $idcard):?array
     {
         return $this->table->read('*')->where(['idcard' => strtoupper($idcard) ])->one();
     }
