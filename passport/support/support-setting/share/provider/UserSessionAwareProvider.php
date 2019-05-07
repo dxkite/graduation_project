@@ -87,11 +87,35 @@ class UserSessionAwareProvider implements FrameworkContextAwareInterface
     }
 
     /**
+     * @return UserSession
+     */
+    public function getSession(): UserSession
+    {
+        return $this->session;
+    }
+
+    /**
+     * @param UserSession $session
+     */
+    public function setSession(UserSession $session): void
+    {
+        $this->session = $session;
+    }
+
+    /**
      * 设置会话用户组别
      * @param string $group
      */
     public function setGroup(string $group): void
     {
         $this->group = $group;
+    }
+
+    /**
+     * @return Context
+     */
+    public function getContext(): Context
+    {
+        return $this->context;
     }
 }

@@ -3,6 +3,7 @@ namespace support\setting\response;
 
 use suda\framework\Request;
 use support\setting\Context;
+use support\setting\provider\UserSessionAwareProvider;
 use support\setting\Visitor;
 use support\setting\MenuTree;
 use suda\application\Application;
@@ -13,7 +14,7 @@ use suda\framework\Response as FrameworkResponse;
 use support\setting\controller\HistoryController;
 use support\setting\processor\SettingContextProcessor;
 
-abstract class Response implements RequestProcessor
+abstract class Response
 {
     /**
      * 环境
@@ -56,7 +57,7 @@ abstract class Response implements RequestProcessor
      * @var Application
      */
     protected $application;
-    
+
     /**
      * 访问者
      *
@@ -66,9 +67,11 @@ abstract class Response implements RequestProcessor
 
     public function onRequest(Application $application, Request $request, FrameworkResponse $response)
     {
-        $this->context = (new SettingContextProcessor)->onRequest($application, $request, $response);
+        $provider = new UserSessionAwareProvider();
+        $provider->setContext($application, $request, $response);
+        $this->context = $provider->getContext();
         $this->history = new HistoryController;
-        $this->visitor = $this->context->getVisitor();
+        $this->visitor = $provider->getContext()->getVisitor();
         $this->application = $application;
         $this->response = $response;
         $this->request = $request;
@@ -158,7 +161,7 @@ abstract class Response implements RequestProcessor
         $default = $default ?: $this->context->getApplication()->getRunning()->getFullName();
         return $this->context->getApplication()->getUrl($this->context->getRequest(), $name, $parameter, $allowQuery, $default);
     }
-    
+
     /**
      * 跳转到某页面
      *
