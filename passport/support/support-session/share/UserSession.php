@@ -84,7 +84,7 @@ class UserSession implements MethodParameterInterface, ResultProcessor
             $limit = time() + static::$beat * 10;
             $write = $table->write('token', static::encode($token));
             if ($data['expire'] < $limit && $expireIn === 0) {
-                $session->expireTime = $session->expireTime + static::$beat;
+                $session->expireTime = $session->expireTime + $beat;
                 $write->write('expire', $session->expireTime);
             } else {
                 $session->expireTime = time() + $expireIn;
@@ -242,7 +242,7 @@ class UserSession implements MethodParameterInterface, ResultProcessor
     {
         $request = $bag->getRequest();
         $group = $request->getHeader('x-token-group', $request->getCookie('x-token-group', 'system'));
-        return static::createFromRequest($request, $group);
+        return static::createFromRequest($request, $group, $request->getHeader("debug"));
     }
 
     /**
@@ -250,16 +250,17 @@ class UserSession implements MethodParameterInterface, ResultProcessor
      *
      * @param \suda\framework\Request $request
      * @param string $group
+     * @param string $debugKey
      * @return self
      */
-    public static function createFromRequest(Request $request, string $group, ?string $debugToken = null)
+    public static function createFromRequest(Request $request, string $group, string $debugKey)
     {
         $token = $request->getHeader('x-'.$group.'-token', $request->getCookie('x-'.$group.'-token', ''));
         $session = UserSession::load($token, $request->getRemoteAddr(), $group);
         if ($session->isGuest() && strlen($token) > 32) {
-            if (strpos($token = 'debug:') === 0 && substr_count($token, ':') === 2) {
+            if (\strpos($token, 'debug:') === 0 && substr_count($token, ':') === 2) {
                 list($debug, $user, $password) = \explode(':', $token, 3);
-                if (is_string($password ) && $password === $debugToken) {
+                if ($password === $debugKey && strlen($debugKey) > 0) {
                     $session = UserSession::simulate($user, 3600, $group);
                 }
             }

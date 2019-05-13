@@ -3,7 +3,6 @@ namespace support\setting\response;
 
 use suda\framework\Request;
 use support\setting\Context;
-use support\setting\provider\UserSessionAwareProvider;
 use support\setting\Visitor;
 use support\setting\MenuTree;
 use suda\application\Application;
@@ -13,6 +12,7 @@ use suda\application\processor\RequestProcessor;
 use suda\framework\Response as FrameworkResponse;
 use support\setting\controller\HistoryController;
 use support\setting\processor\SettingContextProcessor;
+use support\setting\provider\UserSessionAwareProvider;
 
 abstract class Response
 {

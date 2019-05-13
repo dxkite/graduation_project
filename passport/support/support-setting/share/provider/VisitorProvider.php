@@ -27,7 +27,7 @@ class VisitorProvider extends UserSessionAwareProvider
     /**
      * 获取用户
      *
-     * @param UserSession $session
+     * @param \support\session\UserSession $session
      * @return Visitor
      */
     public function getVisitor(UserSession $session):Visitor
@@ -48,7 +48,7 @@ class VisitorProvider extends UserSessionAwareProvider
     {
         $permission = new Permission($permission);
         $this->visitor->getPermission()->assert($permission);
-        return $this->controller->createRole($name, new Permission($permission), $sort);
+        return $this->controller->createRole($name, $permission, $sort);
     }
 
     /**
@@ -153,7 +153,7 @@ class VisitorProvider extends UserSessionAwareProvider
      * @param string $user
      * @param integer|null $page
      * @param integer $row
-     * @return PageData
+     * @return \support\setting\PageData
      */
     public function listUserRole(string $user, ?int $page = null, int $row = 10): PageData
     {

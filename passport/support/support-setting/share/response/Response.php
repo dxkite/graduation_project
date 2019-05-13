@@ -3,7 +3,6 @@ namespace support\setting\response;
 
 use suda\framework\Request;
 use support\setting\Context;
-use support\setting\provider\UserSessionAwareProvider;
 use support\setting\Visitor;
 use support\setting\MenuTree;
 use suda\application\Application;
@@ -13,6 +12,7 @@ use suda\application\processor\RequestProcessor;
 use suda\framework\Response as FrameworkResponse;
 use support\setting\controller\HistoryController;
 use support\setting\processor\SettingContextProcessor;
+use support\setting\provider\UserSessionAwareProvider;
 
 abstract class Response
 {
@@ -57,7 +57,7 @@ abstract class Response
      * @var Application
      */
     protected $application;
-
+    
     /**
      * 访问者
      *
@@ -161,7 +161,7 @@ abstract class Response
         $default = $default ?: $this->context->getApplication()->getRunning()->getFullName();
         return $this->context->getApplication()->getUrl($this->context->getRequest(), $name, $parameter, $allowQuery, $default);
     }
-
+    
     /**
      * 跳转到某页面
      *
