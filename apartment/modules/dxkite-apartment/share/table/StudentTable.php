@@ -2,7 +2,7 @@
 namespace dxkite\apartment\table;
 
 use suda\orm\DataSource;
-use suda\orm\TableStruct;
+use suda\orm\struct\TableStruct;
 use suda\application\database\Table;
 use support\setting\table\AutoCreateTable;
 use suda\orm\connection\creator\MySQLTableCreator;

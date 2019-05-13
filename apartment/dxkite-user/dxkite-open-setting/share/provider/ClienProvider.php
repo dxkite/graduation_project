@@ -1,7 +1,7 @@
 <?php
 namespace dxkite\openuser\setting\provider;
 
-use suda\orm\TableStruct;
+use suda\orm\struct\TableStruct;
 use support\setting\PageData;
 use support\session\UserSession;
 use support\setting\provider\UserSessionAwareProvider;

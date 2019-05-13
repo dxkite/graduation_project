@@ -1,7 +1,7 @@
 <?php
 namespace dxkite\openuser\controller;
 
-use suda\orm\TableStruct;
+use suda\orm\struct\TableStruct;
 use support\setting\PageData;
 use dxkite\openuser\table\UserTable;
 use suda\orm\exception\SQLException;
