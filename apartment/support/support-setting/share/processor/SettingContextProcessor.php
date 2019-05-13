@@ -18,7 +18,7 @@ class SettingContextProcessor implements RequestProcessor
     public function onRequest(Application $application, Request $request, Response $response)
     {
         $context = new Context($application, $request, $response);
-        $session = UserSession::createFromRequest($request, 'system');
+        $session = UserSession::createFromRequest($request, 'system', $application->conf("app.debug-key", ''));
         $vp = new VisitorProvider;
         $context->setVisitor($vp->getVisitor($session));
         return $context;

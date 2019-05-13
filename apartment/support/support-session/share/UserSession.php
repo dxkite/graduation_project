@@ -242,7 +242,7 @@ class UserSession implements MethodParameterInterface, ResultProcessor
     {
         $request = $bag->getRequest();
         $group = $request->getHeader('x-token-group', $request->getCookie('x-token-group', 'system'));
-        return static::createFromRequest($request, $group, $request->getHeader("debug"));
+        return static::createFromRequest($request, $group, $bag->getApplcation()->conf("app.debug-key", ''));
     }
 
     /**

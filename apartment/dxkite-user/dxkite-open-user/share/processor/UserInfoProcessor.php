@@ -18,7 +18,7 @@ class UserInfoProcessor implements RequestProcessor
     public function onRequest(Application $application, Request $request, Response $response)
     {
         $context = new Context($application, $request, $response);
-        $session = UserSession::createFromRequest($request, 'openuser');
+        $session = UserSession::createFromRequest($request, 'openuser', $application->conf("app.debug-key", ''));
         $user = new UserController;
         if (strlen($session->getUserId()) && ($data = $user->getById($session->getUserId())) !== null) {
             $visitor = new Visitor($session->getUserId(), $data);
