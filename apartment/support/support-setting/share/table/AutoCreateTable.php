@@ -2,6 +2,7 @@
 namespace support\setting\table;
 
 
+use suda\application\database\Database;
 use suda\application\database\Table;
 use suda\application\database\creator\MySQLTableCreator;
 
@@ -11,7 +12,7 @@ abstract class AutoCreateTable extends Table
     {
         parent::__construct($name);
         $cacheKey = 'auto-create-'.$name;
-        $cache = Table::$application->cache();
+        $cache = Database::application()->cache();
         // 避免多次重复创建表
         if ($cache->has($cacheKey) === false && SUDA_DEBUG) {
             (new MySQLTableCreator($this->getSource()->write(), $this->getStruct()))->create();
