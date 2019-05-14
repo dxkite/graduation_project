@@ -1,0 +1,8 @@
+{
+    "name": "support/smtp",
+    "import": {
+        "share": {
+            "support\\stmp": "share"
+        }
+    }
+}

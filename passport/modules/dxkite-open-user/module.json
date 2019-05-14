@@ -9,5 +9,8 @@
             "dxkite\\openuser\\response": "src"
         }
     },
+    "require": {
+        "support/smtp": ""
+    },
     "description": "开放接口"
 }
