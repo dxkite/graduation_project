@@ -18,17 +18,21 @@ class Send
     /**
      * 发送邮件
      * @param Application $application
-     * @param string $name
+     * @param string $action
      * @param string $mail
      * @param string $code
-     * @param string $expire
+     * @param string $expireIn
      * @return bool
      */
-    public static function mail(Application $application, string $name, string $mail, string $code, string $expire)
+    public static function mail(Application $application, string $action, string $mail, string $code, string $expireIn)
     {
         $sender = SMTPSender::build($application);
-        $message = new Message('邮箱验证', sprintf("%s：你的邮箱验证码为：%s, 本次验证在 %s 分钟内有效", $name, $code, $expire));
-        $message->setTo($mail, $name);
+        $message = new Message('邮箱验证', $application->_('${action}：你的邮箱验证码为：${code}, 本次验证在 ${expireIn} 分钟内有效',[
+            'action' => $action,
+            'code' => $code,
+            'expireIn' => $expireIn,
+        ]));
+        $message->setTo($mail);
         try {
             return $sender->send($message);
         } catch (FileNoFoundException $e) {
@@ -40,16 +44,16 @@ class Send
     /**
      * 发送短信
      * @param Application $application
-     * @param string $name
+     * @param string $action
      * @param string $phone
      * @param string $code
-     * @param string $expire
+     * @param string $expireIn
      * @return bool|string
      */
-    public static function sortMessage(Application $application, string $name, string $phone, string $code, string $expire)
+    public static function sortMessage(Application $application, string $action, string $phone, string $code, string $expireIn)
     {
         $config = self::getConfig($application);
-        $params = [$name, $code, $expire];
+        $params = [$action, $code, $expireIn];
         $appId = $config['app-id'];
         $appKey = $config['app-key'];
         $singleSender = new SmsSingleSender($appId, $appKey);

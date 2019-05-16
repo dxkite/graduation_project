@@ -1,6 +1,9 @@
 <?php
+
 namespace dxkite\openuser\controller;
 
+use dxkite\openuser\sender\Send;
+use suda\application\Application;
 use suda\orm\struct\TableStruct;
 use support\setting\PageData;
 use dxkite\openuser\table\UserTable;
@@ -27,7 +30,7 @@ class UserController
      * @var array
      */
     protected $listFields = ['id', 'headimg', 'name', 'email', 'email_checked', 'mobile', 'mobile_checked', 'signup_time', 'signup_ip', 'status', 'code_type', 'code_expires'];
-    
+
     public function __construct()
     {
         $this->table = new UserTable;
@@ -52,7 +55,7 @@ class UserController
         }
         return null;
     }
- 
+
     /**
      * 添加用户
      *
@@ -101,8 +104,9 @@ class UserController
      * @param string $code
      * @param integer $type
      * @return boolean
+     * @throws SQLException
      */
-    public function check(string $user, string $code):bool
+    public function check(string $user, string $code): bool
     {
         if ($data = $this->table->read(['code', 'code_type', 'code_expires'])->where(['id' => $user])->one()) {
             if ($data['code_type'] > 0 && $data['code_expires'] > time() && $data['code'] !== $code) {
@@ -177,8 +181,9 @@ class UserController
      * @param string $user
      * @param string $password
      * @return bool
+     * @throws SQLException
      */
-    public function checkPassword(string $user, string $password):bool
+    public function checkPassword(string $user, string $password): bool
     {
         if ($data = $this->table->read(['password'])->where(['id' => $user])->one()) {
             if (password_verify($password, $data['password'])) {
@@ -194,8 +199,9 @@ class UserController
      * @param string $user
      * @param string $password
      * @return boolean
+     * @throws SQLException
      */
-    public function changePassword(string $user, string $password):bool
+    public function changePassword(string $user, string $password): bool
     {
         return $this->table->write([
             'password' => \password_hash($password, PASSWORD_DEFAULT),
@@ -207,8 +213,9 @@ class UserController
      *
      * @param string $name
      * @return array|null
+     * @throws SQLException
      */
-    public function getByName(string $name):?array
+    public function getByName(string $name): ?array
     {
         return $this->table->read('*')->where('LOWER(name)=LOWER(:name)', ['name' => $name])->one();
     }
@@ -218,8 +225,9 @@ class UserController
      *
      * @param string $name
      * @return array|null
+     * @throws SQLException
      */
-    public function getById(string $id):?array
+    public function getById(string $id): ?array
     {
         return $this->table->read('*')->where('id = ?', $id)->one();
     }
@@ -229,8 +237,9 @@ class UserController
      *
      * @param string $name
      * @return array|null
+     * @throws SQLException
      */
-    public function getBaseInfoById(string $id):?array
+    public function getBaseInfoById(string $id): ?array
     {
         return $this->table->read('id', 'name', 'headimg', 'signup_time')->where('id = ?', $id)->one();
     }
@@ -240,8 +249,9 @@ class UserController
      *
      * @param string $name
      * @return array|null
+     * @throws SQLException
      */
-    public function getInfoById(string $id):?array
+    public function getInfoById(string $id): ?array
     {
         return $this->table->read($this->listFields)->where('id = ?', $id)->one();
     }
@@ -251,8 +261,9 @@ class UserController
      *
      * @param string $email
      * @return array|null
+     * @throws SQLException
      */
-    public function getByEmail(string $email):?array
+    public function getByEmail(string $email): ?array
     {
         return $this->table->read('*')->where('LOWER(email)=LOWER(:email)', ['email' => $email])->one();
     }
@@ -262,10 +273,11 @@ class UserController
      *
      * @param string $mobile
      * @return array|null
+     * @throws SQLException
      */
-    public function getByMobile(string $mobile):?array
+    public function getByMobile(string $mobile): ?array
     {
-        return $this->table->read('*')->where(['mobile' => $email])->one();
+        return $this->table->read('*')->where(['mobile' => $mobile])->one();
     }
 
     /**
@@ -273,8 +285,9 @@ class UserController
      *
      * @param string $account
      * @return array
+     * @throws SQLException
      */
-    public function getByAccount(string $account):array
+    public function getByAccount(string $account): array
     {
         if (preg_match(UserController::EMAIL_PREG, $account)) {
             $accountData = $this->getByEmail($account);
@@ -333,10 +346,11 @@ class UserController
      * @param integer|null $page
      * @param integer $row
      * @return PageData
+     * @throws SQLException
      */
     public function search(string $data, ?int $page = null, int $row = 10): PageData
     {
-        return PageData::create($this->listFields->where(' `name` LIKE CONCAT("%",:data,"%") OR `email` LIKE CONCAT("%",:data,"%") OR `mobile` LIKE CONCAT("%",:data,"%") ', ['data' => $data]), $page, $row);
+        return PageData::create($this->table->read($this->listFields)->where(' `name` LIKE CONCAT("%",:data,"%") OR `email` LIKE CONCAT("%",:data,"%") OR `mobile` LIKE CONCAT("%",:data,"%") ', ['data' => $data]), $page, $row);
     }
 
     /**
@@ -345,8 +359,9 @@ class UserController
      * @param string $user
      * @param integer $status
      * @return boolean
+     * @throws SQLException
      */
-    public function status(string $user, int $status):bool
+    public function status(string $user, int $status): bool
     {
         return $this->table->write(['status' => $status])->where(['id' => $user])->ok();
     }
@@ -356,9 +371,81 @@ class UserController
      *
      * @param string $user
      * @return boolean
+     * @throws SQLException
      */
-    public function delete(string $user):bool
+    public function delete(string $user): bool
     {
         return $this->table->delete(['id' => $user])->ok();
+    }
+
+    /**
+     * @param Application $application
+     * @param string $action
+     * @param string $mobile
+     * @param string $code
+     * @param int $expires
+     * @param int $expireIn
+     * @param int $type
+     * @param string|null $user
+     * @param bool $checked
+     * @return bool
+     * @throws SQLException
+     */
+    public function sendMobileCode(Application $application, string $action, string $mobile, string $code, int $expires, int $expireIn, int $type, ?string $user = null, bool $checked = false)
+    {
+        if ($data = $this->table->read(['id', 'mobile_send', 'mobile_checked'])->where(['mobile' => $mobile])->one()) {
+            if ($user !== null && $data['id'] != $user) {
+                throw new UserException('mobile not exist for user', UserException::ERR_MOBILE_OWN);
+            }
+            if ($checked && $data['mobile_checked'] != 1) {
+                throw new UserException('mobile not checked', UserException::ERR_MOBILE_NOT_CHECKED);
+            }
+            if (time() - $data['mobile_send'] > 60) {
+                if (Send::sortMessage($application, $action, $mobile, $code, $expireIn)) {
+                    return $this->table->write([
+                        'code' => $code,
+                        'code_type' => $type,
+                        'code_expires' => $expires,
+                    ])->write(['id' => $data['id']])->ok();
+                }
+                return false;
+            }
+            throw new UserException('mobile code frequency 1/min', UserException::ERR_CODE_FREQUENCY);
+        }
+        throw new UserException('mobile not exist', UserException::ERR_MOBILE_NOT_EXISTS);
+    }
+
+    /**
+     * @param Application $application
+     * @param string $action
+     * @param string $email
+     * @param string $code
+     * @param int $expires
+     * @param int $expireIn
+     * @param int $type
+     * @param string|null $user
+     * @param bool $checked
+     * @return bool
+     * @throws SQLException
+     */
+    public function sendEmailCode(Application $application, string $action, string $email, string $code, int $expires, int $expireIn, int $type, ?string $user = null, bool $checked = false)
+    {
+        if ($data = $this->table->read(['id', 'email_checked'])->where(['email' => $email])->one()) {
+            if ($user !== null && $data['id'] != $user) {
+                throw new UserException('email not exist for user', UserException::ERR_EMAIL_OWN);
+            }
+            if ($checked && $data['email_checked'] != 1) {
+                throw new UserException('email not checked', UserException::ERR_EMAIL_NOT_CHECKED);
+            }
+            if (Send::mail($application, $action, $email, $code, $expireIn)) {
+                return $this->table->write([
+                    'code' => $code,
+                    'code_type' => $type,
+                    'code_expires' => $expires,
+                ])->write(['id' => $data['id']])->ok();
+            }
+            return false;
+        }
+        throw new UserException('mobile not exist', UserException::ERR_MOBILE_NOT_EXISTS);
     }
 }
