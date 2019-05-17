@@ -110,7 +110,7 @@ class UserController
     public function check(string $user, string $code): bool
     {
         if ($data = $this->table->read(['code', 'code_type', 'code_expires'])->where(['id' => $user])->one()) {
-            if ($data['code_type'] > 0 && $data['code_expires'] > time() && $data['code'] !== $code) {
+            if ($data['code'] !== $code || $data['code_type'] <= 0 || $data['code_expires'] < time()) {
                 return false;
             }
             $write = ['code' => null, 'code_type' => 0, 'code_expires' => 0];
@@ -120,7 +120,7 @@ class UserController
             if ($data['code_type'] == UserTable::CODE_MOBILE) {
                 $write['mobile_checked'] = 1;
             }
-            return $this->table->write($write)->ok();
+            return $this->table->write($write)->where(['id' => $user])->ok();
         }
         return true;
     }

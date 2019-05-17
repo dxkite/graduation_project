@@ -12,10 +12,10 @@
             <input 
             type="text" name="code" 
             id="code" 
-            class="form-control {{ $:invaildCode(false)?'is-invalid':'' }}" 
+            class="form-control {{ $:invalidCode(false)?'is-invalid':'' }}" 
             placeholder="{= 验证码 }"
             required autofocus> 
-            @if($:invaildCode(false))
+            @if($:invalidCode(false))
             <div id="name_error" class="invalid-feedback"> {= 验证码错误 }</div>
             @endif
         </div>
