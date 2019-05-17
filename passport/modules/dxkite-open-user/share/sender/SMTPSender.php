@@ -5,8 +5,9 @@ namespace dxkite\openuser\sender;
 use suda\application\Application;
 use suda\application\exception\ConfigurationException;
 use suda\framework\Config;
+use support\smtp\Sender;
 
-class SMTPSender extends \support\smtp\Sender
+class SMTPSender extends Sender
 {
 
     /**

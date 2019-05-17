@@ -2,6 +2,7 @@
 namespace dxkite\openuser\response;
 
 use suda\framework\Request;
+use suda\orm\exception\SQLException;
 use support\setting\response\Response;
 use dxkite\openuser\provider\UserProvider;
 use dxkite\openuser\response\UserResponse;
@@ -46,7 +47,16 @@ class SignupResponse extends UserResponse
                         $p->loadFromContext($this->context);
                         $session = $p->signup($name, $password, $code, $email, $mobile);
                         $session->processor($this->application, $this->request, $this->response);
-                        $this->jumpForward();
+                        try {
+                            if ($p->sendCheckCode($type)) {
+                                $this->goRoute('check', ['redirect_uri' => $this->getRedirectUrl()]);
+                            }else{
+                                $this->jumpForward();
+                            }
+                        } catch (SQLException $e) {
+                            $this->jumpForward();
+                            $this->application->debug()->error($e->getMessage(), ['exception' => $e]);
+                        }
                     } catch (UserException $e) {
                         switch ($e->getCode()) {
                             case UserException::ERR_NAME_FORMAT:

@@ -60,7 +60,7 @@ class UserSessionAwareProvider implements FrameworkContextAwareInterface
         $this->context = new Context($application, $request, $response);
         $vp = new VisitorProvider();
         $this->session = UserSession::createFromRequest($request, $this->getGroup(), $application->conf("app.debug-key", ''));
-        $this->visitor = $vp->getVisitor($this->session);
+        $this->visitor = $vp->createVisitor($this->session->getUserId());
         $this->context->setVisitor($this->visitor);
     }
 

@@ -42,6 +42,7 @@ class UserController
      * @param string $account 账号
      * @param string $password 密码
      * @return null|array 能登陆则非空
+     * @throws SQLException
      */
     public function signin(string $account, string $password): ?array
     {
@@ -406,7 +407,7 @@ class UserController
                         'code' => $code,
                         'code_type' => $type,
                         'code_expires' => $expires,
-                    ])->write(['id' => $data['id']])->ok();
+                    ])->where(['id' => $data['id']])->ok();
                 }
                 return false;
             }
@@ -442,7 +443,7 @@ class UserController
                     'code' => $code,
                     'code_type' => $type,
                     'code_expires' => $expires,
-                ])->write(['id' => $data['id']])->ok();
+                ])->where(['id' => $data['id']])->ok();
             }
             return false;
         }

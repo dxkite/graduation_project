@@ -27,12 +27,12 @@ class VisitorProvider extends UserSessionAwareProvider
     /**
      * 获取用户
      *
-     * @param \support\session\UserSession $session
+     * @param string $userId
      * @return Visitor
      */
-    public function getVisitor(UserSession $session):Visitor
+    public function createVisitor(string $userId):Visitor
     {
-        return  $this->controller->getVisitor($session);
+        return  $this->controller->createVisitor($userId);
     }
 
     /**

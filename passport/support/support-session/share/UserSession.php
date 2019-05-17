@@ -59,10 +59,11 @@ class UserSession implements MethodParameterInterface, ResultProcessor
      * 保存会话
      *
      * @param string $userId 用户ID
-     * @param string $ip  用户IP
+     * @param string $ip 用户IP
      * @param integer $expireIn 过期时间
      * @param string $group 会话组
      * @return UserSession
+     * @throws \suda\orm\exception\SQLException
      */
     public static function save(string $userId, string $ip, int $expireIn = 0, string $group = 'system'): UserSession
     {
@@ -84,7 +85,7 @@ class UserSession implements MethodParameterInterface, ResultProcessor
             $limit = time() + static::$beat * 10;
             $write = $table->write('token', static::encode($token));
             if ($data['expire'] < $limit && $expireIn === 0) {
-                $session->expireTime = $session->expireTime + $beat;
+                $session->expireTime = $session->expireTime + static::$beat;
                 $write->write('expire', $session->expireTime);
             } else {
                 $session->expireTime = time() + $expireIn;
@@ -413,7 +414,6 @@ class UserSession implements MethodParameterInterface, ResultProcessor
      *
      * @param  integer  $beat  心跳时间
      *
-     * @return  self
      */
     public static function setBeat($beat)
     {

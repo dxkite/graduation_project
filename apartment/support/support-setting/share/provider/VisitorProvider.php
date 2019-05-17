@@ -32,7 +32,7 @@ class VisitorProvider extends UserSessionAwareProvider
      */
     public function getVisitor(UserSession $session):Visitor
     {
-        return  $this->controller->getVisitor($session);
+        return  $this->controller->createVisitor($session);
     }
 
     /**

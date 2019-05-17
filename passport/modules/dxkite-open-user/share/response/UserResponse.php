@@ -40,7 +40,7 @@ abstract class UserResponse implements RequestProcessor
      * @var Application
      */
     protected $application;
-    
+
     /**
      * 访问者
      *
@@ -65,7 +65,7 @@ abstract class UserResponse implements RequestProcessor
 
     abstract public function onGuestVisit(Request $request);
     abstract public function onUserVisit(Request $request);
-    
+
     /**
      * 获取模板
      *
@@ -84,12 +84,11 @@ abstract class UserResponse implements RequestProcessor
      * @param array $parameter
      * @param boolean $allowQuery
      * @param string $default
-     * @return void
      */
     public function goRoute(string $name, array $parameter = [], bool $allowQuery = true, ?string $default = null)
     {
         $url = $this->getUrl($name, $parameter, $allowQuery, $default);
-        return $this->context->getResponse()->redirect($url);
+        $this->context->getResponse()->redirect($url);
     }
 
     /**
@@ -106,7 +105,7 @@ abstract class UserResponse implements RequestProcessor
         $default = $default ?: $this->context->getApplication()->getRunning()->getFullName();
         return $this->context->getApplication()->getUrl($this->context->getRequest(), $name, $parameter, $allowQuery, $default);
     }
-    
+
     /**
      * 跳转到某页面
      *
@@ -125,16 +124,21 @@ abstract class UserResponse implements RequestProcessor
      */
     public function jumpForward()
     {
+        $url = $this->getRedirectUrl();
+        $this->redirect($url);
+    }
+
+    public function getRedirectUrl():string  {
         $url = $this->request->get('redirect_uri');
         if (strlen($url) > 0) {
-            $this->redirect($url);
-        } else {
-            $route = $this->request->getAttribute('route');
-            $home = $this->application->getRouteName('home', $this->application->getRunning()->getFullName());
-            if ($route !== $home) {
-                $this->goRoute('home');
-            }
+            return $url;
         }
+        $route = $this->request->getAttribute('route');
+        $home = $this->application->getRouteName('home', $this->application->getRunning()->getFullName());
+        if ($route !== $home) {
+            return $this->getUrl('home');
+        }
+        return '/';
     }
 
     /**

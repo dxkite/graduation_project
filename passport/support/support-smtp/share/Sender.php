@@ -166,7 +166,7 @@ class Sender
     {
         $remoteAddr = 'tcp://' . $this->server . ':' . $this->port;
         $this->socket = null;
-        set_error_handler([$this, '_errorHandler']);
+        set_error_handler(null);
         $this->socket = stream_socket_client($remoteAddr, $errno, $errstr, $this->timeout);
         restore_error_handler();
         if (!$this->socket) {

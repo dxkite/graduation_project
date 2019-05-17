@@ -6,7 +6,7 @@ use support\setting\PageData;
 use suda\orm\exception\SQLException;
 use support\setting\table\UserTable;
 use support\setting\exception\UserException;
-use support\setting\controller\UserController;
+
 
 class UserController
 {
@@ -196,7 +196,7 @@ class UserController
      */
     public function getByMobile(string $mobile):?array
     {
-        return $this->table->read('*')->where(['mobile' => $email])->one();
+        return $this->table->read('*')->where(['mobile' => $mobile])->one();
     }
 
     /**

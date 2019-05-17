@@ -19,6 +19,10 @@
         "class": "dxkite.openuser.response.HomeResponse",
         "uri": "\/home"
     },
+    "check": {
+        "class": "dxkite.openuser.response.CheckResponse",
+        "uri": "\/check"
+    },
     "setting": {
         "class": "dxkite.openuser.response.HomeSettingResponse",
         "uri": "\/home\/setting"
