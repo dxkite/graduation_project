@@ -15,6 +15,13 @@ use suda\application\processor\RequestProcessor;
  */
 class UserInfoProcessor implements RequestProcessor
 {
+    /**
+     * @param Application $application
+     * @param Request $request
+     * @param Response $response
+     * @return mixed|Context
+     * @throws \suda\orm\exception\SQLException
+     */
     public function onRequest(Application $application, Request $request, Response $response)
     {
         $context = new Context($application, $request, $response);

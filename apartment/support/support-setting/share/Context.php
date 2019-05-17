@@ -4,6 +4,8 @@ namespace support\setting;
 use suda\framework\Request;
 use suda\framework\Session;
 use suda\framework\Response;
+use support\session\UserSession;
+use support\setting\provider\VisitorProvider;
 use support\setting\Visitor;
 use suda\application\Application;
 use support\openmethod\Permission;
@@ -165,6 +167,17 @@ class Context
     public function getSession():Session
     {
         return $this->session;
+    }
+
+    /**
+     * @param \support\setting\Visitor $visitor
+     */
+    public function update(Visitor $visitor) {
+        $this->visitor = $visitor;
+        try {
+            $this->session->update();
+        } catch (\Exception $e) {
+        }
     }
 
     /**

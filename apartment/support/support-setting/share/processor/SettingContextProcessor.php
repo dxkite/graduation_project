@@ -20,7 +20,7 @@ class SettingContextProcessor implements RequestProcessor
         $context = new Context($application, $request, $response);
         $session = UserSession::createFromRequest($request, 'system', $application->conf("app.debug-key", ''));
         $vp = new VisitorProvider;
-        $context->setVisitor($vp->createVisitor($session));
+        $context->setVisitor($vp->createVisitor($session->getUserId()));
         return $context;
     }
 }

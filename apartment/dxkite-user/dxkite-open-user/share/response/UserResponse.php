@@ -40,7 +40,7 @@ abstract class UserResponse implements RequestProcessor
      * @var Application
      */
     protected $application;
-    
+
     /**
      * 访问者
      *
@@ -65,7 +65,7 @@ abstract class UserResponse implements RequestProcessor
 
     abstract public function onGuestVisit(Request $request);
     abstract public function onUserVisit(Request $request);
-    
+
     /**
      * 获取模板
      *
@@ -105,7 +105,7 @@ abstract class UserResponse implements RequestProcessor
         $default = $default ?: $this->context->getApplication()->getRunning()->getFullName();
         return $this->context->getApplication()->getUrl($this->context->getRequest(), $name, $parameter, $allowQuery, $default);
     }
-    
+
     /**
      * 跳转到某页面
      *

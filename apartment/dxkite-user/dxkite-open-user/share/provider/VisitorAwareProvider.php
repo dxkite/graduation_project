@@ -1,7 +1,9 @@
 <?php
 namespace dxkite\openuser\provider;
 
+use dxkite\openuser\controller\UserController;
 use support\setting\provider\UserSessionAwareProvider;
+use support\setting\Visitor;
 
 class VisitorAwareProvider extends  UserSessionAwareProvider
 {
@@ -36,5 +38,20 @@ class VisitorAwareProvider extends  UserSessionAwareProvider
     {
         $default = $default ?: $this->application->getRunning()->getFullName();
         return $this->application->getUrl($this->request, $name, $parameter, $allowQuery, $default ?? $this->request->getAttribute('group'));
+    }
+
+    /**
+     * @param string $userId
+     * @return Visitor
+     * @throws \suda\orm\exception\SQLException
+     */
+    public function createVisitor(string $userId)
+    {
+        $user = new UserController;
+       if (($data = $user->getById($userId)) !== null) {
+           return  new Visitor($userId, $data);
+        } else {
+            return new Visitor;
+        }
     }
 }

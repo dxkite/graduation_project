@@ -189,16 +189,16 @@ class VisitorController
     /**
      * 获取用户
      *
-     * @param \support\session\UserSession $session
+     * @param string $userId
      * @return Visitor
      */
-    public function getVisitor(UserSession $session):Visitor
+    public function createVisitor(string $userId):Visitor
     {
-        $visitor = new Visitor($session->getUserId());
+        $visitor = new Visitor($userId);
         $ctr = new VisitorController;
-        $visitor->setPermission($ctr->loadPermission($session->getUserId()));
+        $visitor->setPermission($ctr->loadPermission($userId));
         $uCtr = new UserController;
-        $data = $uCtr->getInfoById($session->getUserId());
+        $data = $uCtr->getInfoById($userId);
         $visitor->setAttributes($data ?? []);
         return $visitor;
     }

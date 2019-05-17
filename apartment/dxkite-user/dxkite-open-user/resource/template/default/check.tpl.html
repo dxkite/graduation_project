@@ -5,17 +5,17 @@
 @endInsert 
 @startInsert('bs-content')
 <div class="container">
-    <form class="form-sign" id="form-signup" action="@self" method="POST">
+    <form class="form-sign" id="form-signup" action="@u" method="POST">
         <h2 class="form-sign-heading"> {= 验证账号 }</h2>
         <div class="form-group">
             <label for="code" class="sr-only">{= 验证码 }</label>
             <input 
             type="text" name="code" 
             id="code" 
-            class="form-control {{ $:invaildCode(false)?'is-invalid':'' }}" 
+            class="form-control {{ $:invalidCode(false)?'is-invalid':'' }}" 
             placeholder="{= 验证码 }"
             required autofocus> 
-            @if($:invaildCode(false))
+            @if($:invalidCode(false))
             <div id="name_error" class="invalid-feedback"> {= 验证码错误 }</div>
             @endif
         </div>

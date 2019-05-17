@@ -17,4 +17,11 @@ class UserException extends RuntimeException
     const ERR_MOBILE_EXISTS = 10;
     const ERR_PASSWORD_OR_ACCOUNT = 11;
     const ERR_ACCOUNT_EXISTS = 12;
+    const ERR_MOBILE_NOT_EXISTS  = 13;
+    const ERR_EMAIL_NOT_EXISTS  = 14;
+    const ERR_CODE_FREQUENCY = 15;
+    const ERR_MOBILE_OWN = 16;
+    const ERR_EMAIL_OWN = 17;
+    const ERR_MOBILE_NOT_CHECKED = 18;
+    const ERR_EMAIL_NOT_CHECKED = 19;
 }

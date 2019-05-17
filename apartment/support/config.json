@@ -1,8 +1,9 @@
 {
-    "loaded": [
+    "load": [
         "support/open-method",
         "support/session",
         "support/upload",
+        "support/smtp",
         "support/setting"
     ],
     "reachable": [
