@@ -25,9 +25,9 @@ class UserTable extends AutoCreateTable
     {
         return $struct->fields([
             $struct->field('id', 'bigint', 20)->auto()->primary(),
-            $struct->field('name', 'varchar', 255)->unique()->comment('用户名'),
-            $struct->field('email', 'varchar', 255)->unique()->default(null)->comment('邮箱'),
-            $struct->field('mobile', 'varchar', 255)->unique()->default(null)->comment('手机号'),
+            $struct->field('name', 'varchar', 128)->unique()->comment('用户名'),
+            $struct->field('email', 'varchar', 128)->unique()->default(null)->comment('邮箱'),
+            $struct->field('mobile', 'varchar', 128)->unique()->default(null)->comment('手机号'),
             $struct->field('password', 'varchar', 255)->comment('密码'),
             $struct->field('headimg', 'varchar', 512)->comment('头像'),
             $struct->field('mobile_checked', 'tinyint', 0)->default(0)->comment('短信验证'),

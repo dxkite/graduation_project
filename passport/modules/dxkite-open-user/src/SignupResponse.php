@@ -60,25 +60,25 @@ class SignupResponse extends UserResponse
                     } catch (UserException $e) {
                         switch ($e->getCode()) {
                             case UserException::ERR_NAME_FORMAT:
-                            $view->set('invaildName', '用户名格式错误');
+                            $view->set('invalidName', '用户名格式错误');
                             break;
                             case UserException::ERR_NAME_EXISTS:
-                            $view->set('invaildName', '用户名已存在');
+                            $view->set('invalidName', '用户名已存在');
                             break;
                             case UserException::ERR_EMAIL_FORMAT:
-                            $view->set('invaildEmail', '邮箱格式错误');
+                            $view->set('invalidEmail', '邮箱格式错误');
                             break;
                             case UserException::ERR_EMAIL_EXISTS:
-                            $view->set('invaildEmail', '邮箱已存在');
+                            $view->set('invalidEmail', '邮箱已存在');
                             break;
                             case UserException::ERR_MOBILE_FORMAT:
-                            $view->set('invaildMobile', '手机号格式错误');
+                            $view->set('invalidMobile', '手机号格式错误');
                             break;
                             case UserException::ERR_MOBILE_EXISTS:
-                            $view->set('invaildMobile', '手机号已经被注册');
+                            $view->set('invalidMobile', '手机号已经被注册');
                             break;
                             case UserException::ERR_CODE:
-                            $view->set('invaildMobile', '验证码错误');
+                            $view->set('invalidCode', '验证码错误');
                             break;
                         }
                     }

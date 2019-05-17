@@ -36,7 +36,7 @@ class EditResponse extends SettingResponse
             $view->set('permission', $role['permission']);
             $view->set('name', $role['name']);
         } else {
-            $view->set('invaildId', true);
+            $view->set('invalidId', true);
         }
         return $view;
     }

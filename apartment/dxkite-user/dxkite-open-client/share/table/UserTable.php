@@ -28,7 +28,7 @@ class UserTable extends AutoCreateTable
             $struct->field('name', 'varchar', 255)->default(null)->comment('用户名'),
             $struct->field('headimg', 'varchar', 512)->default(null)->comment('头像'),
             
-            $struct->field('user', 'varchar', 255)->key()->comment('用户ID'),
+            $struct->field('user', 'varchar', 128)->key()->comment('用户ID'),
             $struct->field('access_token', 'varchar', 255)->comment('访问密钥'),
             $struct->field('refresh_token', 'varchar', 255)->comment('刷新密钥'),
             $struct->field('expires_in', 'int', 11)->key()->comment('授权过期时间'),

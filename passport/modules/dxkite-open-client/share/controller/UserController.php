@@ -19,7 +19,7 @@ class UserController
     {
         $this->table = new UserTable;
     }
- 
+
     /**
      * 链接到开放服务
      *
@@ -29,6 +29,7 @@ class UserController
      * @param integer $expires_in
      * @param string $ip
      * @return string
+     * @throws SQLException
      */
     public function signin(string $user, string $access_token, string $refresh_token, int $expires_in, string $ip = ''): string
     {
@@ -60,6 +61,7 @@ class UserController
      * @param string $name
      * @param string $headimg
      * @return boolean
+     * @throws SQLException
      */
     public function edit(string $user, string $name, string $headimg):bool
     {
@@ -74,6 +76,7 @@ class UserController
      *
      * @param string $id
      * @return boolean
+     * @throws SQLException
      */
     public function wantUserInfo(string $user):bool
     {
@@ -88,6 +91,7 @@ class UserController
      *
      * @param string $id
      * @return array|null
+     * @throws SQLException
      */
     public function getInfoById(string $id):?array
     {
@@ -102,6 +106,7 @@ class UserController
      *
      * @param string $id
      * @return array|null
+     * @throws SQLException
      */
     public function getById(string $id):?array
     {

@@ -79,7 +79,7 @@ class UserProvider extends VisitorAwareProvider
     {
         $verify = new VerifyImage($this->context, 'dxkite/openuser');
         if ($verify->checkCode($code) === false) {
-            //  throw new UserException('code error', UserException::ERR_CODE);
+            throw new UserException('code error', UserException::ERR_CODE);
         }
         $user = $this->controller->add($name, $password, $this->request->getRemoteAddr(), $email, $mobile, UserTable::NORMAL);
         $this->session = UserSession::save($user, $this->request->getRemoteAddr(), 3600, $this->group);

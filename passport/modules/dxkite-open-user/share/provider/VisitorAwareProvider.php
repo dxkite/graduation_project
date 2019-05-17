@@ -1,14 +1,15 @@
 <?php
+
 namespace dxkite\openuser\provider;
 
 use dxkite\openuser\controller\UserController;
 use support\setting\provider\UserSessionAwareProvider;
 use support\setting\Visitor;
 
-class VisitorAwareProvider extends  UserSessionAwareProvider
+class VisitorAwareProvider extends UserSessionAwareProvider
 {
 
-    protected  $group = 'openuser';
+    protected $group = 'openuser';
 
     /**
      * 跳转到某路由
@@ -48,8 +49,8 @@ class VisitorAwareProvider extends  UserSessionAwareProvider
     public function createVisitor(string $userId)
     {
         $user = new UserController;
-       if (($data = $user->getById($userId)) !== null) {
-           return  new Visitor($userId, $data);
+        if (($data = $user->getById($userId)) !== null) {
+            return new Visitor($userId, $data);
         } else {
             return new Visitor;
         }

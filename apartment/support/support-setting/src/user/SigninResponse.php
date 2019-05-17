@@ -27,9 +27,9 @@ class SigninResponse extends Response
                 return;
             } catch (UserException $e) {
                 if ($e->getCode() === UserException::ERR_CODE) {
-                    $view->set('invaildCode', true);
+                    $view->set('invalidCode', true);
                 } else {
-                    $view->set('invaildInput', true);
+                    $view->set('invalidInput', true);
                 }
             }
         }

@@ -25,7 +25,7 @@ class AddResponse extends SettingResponse
                 $this->goRoute('role_list');
                 return;
             } else {
-                $view->set('invaildName', true);
+                $view->set('invalidName', true);
             }
         }
         $view = $this->view('role/add');

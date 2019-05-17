@@ -8,6 +8,7 @@ use suda\application\Resource;
 use dxkite\openclient\HTTPUtil;
 use support\session\UserSession;
 use dxkite\openclient\controller\UserController;
+use support\setting\Visitor;
 
 class UserProvider extends VisitorAwareProvider
 {
@@ -143,5 +144,15 @@ class UserProvider extends VisitorAwareProvider
             $keys[] = '{' . $key . '}';
         }
         return \str_replace($keys, \array_values($parameter), $url);
+    }
+
+    public function createVisitor(string $userId)
+    {
+        $user = new UserController;
+        if (($data = $user->getById($userId)) !== null) {
+            return new Visitor($userId, $data);
+        } else {
+            return new Visitor;
+        }
     }
 }
