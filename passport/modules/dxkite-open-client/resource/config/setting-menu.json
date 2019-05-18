@@ -1,0 +1,6 @@
+{
+  "${module}@${group}:user-center": {
+    "name": "用户中心设置",
+    "sort": 999
+  }
+}

@@ -2,6 +2,7 @@
 
 namespace dxkite\openclient\provider;
 
+use dxkite\openclient\controller\UCConfigController;
 use dxkite\openuser\provider\VisitorAwareProvider;
 use suda\framework\Config;
 use suda\application\Resource;
@@ -48,7 +49,7 @@ class UserProvider extends VisitorAwareProvider
             $url = $this->prepareUrl('signin', [
                 'server' => $this->config['server'],
                 'redirect_uri' => $redirect_uri,
-                'appid' => $this->config['appid']
+                'appid' => $this->config['appid'],
             ]);
             $this->response->redirect($url);
         } else {
@@ -71,7 +72,7 @@ class UserProvider extends VisitorAwareProvider
             'server' => $this->config['server'],
             'secret' => $this->config['secret'],
             'code' => $code,
-            'appid' => $this->config['appid']
+            'appid' => $this->config['appid'],
         ]);
         $data = HTTPUtil::get($url);
         if (\array_key_exists('result', $data)) {
@@ -87,7 +88,7 @@ class UserProvider extends VisitorAwareProvider
                 $userinfo = $this->prepareUrl('userinfo', [
                     'server' => $this->config['server'],
                     'user' => $data['user'],
-                    'access_token' => $data['access_token']
+                    'access_token' => $data['access_token'],
                 ]);
                 $userinfo_data = HTTPUtil::get($userinfo);
                 if (\array_key_exists('result', $userinfo_data)) {
@@ -127,13 +128,7 @@ class UserProvider extends VisitorAwareProvider
 
     protected function prepareConfig()
     {
-        $resource = new Resource(SUDA_DATA);
-        $path = $resource->getConfigResourcePath('config/open-user');
-        if ($path) {
-            $this->config = Config::loadConfig($path);
-        } else {
-            $this->config = [];
-        }
+        $this->config = (new UCConfigController())->loadConfig($this->application->getDataPath());
     }
 
     protected function prepareUrl(string $name, array $parameter)

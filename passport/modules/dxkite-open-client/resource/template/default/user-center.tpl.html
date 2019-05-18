@@ -1,0 +1,31 @@
+@extend ('support/setting:setting-view')
+@startInsert('admin-content')
+
+<form method="POST" action="@u">
+    <div class="form-group row">
+        <label class="col-2 col-form-label" for="server">服务器</label>
+        <div class="col-10">
+            <input type="text" id="server" class="form-control" name="server" placeholder="服务器"
+                value="{{$:config.server('')}}">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-2 col-form-label" for="appid">AppId</label>
+        <div class="col-10">
+            <input type="text" id="appid" class="form-control" name="appid" placeholder="APPID"
+                value="{{$:config.appid('')}}">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-2 col-form-label" for="secret">AppSecret</label>
+        <div class="col-10">
+            <input type="text" id="secret" class="form-control" name="secret" placeholder="AppSecret"
+                value="{{$:config.secret('')}}">
+        </div>
+    </div>
+    <div class="row">
+        <button class="btn btn-primary">设置用户中心参数</button>
+    </div>
+</form>
+
+@endInsert

@@ -1,0 +1,46 @@
+@extend ('support/setting:setting-view')
+@startInsert('admin-content')
+
+<form action="@u" method="POST">
+    <fieldset class="p-3">
+        <legend>SMTP基本设置</legend>
+        <div class="form-group row">
+            <label for="server" class="col-2 col-form-label">服务器</label>
+            <div class="col-10">
+                <div class="input-group">
+                    <input type="text" name="server" class="form-control col-10" value="{{ $:config.server('') }}">
+                    <input type="number" name="port" class="form-control col-2" value="{{ $:config.port('') }}"
+                        placeholder="端口">
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="name" class="col-2 col-form-label">用户名</label>
+            <div class="col-10">
+                <input name="name" class="form-control" type="text" value="{{ $:config.name('') }}" id="name">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="password" class="col-2 col-form-label">密码</label>
+            <div class="col-10">
+                <input name="password" class="form-control" type="password" placeholder="{{ str_repeat('*', strlen($:config.password(''))) }}"
+                    id="password">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="timeout" class="col-2 col-form-label">超时设置</label>
+            <div class="col-10">
+                <input name="timeout" class="form-control" type="number" value="{{ $:config.timeout('') }}" id="timeout">
+            </div>
+        </div>
+        <div class="form-check">
+            <label for="security" class="form-check-label">
+                <input name="security" class="form-check-input" type="checkbox" value="true" id="security" @if
+                    ($:config.security(false)) checked @endif> 开启SSL
+            </label>
+        </div>
+    </fieldset>
+    <button class="btn btn-primary">保存设置</button>
+</form>
+
+@endInsert

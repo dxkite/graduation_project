@@ -2,10 +2,9 @@
 
 namespace dxkite\openuser\controller;
 
+use support\setting\PageData;
 use dxkite\openuser\sender\Send;
 use suda\application\Application;
-use suda\orm\struct\TableStruct;
-use support\setting\PageData;
 use dxkite\openuser\table\UserTable;
 use suda\orm\exception\SQLException;
 use dxkite\openuser\exception\UserException;
@@ -248,7 +247,7 @@ class UserController
     /**
      * 通过用户ID获取用户信息
      *
-     * @param string $name
+     * @param string $id
      * @return array|null
      * @throws SQLException
      */

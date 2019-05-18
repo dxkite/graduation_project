@@ -1,0 +1,10 @@
+{
+    "tencent-sms": {
+        "uri": "/config/tenent-sms",
+        "class": "dxkite.openuser.response.config.ConfigSMSResponse"
+    },
+    "smtp": {
+        "uri": "/config/smtp",
+        "class": "dxkite.openuser.response.config.ConfigSMTPResponse"
+    }
+}

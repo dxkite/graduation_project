@@ -1,0 +1,6 @@
+{
+  "user-center" : {
+    "uri": "/user-center",
+    "class": "dxkite.openclient.response.UserCenterResponse"
+  }
+}

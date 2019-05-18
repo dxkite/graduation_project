@@ -248,7 +248,7 @@ class UserController
     /**
      * 通过用户ID获取用户信息
      *
-     * @param string $name
+     * @param string $id
      * @return array|null
      * @throws SQLException
      */

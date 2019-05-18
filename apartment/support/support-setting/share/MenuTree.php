@@ -2,6 +2,7 @@
 
 namespace support\setting;
 
+use suda\application\Module;
 use suda\framework\Config;
 use suda\framework\Request;
 use support\setting\Context;
@@ -55,8 +56,9 @@ class MenuTree
     public function getMenuData()
     {
         $adminSidebar = [];
+        /** @var Module $module */
         foreach ($this->application->getModules() as $fullName => $module) {
-            if ($path = $module->getResource()->getConfigResourcePath('config/setting-menu')) {
+            if ($module->getStatus() === Module::REACHABLE && $path = $module->getResource()->getConfigResourcePath('config/setting-menu')) {
                 $adminSidebar[$fullName] = [];
                 $sidebar = Config::loadConfig($path, [
                     'module' => $fullName,
