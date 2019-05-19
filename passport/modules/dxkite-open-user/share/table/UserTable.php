@@ -13,9 +13,12 @@ class UserTable extends AutoCreateTable
     const NORMAL = 1;  //  正常状态
     const CREATED = 1;  // 刚刚创建
 
-    const CODE_EMAIL = 1;
-    const CODE_MOBILE = 2;
-    
+    const CODE_CHECK_EMAIL = 1; // 验证邮箱
+    const CODE_CHECK_MOBILE = 2; // 验证手机号
+
+    const CODE_RESET_PASSWORD_BY_EMAIL = 3; // 重置密码
+    const CODE_RESET_PASSWORD_BY_MOBILE = 4; // 重置密码
+
     public function __construct()
     {
         parent::__construct('open_user');

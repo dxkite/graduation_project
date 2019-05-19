@@ -1,0 +1,71 @@
+@extend('support/setting:bootstrap') 
+@set('lang','zh-CN') 
+@startInsert('bs-head')
+<link href="@static('support/setting')/sign.css" rel="stylesheet"> 
+@endInsert 
+@startInsert('bs-content')
+<div class="container">
+    <form class="form-sign" id="form-signup" action="@u" method="POST">
+        <h2 class="form-sign-heading"> {= 重置密码 }</h2>
+        @if($?:resetSuccess)
+        <div class="alert alert-info" role="alert">
+            {= 重置密码成功 }
+        </div>
+        @else
+
+        @if($?:resetError)
+        <div class="alert alert-danger" role="alert">
+            {= 重置密码失败，请重试 }
+        </div>
+        @endif
+        <div class="form-group">
+            <label for="code" class="sr-only">{= 安全验证码 }</label>
+            <input type="text" name="code" id="code" class="form-control  @if($:invalidCode(false)) is-invalid @endif" placeholder="{= 安全验证码 }"
+                required autofocus> 
+            @if($:invalidCode(false))
+            <div id="name_error" class="invalid-feedback"> {= 安全验证码错误 }</div>
+            @endif
+        </div>
+
+        <div class="form-group">
+            <label for="password" class="sr-only">{= 密码 }</label>
+            <input type="password" name="password" id="password" class="form-control  @if($:passwordConfirm(false)) is-invalid @endif" placeholder="{= 密码 }" required>
+            @if($:passwordConfirm)
+            <div class="invalid-feedback"> {= 新密码不能与旧密码相同 }</div>
+            @endif
+        </div>
+        <div class="form-group">
+            <label for="repeat" class="sr-only">{= 重复输入 }</label>
+            <input type="password" name="repeat" id="repeat" class="form-control  @if($:passwordError(false)) is-invalid @endif" placeholder="{= 重复输入 }"
+                required> 
+            @if($:passwordError(false))
+            <div class="invalid-feedback"> {= 两次输入的密码不相同 }</div>
+            @endif
+        </div>
+
+        <div class="form-group" id="verify-image">
+            <div class="input-group">
+                <div class="input-group-prepend ">
+                    <img id="verify_code_image" src="@u('verify')" class="input-group-text verify-image" alt="verfiy">
+                </div>
+                <input type="text" name="humanCode" class="form-control  @if($:invalidHumanCode(false)) is-invalid @endif" id="verifycode" placeholder="{= 图片验证码 }"> @if($:invalidHumanCode(false))
+                <div id="invalidCode" class="invalid-feedback"> {= 图片验证码错误 }</div>
+                @endif
+            </div>
+        </div>
+        <button id="signup-button" class="btn btn-lg btn-primary btn-block" type="submit"> {= 重置密码 } </button>
+        @endif
+    </form>
+</div>
+@endInsert
+
+@startInsert('bs-footer')
+<script>
+    $(function () {
+        var src = $('#verify_code_image').attr('src');
+        $('#verify_code_image').on('click', function () {
+            this.src = src + '?' + new Date().getTime();
+        });
+    });
+</script>
+@endInsert

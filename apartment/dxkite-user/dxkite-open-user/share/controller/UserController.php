@@ -114,10 +114,10 @@ class UserController
                 return false;
             }
             $write = ['code' => null, 'code_type' => 0, 'code_expires' => 0];
-            if ($data['code_type'] == UserTable::CODE_EMAIL) {
+            if ($data['code_type'] == UserTable::CODE_CHECK_EMAIL) {
                 $write['email_checked'] = 1;
             }
-            if ($data['code_type'] == UserTable::CODE_MOBILE) {
+            if ($data['code_type'] == UserTable::CODE_CHECK_MOBILE) {
                 $write['mobile_checked'] = 1;
             }
             return $this->table->write($write)->where(['id' => $user])->ok();

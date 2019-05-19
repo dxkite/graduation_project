@@ -24,4 +24,6 @@ class UserException extends RuntimeException
     const ERR_EMAIL_OWN = 17;
     const ERR_MOBILE_NOT_CHECKED = 18;
     const ERR_EMAIL_NOT_CHECKED = 19;
+    const ERR_CHECK_CODE = 20;
+    const ERR_SAME_PASSWORD = 21;
 }

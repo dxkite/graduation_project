@@ -114,10 +114,10 @@ class UserProvider extends VisitorAwareProvider
         $code = mt_rand(100000, 999999);
         if ($type == 'email') {
             $email = $this->visitor->getAttribute('email');
-            return $this->controller->sendEmailCode($this->application, '验证邮箱', $email, $code, time() + 300, 5, UserTable::CODE_EMAIL, $this->visitor->getId());
+            return $this->controller->sendEmailCode($this->application, '验证邮箱', $email, $code, time() + 300, 5, UserTable::CODE_CHECK_EMAIL, $this->visitor->getId());
         }
         $mobile = $this->visitor->getAttribute('mobile');
-        return $this->controller->sendMobileCode($this->application, '验证手机号', $mobile, $code, time() + 300, 5, UserTable::CODE_MOBILE, $this->visitor->getId());
+        return $this->controller->sendMobileCode($this->application, '验证手机号', $mobile, $code, time() + 300, 5, UserTable::CODE_CHECK_MOBILE, $this->visitor->getId());
     }
 
     /**

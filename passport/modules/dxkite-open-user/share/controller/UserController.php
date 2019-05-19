@@ -113,15 +113,45 @@ class UserController
                 return false;
             }
             $write = ['code' => null, 'code_type' => 0, 'code_expires' => 0];
-            if ($data['code_type'] == UserTable::CODE_EMAIL) {
+            if ($data['code_type'] == UserTable::CODE_CHECK_EMAIL) {
                 $write['email_checked'] = 1;
             }
-            if ($data['code_type'] == UserTable::CODE_MOBILE) {
+            if ($data['code_type'] == UserTable::CODE_CHECK_MOBILE) {
                 $write['mobile_checked'] = 1;
             }
             return $this->table->write($write)->where(['id' => $user])->ok();
         }
         return true;
+    }
+
+    /**
+     * @param string $user
+     * @param string $code
+     * @param int $type
+     * @return bool
+     * @throws SQLException
+     */
+    public function checkCode(string $user, string $code, int $type) {
+        if ($data = $this->table->read(['code', 'code_type', 'code_expires'])->where(['id' => $user])->one()) {
+            if ($data['code'] !== $code || $data['code_type'] <= 0 || $data['code_expires'] < time()) {
+                return false;
+            }
+            if ($data['code_type'] != $type) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 重置验证码
+     * @param string $user
+     * @return bool
+     * @throws SQLException
+     */
+    public function resetCheckCode(string $user) {
+        $write = ['code' => null, 'code_type' => 0, 'code_expires' => 0];
+        return $this->table->write($write)->where(['id' => $user])->ok();
     }
 
     /**
@@ -203,6 +233,11 @@ class UserController
      */
     public function changePassword(string $user, string $password): bool
     {
+        if ($data = $this->table->read(['password'])->where(['id' => $user])->one()) {
+            if (password_verify($password, $data['password'])) {
+                throw new UserException('password is same like old', UserException::ERR_SAME_PASSWORD);
+            }
+        }
         return $this->table->write([
             'password' => \password_hash($password, PASSWORD_DEFAULT),
         ])->where(['id' => $user])->ok();
