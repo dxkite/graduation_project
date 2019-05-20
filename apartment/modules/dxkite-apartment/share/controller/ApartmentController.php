@@ -112,7 +112,7 @@ class ApartmentController
         } else {
             return false;
         }
-        return false;
+        return true;
     }
 
     /**
