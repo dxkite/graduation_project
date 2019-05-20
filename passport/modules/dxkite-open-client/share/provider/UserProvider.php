@@ -31,7 +31,6 @@ class UserProvider extends VisitorAwareProvider
     public function __construct()
     {
         $this->controller = new UserController;
-        $this->prepareConfig();
     }
 
     /**
@@ -44,6 +43,7 @@ class UserProvider extends VisitorAwareProvider
     public function signin(string $redirect_uri)
     {
         if ($this->visitor->isGuest()) {
+            $this->prepareConfig();
             $this->config['server'];
             $redirect_uri = $this->application->getUribase($this->request) . $this->getUrl('user', ['redirect_uri' => $redirect_uri, '_method' => 'authorize']);
             $url = $this->prepareUrl('signin', [
@@ -68,6 +68,7 @@ class UserProvider extends VisitorAwareProvider
      */
     public function authorize(string $redirect_uri, string $code, string $state): UserSession
     {
+        $this->prepareConfig();
         $url = $this->prepareUrl('access_token', [
             'server' => $this->config['server'],
             'secret' => $this->config['secret'],
