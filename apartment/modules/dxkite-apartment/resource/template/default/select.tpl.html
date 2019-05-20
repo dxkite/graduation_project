@@ -67,7 +67,7 @@
             };
 
             console.log(data);
-            dx.acall('select', data)
+            dx.call('select', data)
                 .then(ret => {
                     if (ret > 0) {
                         dxui.Toast('选择成功');

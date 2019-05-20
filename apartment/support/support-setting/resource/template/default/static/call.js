@@ -82,7 +82,7 @@ window.dx = window.dx || {};
         }
 
         if (param instanceof FormData) {
-            ajax.open("POST", url + '?method=' + method);
+            ajax.open("POST", url + '?_method=' + method);
             ajax.send(param);
         } else {
             ajax.open("POST", url);

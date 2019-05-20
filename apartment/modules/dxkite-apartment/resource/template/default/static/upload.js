@@ -60,7 +60,7 @@ $(function () {
                 if (res == -1) {
                     showinfo('Excel表格式错误', '请按照格式上传文件');
                 } else {
-                    showinfo('上传成功', '成功导入数据' + res + '条数据<br/>未上传的数据为重复数据。');
+                    showinfo('上传成功', '成功导入数据' + res.result + '条数据<br/>未上传的数据为重复数据。');
                 }
             })
             .catch(function (res) {

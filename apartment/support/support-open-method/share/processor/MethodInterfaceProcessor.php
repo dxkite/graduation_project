@@ -97,7 +97,7 @@ class MethodInterfaceProcessor
     }
 
     public function uncaughtException(Throwable $throwable) {
-        $this->application->debug()->addIgnoreTraces(__FILE__);
+        $this->application->debug()->addIgnorePath(__FILE__);
         $this->application->debug()->uncaughtException($throwable);
         if ($this->response->isSended() === false) {
             $this->response->sendContent($this->getExceptionJson($throwable, $this->response));

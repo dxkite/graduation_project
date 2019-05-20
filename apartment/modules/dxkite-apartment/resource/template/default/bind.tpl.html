@@ -68,7 +68,7 @@
             idcard = $('#idcard').val();
             password = $('#password').val();
             vcode = $('#vcode').val();
-            dx.acall('bind', [idcard, password, vcode])
+            dx.call('bind', [idcard, password, vcode])
                 .then(function (ret) {
                     if (ret) {
                         dxui.Toast('账号绑定成功');

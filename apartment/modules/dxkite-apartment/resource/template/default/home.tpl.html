@@ -69,7 +69,7 @@
 <script>
     $(function () {
         $('#signout').on('click', function () {
-            dx.acall('signout').then(() => {
+            dx.call('signout').then(() => {
                 dxui.Toast('退出登陆成功啦！密码别忘了哦~');
                 window.location.href = "@u('index')";
             })

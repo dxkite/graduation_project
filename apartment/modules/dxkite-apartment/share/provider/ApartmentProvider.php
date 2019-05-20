@@ -1,17 +1,15 @@
 <?php
 namespace dxkite\apartment\provider;
 
+use dxkite\openclient\provider\UserAwareProvider;
 use Exception;
 use support\session\UserSession;
 use support\setting\VerifyImage;
-use dxkite\apartment\table\StudentTable;
-use dxkite\apartment\table\ApartmentTable;
 use dxkite\apartment\controller\UserController;
-use dxkite\apartment\controller\ExcelController;
 use dxkite\apartment\controller\ApartmentController;
-use dxkite\openclient\provider\VisitorAwareProvider;
 
-class ApartmentProvider extends VisitorAwareProvider
+
+class ApartmentProvider extends UserAwareProvider
 {
 
     /**
@@ -34,6 +32,13 @@ class ApartmentProvider extends VisitorAwareProvider
         $this->apartment = new ApartmentController;
     }
 
+    /**
+     * @param string $idcard
+     * @param string $password
+     * @param string $code
+     * @return bool
+     * @throws Exception
+     */
     public function bind(string $idcard, string $password, string $code): bool
     {
         $verify = new VerifyImage($this->context, 'apartment');
@@ -98,7 +103,7 @@ class ApartmentProvider extends VisitorAwareProvider
     {
         $tree = [];
         foreach ($apart as $item) {
-            $this->add($tree, $item->toArray());
+            $this->add($tree, $item);
         }
         return $tree;
     }
