@@ -10,7 +10,7 @@
     "signup": {
         "class": "dxkite.openuser.response.SignupResponse",
         "uri": "\/signup"
-    },    
+    },
     "signout": {
         "class": "dxkite.openuser.response.SignoutResponse",
         "uri": "\/signout"
@@ -26,5 +26,17 @@
     "setting": {
         "class": "dxkite.openuser.response.HomeSettingResponse",
         "uri": "\/home\/setting"
+    },
+    "reset_by_email": {
+        "class": "dxkite.openuser.response.reset.ByEmailResponse",
+        "uri": "\/reset-password\/by-email"
+    },
+    "reset_by_mobile": {
+        "class": "dxkite.openuser.response.reset.ByMobileResponse",
+        "uri": "\/reset-password\/by-mobile"
+    },
+    "reset_password": {
+        "class": "dxkite.openuser.response.reset.IndexResponse",
+        "uri": "\/reset-password\/by-{type:string}\/{account:string}"
     }
 }

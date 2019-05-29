@@ -44,6 +44,7 @@ class UCConfigController
         $path = $resource->getConfigResourcePath('config/open-user');
         $savePath = $path ?? $dataPath.'/config/open-user.json';
         $config = array_merge($preview, $config);
+        FileSystem::make(dirname($savePath));
         return FileSystem::put($savePath, json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
     }
 }

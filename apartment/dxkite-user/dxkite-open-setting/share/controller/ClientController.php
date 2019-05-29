@@ -21,7 +21,7 @@ class ClientController
     {
         $this->table = new ClientTable;
     }
-    
+
     /**
      * 添加网站
      *
@@ -29,6 +29,7 @@ class ClientController
      * @param string $description
      * @param string|null $hostname
      * @return string
+     * @throws SQLException
      */
     public function add(string $name, string $description, ?string $hostname):string
     {
@@ -48,6 +49,7 @@ class ClientController
      *
      * @param string $id
      * @return array|null
+     * @throws SQLException
      */
     public function get(string $id):?array {
         return $this->table->read('*')->where(['id' => $id])->one();
@@ -61,6 +63,7 @@ class ClientController
      * @param string $description
      * @param string|null $hostname
      * @return boolean
+     * @throws SQLException
      */
     public function edit(string $id, string $name, string $description, ?string $hostname):bool
     {
@@ -77,6 +80,7 @@ class ClientController
      *
      * @param string $id
      * @return boolean
+     * @throws SQLException
      */
     public function delete(string $id):bool
     {
@@ -88,6 +92,7 @@ class ClientController
      *
      * @param string $id
      * @return boolean
+     * @throws SQLException
      */
     public function reset(string $id):bool
     {

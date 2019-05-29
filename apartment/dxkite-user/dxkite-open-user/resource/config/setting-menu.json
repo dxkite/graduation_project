@@ -1,0 +1,13 @@
+{
+    "${module}@${group}:tencent-sms": {
+        "name": "短信邮箱参数",
+        "child": {
+            "${module}@${group}:tencent-sms": {
+                "name": "设置腾讯短信"
+            },
+            "${module}@${group}:smtp": {
+                "name": "设置邮箱参数"
+            }
+        }
+    }
+}

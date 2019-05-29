@@ -18,8 +18,8 @@ class AuthClientTable extends AutoCreateTable
     {
         return $struct->fields([
             $struct->field('id', 'bigint', 20)->auto()->primary(),
-            $struct->field('appid', 'varchar', 255)->key()->comment('appid'),
-            $struct->field('user', 'varchar', 255)->key()->comment('授权用户'),
+            $struct->field('appid', 'varchar', 128)->key()->comment('appid'),
+            $struct->field('user', 'varchar', 128)->key()->comment('授权用户'),
             $struct->field('code', 'varchar', 255)->comment('密钥'),
             $struct->field('create_time', 'int', 11)->key()->default(null)->comment('Code创建时间'),
             $struct->field('access_token', 'varchar', 255)->key()->default(null)->comment('访问Token'),

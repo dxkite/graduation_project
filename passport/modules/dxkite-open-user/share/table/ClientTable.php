@@ -18,9 +18,9 @@ class ClientTable extends AutoCreateTable
     {
         return $struct->fields([
             $struct->field('id', 'bigint', 20)->auto()->primary(),
-            $struct->field('name', 'varchar', 255)->unique()->comment('网站名'),
+            $struct->field('name', 'varchar', 128)->unique()->comment('网站名'),
             $struct->field('description', 'text')->default(null)->comment('站点描述'),
-            $struct->field('appid', 'varchar',255)->key()->default(null)->comment('站点密钥'),
+            $struct->field('appid', 'varchar',128)->key()->default(null)->comment('站点密钥'),
             $struct->field('secret', 'varchar',255)->default(null)->comment('站点密钥'),
             $struct->field('hostname', 'varchar',255)->default(null)->comment('站点域名限制'),
             $struct->field('access_token', 'varchar',255)->default(null)->comment('访问Token'),

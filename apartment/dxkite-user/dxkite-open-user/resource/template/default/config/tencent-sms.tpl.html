@@ -1,0 +1,35 @@
+@extend ('support/setting:setting-view')
+@startInsert('admin-content')
+
+<form action="@u" method="POST">
+    <fieldset class="p-3">
+        <legend>腾讯短信参数设置</legend>
+        <div class="form-group row">
+            <label for="app-id" class="col-2 col-form-label">APP-ID</label>
+            <div class="col-10">
+                <input name="app-id" class="form-control" type="text" id="app-id" value="{{ $:config['app-id'] ?? '' }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="app-key" class="col-2 col-form-label">APP-Key</label>
+            <div class="col-10">
+                <input name="app-key" class="form-control" type="text"  id="app-key" value="{{ $:config['app-key'] ?? '' }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="sign" class="col-2 col-form-label">签名</label>
+            <div class="col-10">
+                <input name="sign" class="form-control" type="text" id="sign" value="{{ $:config.sign('') }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="template" class="col-2 col-form-label">模板</label>
+            <div class="col-10">
+                <input name="template" class="form-control" type="text" id="template" value="{{ $:config.template('') }}">
+            </div>
+        </div>
+    </fieldset>
+    <button class="btn btn-primary">保存设置</button>
+</form>
+
+@endInsert
