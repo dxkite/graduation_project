@@ -4,62 +4,89 @@ Navicat MySQL Data Transfer
 Source Server         : local-phpstudy
 Source Server Version : 50553
 Source Host           : 127.0.0.1:3306
-Source Database       : sudav3_apartment
+Source Database       : suda_passport_install
 
 Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2019-05-07 21:31:51
+Date: 2019-05-29 11:34:26
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for dx_apartment
+-- Table structure for dx_open_client
 -- ----------------------------
-DROP TABLE IF EXISTS `dx_apartment`;
-CREATE TABLE `dx_apartment` (
+DROP TABLE IF EXISTS `dx_open_client`;
+CREATE TABLE `dx_open_client` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user` bigint(20) DEFAULT NULL COMMENT '选择人',
-  `build` int(11) DEFAULT NULL COMMENT '楼宇',
-  `floor` int(11) DEFAULT NULL COMMENT '楼层',
-  `room` int(11) DEFAULT NULL COMMENT '房间号',
-  `bed` int(11) DEFAULT NULL COMMENT '床位号',
-  `sex` char(1) DEFAULT NULL COMMENT '性别',
-  `major` varchar(255) DEFAULT NULL COMMENT '专业',
-  `time` int(11) DEFAULT NULL COMMENT '时间',
-  `ip` varchar(255) DEFAULT NULL COMMENT '选择IP',
+  `name` varchar(255) DEFAULT NULL COMMENT '网站名',
+  `description` text COMMENT '站点描述',
+  `appid` varchar(255) DEFAULT NULL COMMENT '站点密钥',
+  `secret` varchar(255) DEFAULT NULL COMMENT '站点密钥',
+  `hostname` varchar(255) DEFAULT NULL COMMENT '站点域名限制',
+  `access_token` varchar(255) DEFAULT NULL COMMENT '访问Token',
+  `expires_in` int(11) DEFAULT NULL COMMENT '过期时间',
+  `status` tinyint(1) DEFAULT '1' COMMENT '启用状态',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `user` (`user`)
-) ENGINE=InnoDB AUTO_INCREMENT=5497 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of dx_apartment
--- ----------------------------
-
--- ----------------------------
--- Table structure for dx_open_client_user
--- ----------------------------
-DROP TABLE IF EXISTS `dx_open_client_user`;
-CREATE TABLE `dx_open_client_user` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL COMMENT '用户名',
-  `headimg` varchar(512) DEFAULT NULL COMMENT '头像',
-  `user` varchar(255) DEFAULT NULL COMMENT '用户ID',
-  `access_token` varchar(255) DEFAULT NULL COMMENT '访问密钥',
-  `refresh_token` varchar(255) DEFAULT NULL COMMENT '刷新密钥',
-  `expires_in` int(11) DEFAULT NULL COMMENT '授权过期时间',
-  `signup_ip` varchar(32) DEFAULT NULL COMMENT '注册IP',
-  `signup_time` int(11) DEFAULT NULL COMMENT '注册时间',
-  `status` tinyint(1) DEFAULT '1' COMMENT '用户状态',
-  PRIMARY KEY (`id`)
+  UNIQUE KEY `name` (`name`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of dx_open_client_user
+-- Records of dx_open_client
 -- ----------------------------
-INSERT INTO `dx_open_client_user` VALUES ('2', 'dxkite', 'http://passport.dev.dx/upload/image/jpeg/W7XxcKkEUZMxfWBzywB8tA/0.jpg', '1', 'RzdDdmFuNjFMUlhmMnI4VTZ5dWh4QToxOlmrUsF9DAdWoboaNMH6xEo', 'RzdDdmFuNjFMUlhmMnI4VTZ5dWh4QToxOuYtDBhGDQ_A26KJcbjZVxU', '1556776416', '0.0.0.0', '1554609689', '1');
+INSERT INTO `dx_open_client` VALUES ('2', 'ATD公寓选择系统', '公寓选择系统  ', 'G7Cvan61LRXf2r8U6yuhxA', 'A4OsUmrhD_VLyHItsCpkAg', null, null, null, '1');
+
+-- ----------------------------
+-- Table structure for dx_open_client_auth
+-- ----------------------------
+DROP TABLE IF EXISTS `dx_open_client_auth`;
+CREATE TABLE `dx_open_client_auth` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `appid` varchar(255) DEFAULT NULL COMMENT 'appid',
+  `user` varchar(255) DEFAULT NULL COMMENT '授权用户',
+  `code` varchar(255) DEFAULT NULL COMMENT '密钥',
+  `create_time` int(11) DEFAULT NULL COMMENT 'Code创建时间',
+  `access_token` varchar(255) DEFAULT NULL COMMENT '访问Token',
+  `refresh_token` varchar(255) DEFAULT NULL COMMENT '刷新令牌',
+  `expires_in` int(11) DEFAULT NULL COMMENT 'Token过期时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of dx_open_client_auth
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for dx_open_user
+-- ----------------------------
+DROP TABLE IF EXISTS `dx_open_user`;
+CREATE TABLE `dx_open_user` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL COMMENT '用户名',
+  `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
+  `mobile` varchar(255) DEFAULT NULL COMMENT '手机号',
+  `password` varchar(255) DEFAULT NULL COMMENT '密码',
+  `headimg` varchar(512) DEFAULT NULL COMMENT '头像',
+  `mobile_checked` tinyint(4) DEFAULT '0' COMMENT '短信验证',
+  `mobile_send` int(11) DEFAULT '0' COMMENT '上次发送短信时间',
+  `email_checked` tinyint(4) DEFAULT '0' COMMENT '邮箱验证',
+  `code` varchar(6) DEFAULT NULL COMMENT '6位验证码',
+  `code_type` tinyint(1) DEFAULT NULL COMMENT '验证类型',
+  `code_expires` int(11) DEFAULT NULL COMMENT '验证时间',
+  `signup_ip` varchar(32) DEFAULT NULL COMMENT '创建IP',
+  `signup_time` int(11) DEFAULT NULL COMMENT '创建时间',
+  `status` tinyint(1) DEFAULT '1' COMMENT '用户状态',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`) USING BTREE,
+  UNIQUE KEY `email` (`email`) USING BTREE,
+  UNIQUE KEY `mobile` (`mobile`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2878 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of dx_open_user
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for dx_setting_grant
@@ -89,7 +116,7 @@ CREATE TABLE `dx_setting_roles` (
   `permission` text COMMENT '权限控制对象',
   `sort` int(11) DEFAULT '0' COMMENT '排序索引',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
+  UNIQUE KEY `name` (`name`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -113,9 +140,9 @@ CREATE TABLE `dx_setting_user` (
   `create_time` int(11) DEFAULT NULL COMMENT '创建时间',
   `status` tinyint(1) DEFAULT '1' COMMENT '用户状态',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
-  UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `mobile` (`mobile`)
+  UNIQUE KEY `name` (`name`) USING BTREE,
+  UNIQUE KEY `email` (`email`) USING BTREE,
+  UNIQUE KEY `mobile` (`mobile`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -136,34 +163,10 @@ CREATE TABLE `dx_setting_view_history` (
   `url` varchar(512) DEFAULT NULL COMMENT '访问地址',
   `time` int(11) DEFAULT NULL COMMENT '访问时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of dx_setting_view_history
--- ----------------------------
-
--- ----------------------------
--- Table structure for dx_student
--- ----------------------------
-DROP TABLE IF EXISTS `dx_student`;
-CREATE TABLE `dx_student` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user` bigint(20) DEFAULT NULL COMMENT '用户ID',
-  `number` int(8) DEFAULT NULL COMMENT '学号',
-  `name` varchar(255) DEFAULT NULL COMMENT '姓名',
-  `exam_number` varchar(255) DEFAULT NULL COMMENT '考生号',
-  `idcard` varchar(18) DEFAULT NULL COMMENT '身份证号',
-  `sex` char(1) DEFAULT NULL COMMENT '性别',
-  `major` varchar(255) DEFAULT NULL COMMENT '录取专业',
-  `class` varchar(255) DEFAULT NULL COMMENT '录取班级',
-  `arrearage` int(11) DEFAULT '0' COMMENT '欠费金额',
-  `selected` tinyint(1) DEFAULT '0' COMMENT '是否已经选择',
-  `export` tinyint(1) DEFAULT '0' COMMENT '导出标记',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5790 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of dx_student
 -- ----------------------------
 
 -- ----------------------------
@@ -179,11 +182,8 @@ CREATE TABLE `dx_support_session` (
   `ip` varchar(32) DEFAULT NULL COMMENT '会话创建IP',
   `time` int(11) DEFAULT NULL COMMENT '会话创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of dx_support_session
 -- ----------------------------
-INSERT INTO `dx_support_session` VALUES ('1', '2', 'openuser', 'HyUGqFgQzsXJhpdmpcOkUg', '1556766535', '0.0.0.0', '1556759335');
-INSERT INTO `dx_support_session` VALUES ('2', '2', 'openuser', 'ZphXSWtJvhqMEeckm0QLWw', '1556776416', '0.0.0.0', '1556768855');
-INSERT INTO `dx_support_session` VALUES ('3', '1', 'system', 'Y7RWDMazNvsEHpdbDe6Ryg', '1557260018', '0.0.0.0', '1557234818');
