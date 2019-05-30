@@ -20,7 +20,7 @@ class UserInfoProcessor implements RequestProcessor
      * @param Request $request
      * @param Response $response
      * @return mixed|Context
-     * @throws \suda\orm\exception\SQLException
+     * @throws \suda\database\exception\SQLException
      */
     public function onRequest(Application $application, Request $request, Response $response)
     {

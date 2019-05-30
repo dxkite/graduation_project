@@ -6,7 +6,7 @@ use support\setting\PageData;
 use dxkite\openuser\sender\Send;
 use suda\application\Application;
 use dxkite\openuser\table\UserTable;
-use suda\orm\exception\SQLException;
+use suda\database\exception\SQLException;
 use dxkite\openuser\exception\UserException;
 
 class UserController

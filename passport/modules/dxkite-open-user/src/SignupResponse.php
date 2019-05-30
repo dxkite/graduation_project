@@ -2,7 +2,7 @@
 namespace dxkite\openuser\response;
 
 use suda\framework\Request;
-use suda\orm\exception\SQLException;
+use suda\database\exception\SQLException;
 use support\setting\response\Response;
 use dxkite\openuser\provider\UserProvider;
 use dxkite\openuser\response\UserResponse;

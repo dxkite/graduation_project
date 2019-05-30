@@ -63,7 +63,7 @@ class UserSession implements MethodParameterInterface, ResultProcessor
      * @param integer $expireIn 过期时间
      * @param string $group 会话组
      * @return UserSession
-     * @throws \suda\orm\exception\SQLException
+     * @throws \suda\database\exception\SQLException
      */
     public static function save(string $userId, string $ip, int $expireIn = 0, string $group = 'system'): UserSession
     {

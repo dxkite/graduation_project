@@ -12,7 +12,7 @@ class CheckResponse extends UserSignResponse
     /**
      * @param Request $request
      * @return \suda\application\template\ModuleTemplate
-     * @throws \suda\orm\exception\SQLException
+     * @throws \suda\database\exception\SQLException
      */
     public function onUserVisit(Request $request)
     {

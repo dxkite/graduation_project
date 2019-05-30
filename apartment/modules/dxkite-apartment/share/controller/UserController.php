@@ -1,7 +1,7 @@
 <?php
 namespace dxkite\apartment\controller;
 
-use suda\orm\struct\TableStruct;
+use suda\database\struct\TableStruct;
 use dxkite\apartment\Setting;
 use dxkite\apartment\table\StudentTable;
 
@@ -19,7 +19,7 @@ class UserController
      *
      * @param string $user
      * @return boolean
-     * @throws \suda\orm\exception\SQLException
+     * @throws \suda\database\exception\SQLException
      */
     public function isBinded(string $user):bool
     {
@@ -32,7 +32,7 @@ class UserController
      * @param string $user
      * @param string $id
      * @return boolean
-     * @throws \suda\orm\exception\SQLException
+     * @throws \suda\database\exception\SQLException
      */
     public function bind(string $user, string $id):bool {
         return $this->table->write([
@@ -45,7 +45,7 @@ class UserController
      *
      * @param string $user
      * @return bool
-     * @throws \suda\orm\exception\SQLException
+     * @throws \suda\database\exception\SQLException
      */
     public function selectable(string $user):bool
     {
@@ -65,7 +65,7 @@ class UserController
      * 通过ID获取用户
      * @param int $user
      * @return array|null
-     * @throws \suda\orm\exception\SQLException
+     * @throws \suda\database\exception\SQLException
      */
     public function getByUser(string $user):?array
     {
@@ -75,7 +75,7 @@ class UserController
     /**
      * @param string $id
      * @return mixed
-     * @throws \suda\orm\exception\SQLException
+     * @throws \suda\database\exception\SQLException
      */
     public function getById(string $id) {
         return $this->table->read('*')->where(['id' => $id])->one();
@@ -85,7 +85,7 @@ class UserController
      * 通过身份证获取用户
      * @param string $idcard
      * @return array|null
-     * @throws \suda\orm\exception\SQLException
+     * @throws \suda\database\exception\SQLException
      */
     public function getByIdCard(string $idcard):?array
     {

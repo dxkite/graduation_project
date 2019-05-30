@@ -8,7 +8,7 @@ namespace dxkite\openuser\response\reset;
 use dxkite\openuser\exception\UserException;
 use dxkite\openuser\provider\UserProvider;
 use suda\framework\Request;
-use suda\orm\exception\SQLException;
+use suda\database\exception\SQLException;
 
 class ByEmailResponse extends Response
 {

@@ -2,8 +2,8 @@
 
 namespace dxkite\openuser\provider;
 
-use suda\orm\exception\SQLException;
-use suda\orm\struct\TableStruct;
+use suda\database\exception\SQLException;
+use suda\database\struct\TableStruct;
 use support\setting\PageData;
 use support\setting\provider\VisitorProvider;
 use support\upload\UploadUtil;

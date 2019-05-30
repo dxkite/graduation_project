@@ -1,8 +1,8 @@
 <?php
 namespace dxkite\apartment\table;
 
-use suda\orm\DataSource;
-use suda\orm\struct\TableStruct;
+use suda\database\DataSource;
+use suda\database\struct\TableStruct;
 use support\setting\table\AutoCreateTable;
 
 /**

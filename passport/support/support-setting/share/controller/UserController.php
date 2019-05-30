@@ -3,7 +3,7 @@ namespace support\setting\controller;
 
 
 use support\setting\PageData;
-use suda\orm\exception\SQLException;
+use suda\database\exception\SQLException;
 use support\setting\table\UserTable;
 use support\setting\exception\UserException;
 

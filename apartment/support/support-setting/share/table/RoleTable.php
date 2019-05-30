@@ -1,7 +1,7 @@
 <?php
 namespace support\setting\table;
 
-use suda\orm\struct\TableStruct;
+use suda\database\struct\TableStruct;
 use support\openmethod\Permission;
 use support\setting\table\AutoCreateTable;
 

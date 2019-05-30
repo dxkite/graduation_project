@@ -1,7 +1,7 @@
 <?php
 namespace dxkite\openuser\provider;
 
-use suda\orm\struct\TableStruct;
+use suda\database\struct\TableStruct;
 use support\session\UserSession;
 use dxkite\openuser\table\ClientTable;
 use dxkite\openuser\table\AuthClientTable;

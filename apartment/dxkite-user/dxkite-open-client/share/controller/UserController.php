@@ -1,10 +1,10 @@
 <?php
 namespace dxkite\openclient\controller;
 
-use suda\orm\struct\TableStruct;
+use suda\database\struct\TableStruct;
 use support\setting\PageData;
 use dxkite\openclient\table\UserTable;
-use suda\orm\exception\SQLException;
+use suda\database\exception\SQLException;
 
 class UserController
 {

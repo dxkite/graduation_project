@@ -1,7 +1,7 @@
 <?php
 namespace support\session\table;
 
-use suda\orm\struct\TableStruct;
+use suda\database\struct\TableStruct;
 use support\session\table\AutoCreateTable;
 
 /**

@@ -3,8 +3,8 @@ namespace support\session\table;
 
 use suda\application\database\creator\MySQLTableCreator;
 use suda\application\database\Database;
-use suda\orm\DataSource;
-use suda\orm\struct\TableStruct;
+use suda\database\DataSource;
+use suda\database\struct\TableStruct;
 use suda\application\database\Table;
 
 abstract class AutoCreateTable extends Table

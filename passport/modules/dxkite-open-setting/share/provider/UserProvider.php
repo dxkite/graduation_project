@@ -1,7 +1,7 @@
 <?php
 namespace dxkite\openuser\setting\provider;
 
-use suda\orm\struct\TableStruct;
+use suda\database\struct\TableStruct;
 use support\setting\PageData;
 use support\upload\UploadUtil;
 use dxkite\openuser\table\UserTable;

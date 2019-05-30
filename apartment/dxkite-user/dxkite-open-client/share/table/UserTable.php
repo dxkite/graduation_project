@@ -1,7 +1,7 @@
 <?php
 namespace dxkite\openclient\table;
 
-use suda\orm\struct\TableStruct;
+use suda\database\struct\TableStruct;
 use support\setting\table\AutoCreateTable;
 
 /**

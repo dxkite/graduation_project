@@ -1,7 +1,7 @@
 <?php
 namespace dxkite\apartment\controller;
 
-use suda\orm\DataSource;
+use suda\database\DataSource;
 use dxkite\apartment\Setting;
 use dxkite\apartment\table\StudentTable;
 use dxkite\apartment\table\ApartmentTable;

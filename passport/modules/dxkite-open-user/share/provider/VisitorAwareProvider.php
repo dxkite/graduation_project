@@ -44,7 +44,7 @@ class VisitorAwareProvider extends UserSessionAwareProvider
     /**
      * @param string $userId
      * @return Visitor
-     * @throws \suda\orm\exception\SQLException
+     * @throws \suda\database\exception\SQLException
      */
     public function createVisitor(string $userId)
     {

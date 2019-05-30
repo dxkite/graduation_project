@@ -2,8 +2,8 @@
 namespace support\setting;
 
 use JsonSerializable;
-use suda\orm\struct\ReadStatement;
-use suda\orm\struct\QueryStatement;
+use suda\database\struct\ReadStatement;
+use suda\database\struct\QueryStatement;
 
 class PageData implements JsonSerializable
 {
